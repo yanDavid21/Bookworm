@@ -9,13 +9,6 @@ var debug = require('debug')('backend:server');
 var http = require('http');
 
 /**
- * Get port from environment and store in Express.
- */
-
-var server_port = process.env.PORT || '5000';
-var server_host = '0.0.0.0';
-
-/**
  * Create HTTP server.
  */
 
@@ -25,31 +18,10 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(server_port, server_host, function() {
-  console.log('Listening on port %d', server_port);
-});
+ console.log("Server currently running...");
+server.listen(process.env.PORT || '5000');
 server.on('error', onError);
 server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
 
 /**
  * Event listener for HTTP server "error" event.
