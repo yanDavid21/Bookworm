@@ -6,7 +6,7 @@ const logger = require('morgan');
 
 const app = express();
 
-
+const db_uri = process.env.MONGODB_URI;
 
 /***********middleware ************/
 app.use(express.static(path.join(__dirname, 'build')));
