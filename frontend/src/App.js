@@ -27,7 +27,7 @@ const Body = ({ drawerWidth }) => {
           <Route path="/" element={<Homepage />}></Route>
           <Route path="/details" exact element={<DetailsPage />}></Route>
           <Route path="/login" exact element={<LoginPage />}></Route>
-          <Route path="/signup" exact element={<SignupPage />}></Route>
+          <Route path="/register" exact element={<SignupPage />}></Route>
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/search" exact element={<SearchPage />}></Route>
           <Route path="/*" element={<Homepage />}></Route>
