@@ -1,2 +1,4 @@
 # Dean screwed up and opened the project in IntelliJ
 .idea
+
+package-lock.json
