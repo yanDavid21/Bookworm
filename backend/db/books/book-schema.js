@@ -7,8 +7,10 @@ const bookSchema = new Schema({
   genre: String,
   description: String,
   published: Date,
-  pages: Number
-  // if we are using friends, then friend list goes here
+  pages: Number,
+  toReadUsers: [Schema.Types.ObjectId],
+  inProgressUsers: [Schema.Types.ObjectId],
+  finishedUsers: [Schema.Types.ObjectId]
 })
 
 module.exports = bookSchema

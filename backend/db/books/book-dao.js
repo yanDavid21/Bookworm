@@ -1,4 +1,4 @@
-const model = require('./paid-user-model')
+const model = require('./book-model')
 
 const findAllBooks = () => model.find()
 
