@@ -16,3 +16,23 @@
 .drawer {
   border-color: rgb(33, 112, 33);
 }
+
+.flex-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  height: 100%;
+  padding: 5em 5em;
+}
+
+.search-page {
+  height: 100%;
+  
+}
