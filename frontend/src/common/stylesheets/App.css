@@ -34,5 +34,8 @@
 
 .search-page {
   height: 100%;
-  
+}
+
+.search-results {
+  min-height: 500px;
 }
