@@ -33,10 +33,10 @@ connectToDatabase().catch(err => console.log(err))
 
 /***************routes *******************/
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const searchRouter = require('./routes/search');
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/search', searchRouter);
 /*******************************************/
 
 
