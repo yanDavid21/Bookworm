@@ -17,9 +17,9 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import PendingIcon from "@mui/icons-material/Pending";
 
 const listOfTabs = [
-  { title: "To Read", path: "#to-read", icon: <PlaylistAddIcon /> },
-  { title: "In Progress", path: "#in-progress", icon: <PendingIcon /> },
-  { title: "Finished", path: "#finished", icon: <AssignmentTurnedInIcon /> },
+  { title: "Reading List", path: "#to-read", icon: <PlaylistAddIcon /> },
+  { title: "In Progress List", path: "#in-progress", icon: <PendingIcon /> },
+  { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
 ];
 
 const PermanentDrawerLeft = ({ drawerWidth }) => {
