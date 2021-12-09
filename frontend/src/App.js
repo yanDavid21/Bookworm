@@ -11,6 +11,8 @@ import SearchPage from "./pages/Search";
 
 const drawerWidth = 250;
 
+export const BACKEND_URL = "localhost:5000"
+
 const Body = ({ drawerWidth }) => {
   return (
     <div
