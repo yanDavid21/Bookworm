@@ -11,35 +11,70 @@ import FormControl from "@mui/material/FormControl";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { Link } from "react-router-dom";
+import { Card } from "@mui/material";
+import BooksImage from "../../common/resources/stackOfBooks.png";
 
 const SearchResultCard = ({ title, isbn, authors, thumbnail, description }) => {
   return (
     <>
       <Link to={`/details/${isbn}`} className="unstyled-link">
-        <ListItem alignItems="flex-center" sx={{ width: 500 }}>
-          <ListItemAvatar>
-            <Avatar alt={`Thumbail of ${title}`} src={thumbnail} />
-          </ListItemAvatar>
-          <ListItemText
-            primary={title}
-            secondary={
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {description}
-              </Typography>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="li" />
+        <Card>
+          <ListItem alignItems="flex-center" sx={{ maxWidth: 600 }}>
+            <ListItemAvatar sx={{ mr: 2 }}>
+              {thumbnail ? (
+                <img alt={`Thumbail of ${title}`} src={thumbnail} />
+              ) : (
+                <img
+                  alt={`Thumbail of ${title}`}
+                  src={BooksImage}
+                  width={100}
+                  height={100}
+                />
+              )}
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography
+                  sx={{ display: "block" }}
+                  component="div"
+                  variant="h6"
+                  color="text.primary"
+                >
+                  {title}
+                </Typography>
+              }
+              secondary={
+                <>
+                  <Typography
+                    sx={{ display: "block" }}
+                    component="div"
+                    variant="subtitle1"
+                    color="text.primary"
+                  >
+                    {authors ? authors.toString() : ""}
+                  </Typography>
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {description
+                      ? description.length < 250
+                        ? description
+                        : description.substring(0, 250) + "..."
+                      : ""}
+                  </Typography>
+                </>
+              }
+            />
+          </ListItem>
+        </Card>
+        <Divider component="li" sx={{ mt: 2, mb: 2 }} />
       </Link>
     </>
   );
@@ -98,11 +133,6 @@ const SearchField = ({
   };
 
   const fetchBooks = () => {
-    console.log(
-      `/api/search?q=${search}${
-        bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
-      }`
-    );
     fetch(
       `/api/search?q=${search}${
         bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
@@ -193,11 +223,12 @@ const SearchPage = () => {
               <div className="search-results flex-horizontal flex-center">
                 <List>
                   {searchResults.map((result) => {
-                    const isbn = result.volumeInfo.industryIdentifiers[0].identifier;
+                    const isbn =
+                      result.volumeInfo.industryIdentifiers[0].identifier;
                     const title = result.volumeInfo.title;
                     const authors = result.volumeInfo.authors;
                     const description = result.volumeInfo.description;
-                    const thumbnail = result.volumeInfo.imageLinks.thumbnail;
+                    const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
                     return (
                       <SearchResultCard
                         title={title}
