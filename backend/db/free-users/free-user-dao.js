@@ -21,11 +21,25 @@ const findUserByEmail = (email) => {
   return docs
 }
 
+const validateLogin = (email, password) => {
+  docs = findUserByEmail(email)
+  if (docs.length() > 1) {
+    console.error("validateLogin: more than one user found for email " + email)
+  } else if (docs.length() === 0) {
+    return false;
+  } else {
+    doc = docs[0]
+    return PaidUser.validatePassword(password, doc.password)
+  }
+}
+
+
 module.exports = {
   findAllUsers,
   deleteUser,
   createUser,
   findUserById,
   updateUser,
-  findUserByEmail
+  findUserByEmail,
+  validateLogin
 }

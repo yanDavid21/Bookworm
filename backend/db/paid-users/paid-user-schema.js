@@ -8,7 +8,7 @@ const paidUserSchema = new Schema({
   to_read: [Schema.Types.ObjectId],
   in_progress: [Schema.Types.ObjectId],
   finished: [Schema.Types.ObjectId],
-  friends: [Schema.Types.ObjectId]
+  friends: [Schema.Types.ObjectId],
 })
 
 module.exports = paidUserSchema
