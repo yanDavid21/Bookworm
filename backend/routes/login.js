@@ -24,13 +24,13 @@ router.post('/', function (req, res) {
 
     // generate a new cookie
     const hashString = email + password + Date.now()
-    const sessionCookie = bcrypt.hash(hashString, 10)
+    const token = bcrypt.hash(hashString, 10)
 
     cookieDao.createCookie(new ObjectId(userId), cookie)
 
     res.status(200).send({
       message: "Login successful.",
-      sessionCookie: sessionCookie,
+      token: token,
     })
   } else {
     res.status(403).send({
