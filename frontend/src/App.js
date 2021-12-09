@@ -8,6 +8,7 @@ import DetailsPage from "./pages/Details";
 import LoginPage from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import SearchPage from "./pages/Search";
+import SignupPage from "./pages/Signup";
 
 const drawerWidth = 250;
 
@@ -28,6 +29,7 @@ const Body = ({ drawerWidth }) => {
           <Route path="/" element={<Homepage />}></Route>
           <Route path="/details" exact element={<DetailsPage />}></Route>
           <Route path="/login" exact element={<LoginPage />}></Route>
+          <Route path="/register" exact element={<SignupPage />}></Route>
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/search" exact element={<SearchPage />}></Route>
           <Route path="/*" element={<Homepage />}></Route>
