@@ -49,12 +49,9 @@ app.use('/login', (req, res) => {
   });
 });
 app.use('/api/createUser', createUserRouter);
-<<<<<<< HEAD
 app.use('/api/getUserData', getUserDataRouter);
-=======
 app.use('/api/login', loginRouter);
 app.use('/api/details', detailRouter);
->>>>>>> a93d30382533d343c90aa05fb0ca0bea0a476a4b
 /*******************************************/
 
 
