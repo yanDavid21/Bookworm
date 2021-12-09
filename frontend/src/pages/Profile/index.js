@@ -39,9 +39,13 @@ const ProfileHeader = ({ username, email, profPicture }) => {
 };
 
 const BookCard = ({ listType, isbn, title, author, image }) => {
-  const removeItem = (listType, title) => {};
+  const removeItem = (listType, isbn) => {
 
-  const addToNextList = (listType, isbn) => {};
+  };
+
+  const addToNextList = (listType, isbn) => {
+    
+  };
 
   const buttonActionText = (listType) => {
     switch (listType) {
