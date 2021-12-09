@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
@@ -24,29 +25,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 /************************** */
 
 
-/***************database *****************/
+/*************** database *****************/
 async function connectToDatabase() {
   await mongoose.connect(db_uri)
 }
 connectToDatabase().catch(err => console.log(err))
 /*****************************************/
 
-/***************routes *******************/
+/*************** routes *******************/
 const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
 const createUserRouter = require('./routes/create-user');
 const getUserDataRouter = require('./routes/get-user')
+const loginRouter = require('./routes/login');
+const detailRouter = require('./routes/details');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
+app.use(cors());
+app.use('/login', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
 app.use('/api/createUser', createUserRouter);
+<<<<<<< HEAD
 app.use('/api/getUserData', getUserDataRouter);
+=======
+app.use('/api/login', loginRouter);
+app.use('/api/details', detailRouter);
+>>>>>>> a93d30382533d343c90aa05fb0ca0bea0a476a4b
 /*******************************************/
 
 
-
-
-/****************error handler******************/
+/**************** error handler ******************/
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

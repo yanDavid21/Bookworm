@@ -26,7 +26,12 @@ const ProfilePage = () => {
 
   useEffect(() => {
     //get user data
-  }, []);
+    fetch()
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
+  }, [userData]);
   return (
     <div className="profile-page flex-center flex-horizontal">
       <Grid container>

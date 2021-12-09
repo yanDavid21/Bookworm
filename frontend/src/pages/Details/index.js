@@ -10,7 +10,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import books from "./books.jpeg"
+import CircularProgress from '@mui/material/CircularProgress';
 import {BACKEND_URL} from "../../App";
+import Box from "@mui/material/Box";
 
 const fetchBook = (isbn, setResults) => {
   fetch(`/api/details?q=${isbn}`)
@@ -30,35 +32,47 @@ const DetailsPage = () => {
   useEffect(() => {
     fetchBook(location.pathname.substring(8), setResult)
   },[location, setResult])
-  return <div>
+  // const isbn = {result.items[0].volumeInfo.industryIdentifiers[0].identifier};
+  // const title = {result.items[0].volumeInfo.title};
+  // const authors = {result.items[0].volumeInfo.authors};
+  // const description = {result.items[0].volumeInfo.description};
+  // const thumbnail = {result.items[0].volumeInfo.imageLinks.thumbnail};
+  return result ? (<div>
     <Card>
-      <CardActionArea>
-        <CardMedia
-            component="img"
-            height="300"
-            image={books}
-            alt="books in library"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {location.pathname.substring(1).toUpperCase()}
-            result.title
-          </Typography>
-          <Typography  color="text.secondary">
-            by result.author [get author here]
+      <CardActionArea sx={{ display: 'flex' }}>
+        <Box>
+          <CardMedia sx={{ display: 'flex', ml:1, flexDirection: 'column', minWidth: 350}}
+              component="img"
+              image={result.items[0].volumeInfo.imageLinks.thumbnail?
+                  result.items[0].volumeInfo.imageLinks.thumbnail:
+                  books}
+              alt="books in library"
+          />
+          <Button
+              sx={{ mt: 5, ml:1, mb:2, backgroundColor: "rgb(33, 112, 33)" }}
+              variant="contained"
+              // onClick={}
+          >
+            Add to Reading List
+          </Button>
+        </Box>
+        <CardContent sx={{ display: 'flex', position:"relative", mt:-20, flexDirection: 'column', flex: '3 1 auto'}}>
+          <Typography gutterBottom variant="h4" component="div">
+            {result.items[0].volumeInfo.title}
+            <Typography gutterBottom variant="h5" component="div" color="text.secondary">
+              {result.items[0].volumeInfo.authors}
+            </Typography>
           </Typography>
           <Typography>
-            result.description   get description here
+            {result.items[0].volumeInfo.description}
+          </Typography>
+          <Typography>
+
           </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
-
-
-
-
-
-  </div>;
+  </div>): <CircularProgress></CircularProgress>;
 };
 
 export default DetailsPage;

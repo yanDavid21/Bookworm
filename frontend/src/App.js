@@ -9,12 +9,15 @@ import LoginPage from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import SearchPage from "./pages/Search";
 import SignupPage from "./pages/Signup";
+import useToken from './common/customHooks/useToken';
 
 const drawerWidth = 250;
 
 export const BACKEND_URL = "http://localhost:5000"
 
 const Body = ({ drawerWidth }) => {
+  const { token, setToken } = useToken();
+  
   return (
     <div
       className="body"
@@ -27,8 +30,8 @@ const Body = ({ drawerWidth }) => {
       <div className="content">
         <Routes>
           <Route path="/" element={<Homepage />}></Route>
-          <Route path="/details" exact element={<DetailsPage />}></Route>
-          <Route path="/login" exact element={<LoginPage />}></Route>
+          <Route path="/details/*" element={<DetailsPage />}></Route>
+          <Route path="/login" exact element={<LoginPage token={token} setToken={setToken}/>}></Route>
           <Route path="/register" exact element={<SignupPage />}></Route>
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/search" exact element={<SearchPage />}></Route>
@@ -40,6 +43,7 @@ const Body = ({ drawerWidth }) => {
 };
 
 function App() {
+
   return (
     <Router>
       <PermanentDrawerLeft drawerWidth={drawerWidth} />
