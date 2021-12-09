@@ -1,21 +1,31 @@
-const model = require('./free-user-model')
+const FreeUser = require('./free-user-model')
 
-const findAllFreeUsers = () => model.find()
+const findAllUsers = () => FreeUser.find()
 
-const deleteFreeUser = (id) => model.deleteOne({_id: id})
+const deleteUser = (id) => FreeUser.deleteOne({_id: id})
 
-const createFreeUser = (freeUser) => model.create(freeUser)
+const createUser = (user, password) => {
+  const doc = new FreeUser(user)
+  doc.setPassword(password)
+  doc.save()
+}
 
-const findFreeUserById = (id) => model.findById(id)
+const findUserById = (id) => FreeUser.findById(id)
 
-const updateFreeUser = (id, user) =>
-    model.updateOne({_id: id},
+const updateUser = (id, user) =>
+    FreeUser.updateOne({_id: id},
         {$set: user});
 
+const findUserByEmail = (email) => {
+  docs = FreeUser.find({email: email})
+  return docs
+}
+
 module.exports = {
-  findAllFreeUsers,
-  deleteFreeUser,
-  createFreeUser,
-  findFreeUserById,
-  updateFreeUser
+  findAllUsers,
+  deleteUser,
+  createUser,
+  findUserById,
+  updateUser,
+  findUserByEmail
 }
