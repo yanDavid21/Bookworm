@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
@@ -37,6 +38,12 @@ const searchRouter = require('./routes/search');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
+app.use(cors());
+app.use('/login', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
 /*******************************************/
 
 
