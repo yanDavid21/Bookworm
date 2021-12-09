@@ -42,11 +42,6 @@ const detailRouter = require('./routes/details');
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
 app.use(cors());
-app.use('/login', (req, res) => {
-  res.send({
-    token: 'test123'
-  });
-});
 app.use('/api/createUser', createUserRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/details', detailRouter);
