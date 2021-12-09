@@ -8,7 +8,7 @@ schema.methods.setPassword = function(password) {
   }) 
 }
 
-schema.methods.validPassword = function(password, hash) {
+schema.methods.validatePassword = function(password, hash) {
   bcrypt.compare(password, hash, (err, response) => {
     return response
   })

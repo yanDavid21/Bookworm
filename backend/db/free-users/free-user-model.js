@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt')
 schema.methods.setPassword = function(password) {
   bcrypt.hash(password, 10, (err, hash) => {
     this.password = hash
-  }) 
+  })
 }
 
-schema.methods.validPassword = function(password, hash) {
+schema.methods.validatePassword = function(password, hash) {
   bcrypt.compare(password, hash, (err, response) => {
     return response
   })
