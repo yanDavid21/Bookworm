@@ -34,9 +34,11 @@ connectToDatabase().catch(err => console.log(err))
 /***************routes *******************/
 const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
+const createUserRouter = require('./routes/create-user');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/createUser', createUserRouter);
 /*******************************************/
 
 
