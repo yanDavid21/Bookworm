@@ -13,26 +13,26 @@ router.post('/', function (req, res) {
   if (userType === "Premium") {
     dao = paidUserDao
   }
-  if (userType == "Basic") {
-    // check that a user with the same email doesn't exist in the database
-    if (freeUserDao.findUserByEmail().length() === 1 || paidUserDao.findUserByEmail().length() === 1) {
-      // Tell the frontend that there is already a user with that email
-      res.status(409).send({
-        message: "User with the inputted email already exists."
-      })
-    } else {
-      user = {
-        name: name,
-        email: email,
-        to_read: [],
-        in_progress: [],
-        finished: [],
-      }
-      dao.createUser(user, password)
-      res.status(201).send({
-        message: "New user with email " + email + " created."
-      })
+
+  // check that a user with the same email doesn't exist in the database
+  if (freeUserDao.findUserByEmail().length() === 1 || paidUserDao.findUserByEmail().length() === 1) {
+    // Tell the frontend that there is already a user with that email
+    res.status(409).send({
+      message: "User with the inputted email already exists."
+    })
+  } else {
+    user = {
+      name: name,
+      email: email,
+      to_read: [],
+      in_progress: [],
+      finished: [],
     }
+    dao.createUser(user, password)
+    res.status(201).send({
+      message: "New user with email " + email + " created."
+    })
+    
   }
 })
 
