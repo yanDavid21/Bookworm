@@ -1,21 +1,31 @@
-const model = require('./paid-user-model')
+const PaidUser = require('./paid-user-model')
 
-const findAllPaidUsers = () => model.find()
+const findAllUsers = () => PaidUser.find()
 
-const deletePaidUser = (id) => model.deleteOne({_id: id})
+const deleteUser = (id) => PaidUser.deleteOne({_id: id})
 
-const createPaidUser = (book) => model.create(book)
+const createUser = (user) => {
+  const doc = new PaidUser(user)
+  doc.setPassword(password)
+  doc.save()
+}
 
-const findPaidUserById = (id) => model.findById(id)
+const findUserById = (id) => PaidUser.findById(id)
 
-const updatePaidUser = (id, user) =>
-    model.updateOne({_id: id},
+const updateUser = (id, user) =>
+    PaidUser.updateOne({_id: id},
         {$set: user});
 
+const findUserByEmail = (email) => {
+  docs = PaidUser.find({email: email})
+  return docs
+}
+
 module.exports = {
-  findAllPaidUsers,
-  deletePaidUser,
-  createPaidUser,
-  findPaidUserById,
-  updatePaidUser
+  findAllUsers,
+  deleteUser,
+  createUser,
+  findUserById,
+  updateUser,
+  findUserByEmail
 }

@@ -13,7 +13,7 @@ import useToken from './common/customHooks/useToken';
 
 const drawerWidth = 250;
 
-export const BACKEND_URL = "localhost:5000"
+export const BACKEND_URL = "http://localhost:5000"
 
 const Body = ({ drawerWidth }) => {
   const { token, setToken } = useToken();
@@ -30,8 +30,8 @@ const Body = ({ drawerWidth }) => {
       <div className="content">
         <Routes>
           <Route path="/" element={<Homepage />}></Route>
-          <Route path="/details" exact element={<DetailsPage />}></Route>
-          <Route path="/login" exact element={<LoginPage token={token} setToken={setToken}/>}></Route>
+          <Route path="/details/*" element={<DetailsPage />}></Route>
+          <Route path="/login" exact element={<LoginPage />}></Route>
           <Route path="/register" exact element={<SignupPage />}></Route>
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/search" exact element={<SearchPage />}></Route>

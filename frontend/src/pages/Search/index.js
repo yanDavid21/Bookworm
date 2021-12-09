@@ -8,46 +8,145 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { BACKEND_URL } from "../../App";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import { Link } from "react-router-dom";
+import { Card } from "@mui/material";
+import BooksImage from "../../common/resources/stackOfBooks.png";
 
-function SearchTypeRadioGroup({ setSearchType }) {
+const SearchResultCard = ({ title, isbn, authors, thumbnail, description }) => {
+  return (
+    <>
+      <Link to={`/details/${isbn}`} className="unstyled-link">
+        <Card>
+          <ListItem alignItems="flex-center" sx={{ maxWidth: 600 }}>
+            <ListItemAvatar sx={{ mr: 2 }}>
+              {thumbnail ? (
+                <img alt={`Thumbail of ${title}`} src={thumbnail} />
+              ) : (
+                <img
+                  alt={`Thumbail of ${title}`}
+                  src={BooksImage}
+                  width={100}
+                  height={100}
+                />
+              )}
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography
+                  sx={{ display: "block" }}
+                  component="div"
+                  variant="h6"
+                  color="text.primary"
+                >
+                  {title}
+                </Typography>
+              }
+              secondary={
+                <>
+                  <Typography
+                    sx={{ display: "block" }}
+                    component="div"
+                    variant="subtitle1"
+                    color="text.primary"
+                  >
+                    {authors ? authors.toString() : ""}
+                  </Typography>
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {description
+                      ? description.length < 250
+                        ? description
+                        : description.substring(0, 250) + "..."
+                      : ""}
+                  </Typography>
+                </>
+              }
+            />
+          </ListItem>
+        </Card>
+        <Divider component="li" sx={{ mt: 2, mb: 2 }} />
+      </Link>
+    </>
+  );
+};
+
+function SearchTypeRadioGroup({ setSearchType, bonusQuery, setBonusQuery }) {
   const onChange = (e) => {
     setSearchType(e.target.value);
   };
+
+  const onChangeBonusQuery = (e) => {
+    setBonusQuery(e.target.value);
+  };
   return (
     <FormControl component="fieldset">
-      <RadioGroup
-        row
-        aria-label="Search Types"
-        name="row-radio-buttons-group"
-        onChange={onChange}
-      >
-        <FormControlLabel value="All" control={<Radio />} label="All" />
-        <FormControlLabel value="Title" control={<Radio />} label="Title" />
-        <FormControlLabel value="Author" control={<Radio />} label="Author" />
-        <FormControlLabel value="Subject" control={<Radio />} label="Subject" />
-        <FormControlLabel
-          value="Publisher"
-          control={<Radio />}
-          label="Publisher"
-        />
-      </RadioGroup>
+      <div className="flex-horizontal flex-center">
+        <RadioGroup
+          row
+          aria-label="Search Types"
+          name="row-radio-buttons-group"
+          onChange={onChange}
+        >
+          <FormControlLabel value="ISBN" control={<Radio />} label="ISBN" />
+          <FormControlLabel value="Title" control={<Radio />} label="Title" />
+          <FormControlLabel value="Author" control={<Radio />} label="Author" />
+          <FormControlLabel
+            value="Subject"
+            control={<Radio />}
+            label="Subject"
+          />
+          <FormControlLabel
+            value="Publisher"
+            control={<Radio />}
+            label="Publisher"
+          />
+        </RadioGroup>
+        <TextField
+          size="small"
+          value={bonusQuery}
+          onChange={onChangeBonusQuery}
+        ></TextField>
+      </div>
     </FormControl>
   );
 }
 
-const SearchField = ({ search, setSearch, searchType, setSearchResults }) => {
+const SearchField = ({
+  search,
+  setSearch,
+  searchType,
+  setSearchResults,
+  bonusQuery,
+}) => {
   const onChange = (e) => {
     setSearch(e.target.value);
   };
 
   const fetchBooks = () => {
-    fetch(`${BACKEND_URL}/api/search?q=${search}&searchType=${searchType}`)
+    fetch(
+      `/api/search?q=${search}${
+        bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
+      }`
+    )
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setSearchResults(data.volumes);
+        console.log(data.items);
+        setSearchResults(data.items);
+      })
+      .catch((err) => {
+        alert(err);
       });
   };
 
@@ -78,8 +177,9 @@ const SearchField = ({ search, setSearch, searchType, setSearchResults }) => {
 const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("");
+  const [bonusQuery, setBonusQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  console.log(searchType);
+  const [showBonus, setBonusSearch] = useState(false);
   return (
     <div className="search-page flex-horizontal flex-center">
       <Grid container spacing={2}>
@@ -92,19 +192,54 @@ const SearchPage = () => {
                   setSearch={setSearch}
                   searchType={searchType}
                   setSearchResults={setSearchResults}
+                  bonusQuery={bonusQuery}
                 />
               </div>
             </Grid>
+
+            {showBonus && (
+              <Grid item xs={12}>
+                <div className="flex-horizontal flex-center">
+                  <SearchTypeRadioGroup
+                    setSearchType={setSearchType}
+                    bonusQuery={bonusQuery}
+                    setBonusQuery={setBonusQuery}
+                  />
+                </div>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <div className="flex-horizontal flex-center">
-                <SearchTypeRadioGroup setSearchType={setSearchType} />
+                <Button
+                  onClick={() => {
+                    setBonusSearch(!showBonus);
+                  }}
+                >
+                  {showBonus ? "Hide Advanced Search" : "Show Advanced Search"}
+                </Button>
               </div>
             </Grid>
-            <Grid container item xs={12}>
-              <div className="search-results">
-                {searchResults.map(() => {
-                  return <></>;
-                })}
+            <Grid item xs={12}>
+              <div className="search-results flex-horizontal flex-center">
+                <List>
+                  {searchResults.map((result) => {
+                    const isbn =
+                      result.volumeInfo.industryIdentifiers[0].identifier;
+                    const title = result.volumeInfo.title;
+                    const authors = result.volumeInfo.authors;
+                    const description = result.volumeInfo.description;
+                    const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
+                    return (
+                      <SearchResultCard
+                        title={title}
+                        isbn={isbn}
+                        authors={authors}
+                        thumbnail={thumbnail}
+                        description={description}
+                      />
+                    );
+                  })}
+                </List>
               </div>
             </Grid>
           </Grid>
