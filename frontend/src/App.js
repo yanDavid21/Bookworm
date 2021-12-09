@@ -30,7 +30,7 @@ const Body = ({ drawerWidth }) => {
       <Header></Header>
       <div className="content">
         <Routes>
-          <Route path="/" element={<Homepage />}></Route>
+          <Route path="/" element={<Homepage token={token}/>}></Route>
           <Route element={<RequireAuth token={token}/>}>
             <Route path="/details/*" element={<DetailsPage />}></Route>
           </Route>
@@ -39,7 +39,7 @@ const Body = ({ drawerWidth }) => {
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/author/*" element={<AuthorPage/>}></Route>
           <Route path="/search" exact element={<SearchPage />}></Route>
-          <Route path="/*" element={<Homepage />}></Route>
+          <Route path="/*" element={<Homepage token={token}/>}></Route>
         </Routes>
       </div>
     </div>
