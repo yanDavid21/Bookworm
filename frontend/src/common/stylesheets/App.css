@@ -22,6 +22,19 @@
   flex-direction: row;
 }
 
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-list-container {
+  align-items: flex-start;
+}
+
+.book-list {
+  overflow-x: "auto";
+}
+
 .flex-center {
   justify-content: center;
   align-items: center;
