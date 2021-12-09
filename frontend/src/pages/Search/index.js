@@ -8,6 +8,42 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import { Link } from "react-router-dom";
+
+const SearchResultCard = ({ title, isbn, authors, thumbnail, description }) => {
+  return (
+    <>
+      <Link to={`/details/${isbn}`} className="unstyled-link">
+        <ListItem alignItems="flex-center" sx={{ width: 500 }}>
+          <ListItemAvatar>
+            <Avatar alt={`Thumbail of ${title}`} src={thumbnail} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={title}
+            secondary={
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {description}
+              </Typography>
+            }
+          />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+      </Link>
+    </>
+  );
+};
 
 function SearchTypeRadioGroup({ setSearchType, bonusQuery, setBonusQuery }) {
   const onChange = (e) => {
@@ -153,11 +189,26 @@ const SearchPage = () => {
                 </Button>
               </div>
             </Grid>
-            <Grid container item xs={12}>
-              <div className="search-results">
-                {searchResults.map(() => {
-                  return <></>;
-                })}
+            <Grid item xs={12}>
+              <div className="search-results flex-horizontal flex-center">
+                <List>
+                  {searchResults.map((result) => {
+                    const isbn = result.volumeInfo.industryIdentifiers[0].identifier;
+                    const title = result.volumeInfo.title;
+                    const authors = result.volumeInfo.authors;
+                    const description = result.volumeInfo.description;
+                    const thumbnail = result.volumeInfo.imageLinks.thumbnail;
+                    return (
+                      <SearchResultCard
+                        title={title}
+                        isbn={isbn}
+                        authors={authors}
+                        thumbnail={thumbnail}
+                        description={description}
+                      />
+                    );
+                  })}
+                </List>
               </div>
             </Grid>
           </Grid>

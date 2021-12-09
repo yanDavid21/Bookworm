@@ -1,5 +1,5 @@
 .body {
-  height: 90vh;
+  min-height: 90vh;
   margin: auto;
 }
 
@@ -30,6 +30,7 @@
 .content {
   height: 100%;
   padding: 5em 5em;
+  overflow-y: auto;
 }
 
 .search-page {
@@ -38,4 +39,9 @@
 
 .search-results {
   min-height: 500px;
+}
+
+.unstyled-link {
+  color: black;
+  text-decoration: none;
 }
