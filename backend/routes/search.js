@@ -23,7 +23,7 @@ router.get("/", function (req, res, next) {
     url: url,
   })
     .then((response) => {
-      res.status(200).json(response.data);
+      res.status(200).json(response.data)
     })
     .catch((err) => {
       console.log(err);

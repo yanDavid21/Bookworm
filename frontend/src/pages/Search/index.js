@@ -229,6 +229,7 @@ const SearchPage = () => {
                     const authors = result.volumeInfo.authors;
                     const description = result.volumeInfo.description;
                     const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
+                    if (isbn.substring(0,4) !== "OCLC") {
                     return (
                       <SearchResultCard
                         title={title}
@@ -237,7 +238,7 @@ const SearchPage = () => {
                         thumbnail={thumbnail}
                         description={description}
                       />
-                    );
+                    );}
                   })}
                 </List>
               </div>

@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import books from "./books.jpeg"
 import CircularProgress from '@mui/material/CircularProgress';
-import {BACKEND_URL} from "../../App";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 const fetchBook = (isbn, setResults) => {
@@ -49,25 +49,47 @@ const DetailsPage = () => {
               alt="books in library"
           />
           <Button
-              sx={{ mt: 5, ml:1, mb:2, backgroundColor: "rgb(33, 112, 33)" }}
+              sx={{ mt: 4, ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
               variant="contained"
               // onClick={}
           >
             Add to Reading List
           </Button>
+          <Button
+              sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
+              variant="contained"
+              // onClick={}
+          >
+            Add to Bookshelf
+          </Button>
+          <Button
+              sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
+              variant="contained"
+              // onClick={}
+          >
+            Add to Favorites
+          </Button>
         </Box>
-        <CardContent sx={{ display: 'flex', position:"relative", mt:-20, flexDirection: 'column', flex: '3 1 auto'}}>
+        <CardContent sx={{ display: 'flex', position:"relative", mt:-10, ml:3, flexDirection: 'column', flex: '3 1 auto'}}>
           <Typography gutterBottom variant="h4" component="div">
             {result.items[0].volumeInfo.title}
+            <Link to={`/author`}>
             <Typography gutterBottom variant="h5" component="div" color="text.secondary">
-              {result.items[0].volumeInfo.authors}
+              {result.items[0].volumeInfo.authors.length === 1? result.items[0].volumeInfo.authors:
+                  result.items[0].volumeInfo.authors.join(", ")}
+              {/*{console.log(result.items[0].volumeInfo.authors)}*/}
+              {/*{result.items[0].volumeInfo.authors}*/}
             </Typography>
+            </Link>
           </Typography>
           <Typography>
             {result.items[0].volumeInfo.description}
           </Typography>
-          <Typography>
-
+          <Typography sx={{mt: 3}}>
+            Published in {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
+          </Typography>
+          <Typography sx={{mt: 3}}>
+            {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
           </Typography>
         </CardContent>
       </CardActionArea>
