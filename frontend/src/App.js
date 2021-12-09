@@ -12,7 +12,7 @@ import SignupPage from "./pages/Signup";
 
 const drawerWidth = 250;
 
-export const BACKEND_URL = "localhost:5000"
+export const BACKEND_URL = "http://localhost:5000"
 
 const Body = ({ drawerWidth }) => {
   return (

@@ -8,46 +8,79 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { BACKEND_URL } from "../../App";
 
-function SearchTypeRadioGroup({ setSearchType }) {
+function SearchTypeRadioGroup({ setSearchType, bonusQuery, setBonusQuery }) {
   const onChange = (e) => {
     setSearchType(e.target.value);
   };
+
+  const onChangeBonusQuery = (e) => {
+    setBonusQuery(e.target.value);
+  };
   return (
     <FormControl component="fieldset">
-      <RadioGroup
-        row
-        aria-label="Search Types"
-        name="row-radio-buttons-group"
-        onChange={onChange}
-      >
-        <FormControlLabel value="All" control={<Radio />} label="All" />
-        <FormControlLabel value="Title" control={<Radio />} label="Title" />
-        <FormControlLabel value="Author" control={<Radio />} label="Author" />
-        <FormControlLabel value="Subject" control={<Radio />} label="Subject" />
-        <FormControlLabel
-          value="Publisher"
-          control={<Radio />}
-          label="Publisher"
-        />
-      </RadioGroup>
+      <div className="flex-horizontal flex-center">
+        <RadioGroup
+          row
+          aria-label="Search Types"
+          name="row-radio-buttons-group"
+          onChange={onChange}
+        >
+          <FormControlLabel value="ISBN" control={<Radio />} label="ISBN" />
+          <FormControlLabel value="Title" control={<Radio />} label="Title" />
+          <FormControlLabel value="Author" control={<Radio />} label="Author" />
+          <FormControlLabel
+            value="Subject"
+            control={<Radio />}
+            label="Subject"
+          />
+          <FormControlLabel
+            value="Publisher"
+            control={<Radio />}
+            label="Publisher"
+          />
+        </RadioGroup>
+        <TextField
+          size="small"
+          value={bonusQuery}
+          onChange={onChangeBonusQuery}
+        ></TextField>
+      </div>
     </FormControl>
   );
 }
 
-const SearchField = ({ search, setSearch, searchType, setSearchResults }) => {
+const SearchField = ({
+  search,
+  setSearch,
+  searchType,
+  setSearchResults,
+  bonusQuery,
+}) => {
   const onChange = (e) => {
     setSearch(e.target.value);
   };
 
   const fetchBooks = () => {
-    fetch(`${BACKEND_URL}/api/search?q=${search}&searchType=${searchType}`)
+    console.log(
+      `/api/search?q=${search}${
+        bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
+      }`
+    );
+    fetch(
+      `/api/search?q=${search}${
+        bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
+      }`
+    )
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setSearchResults(data.volumes);
+        console.log(data.items);
+        setSearchResults(data.items);
+      })
+      .catch((err) => {
+        alert(err);
       });
   };
 
@@ -78,8 +111,9 @@ const SearchField = ({ search, setSearch, searchType, setSearchResults }) => {
 const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("");
+  const [bonusQuery, setBonusQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  console.log(searchType);
+  const [showBonus, setBonusSearch] = useState(false);
   return (
     <div className="search-page flex-horizontal flex-center">
       <Grid container spacing={2}>
@@ -92,12 +126,31 @@ const SearchPage = () => {
                   setSearch={setSearch}
                   searchType={searchType}
                   setSearchResults={setSearchResults}
+                  bonusQuery={bonusQuery}
                 />
               </div>
             </Grid>
+
+            {showBonus && (
+              <Grid item xs={12}>
+                <div className="flex-horizontal flex-center">
+                  <SearchTypeRadioGroup
+                    setSearchType={setSearchType}
+                    bonusQuery={bonusQuery}
+                    setBonusQuery={setBonusQuery}
+                  />
+                </div>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <div className="flex-horizontal flex-center">
-                <SearchTypeRadioGroup setSearchType={setSearchType} />
+                <Button
+                  onClick={() => {
+                    setBonusSearch(!showBonus);
+                  }}
+                >
+                  {showBonus ? "Hide Advanced Search" : "Show Advanced Search"}
+                </Button>
               </div>
             </Grid>
             <Grid container item xs={12}>
