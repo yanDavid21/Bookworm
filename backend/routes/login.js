@@ -26,7 +26,7 @@ router.post('/', function (req, res) {
     const hashString = email + password + Date.now()
     const token = bcrypt.hash(hashString, 10)
 
-    cookieDao.createCookie(new ObjectId(userId), cookie)
+    cookieDao.createCookie(new ObjectId(userId), token)
 
     res.status(200).send({
       message: "Login successful.",
