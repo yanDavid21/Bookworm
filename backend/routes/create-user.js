@@ -7,7 +7,6 @@ router.post('/', function (req, res) {
   const name = req.query.name
   const email = req.query.email
   const password = req.query.password
-
   const userType = req.query.userType
 
   let dao = freeUserDao
@@ -16,7 +15,7 @@ router.post('/', function (req, res) {
   }
   if (userType == "Basic") {
     // check that a user with the same email doesn't exist in the database
-    if (freeUserDao.findUserByEmail().length() === 1) {
+    if (dao.findUserByEmail().length() === 1) {
       // Tell the frontend that there is already a user with that email
       res.status(409).send({
         message: "User with the inputted email already exists."
@@ -29,7 +28,7 @@ router.post('/', function (req, res) {
         in_progress: [],
         finished: []
       }
-      freeUserDao.createUser(user, password)
+      dao.createUser(user, password)
       res.status(201).send({
         message: "New user with email " + email + " created."
       })
