@@ -10,7 +10,8 @@ const bookSchema = new Schema({
   pages: Number,
   toReadUsers: [Schema.Types.ObjectId],
   inProgressUsers: [Schema.Types.ObjectId],
-  finishedUsers: [Schema.Types.ObjectId]
+  finishedUsers: [Schema.Types.ObjectId],
+  thumbnail: String
 })
 
 module.exports = bookSchema

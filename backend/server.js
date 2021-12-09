@@ -24,27 +24,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 /************************** */
 
 
-/***************database *****************/
+/*************** database *****************/
 async function connectToDatabase() {
   await mongoose.connect(db_uri)
 }
 connectToDatabase().catch(err => console.log(err))
 /*****************************************/
 
-/***************routes *******************/
+/*************** routes *******************/
 const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
 const createUserRouter = require('./routes/create-user');
+const detailRouter = require('./routes/details');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/createUser', createUserRouter);
+app.use('/api/details', detailRouter);
 /*******************************************/
 
 
-
-
-/****************error handler******************/
+/**************** error handler ******************/
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
