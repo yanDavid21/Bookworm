@@ -60,25 +60,27 @@ const DetailsPage = () => {
               variant="contained"
               // onClick={}
           >
-            Add to Bookshelf
+            Add to In-Progress List
           </Button>
           <Button
               sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
               variant="contained"
               // onClick={}
           >
-            Add to Favorites
+            Add to Finished List
           </Button>
         </Box>
         <CardContent sx={{ display: 'flex', position:"relative", mt:-10, ml:3, flexDirection: 'column', flex: '3 1 auto'}}>
           <Typography gutterBottom variant="h4" component="div">
             {result.items[0].volumeInfo.title}
-            <Link to={`/author`}>
+            <Link to={`/author/${result.items[0].volumeInfo.authors}`}>
             <Typography gutterBottom variant="h5" component="div" color="text.secondary">
-              {result.items[0].volumeInfo.authors.length === 1? result.items[0].volumeInfo.authors:
-                  result.items[0].volumeInfo.authors.join(", ")}
-              {/*{console.log(result.items[0].volumeInfo.authors)}*/}
-              {/*{result.items[0].volumeInfo.authors}*/}
+              {result.items[0].volumeInfo.authors.length === 1?
+                  result.items[0].volumeInfo.authors:
+                  result.items[0].volumeInfo.authors.map((author, index) => {
+                    return <Link to={`/author/${author}`}>{author + (index === result.items[0].volumeInfo.authors.length - 1 ? "" : ", ")}</Link>
+                  })
+              }
             </Typography>
             </Link>
           </Typography>
@@ -87,9 +89,6 @@ const DetailsPage = () => {
           </Typography>
           <Typography sx={{mt: 3}}>
             Published in {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
-          </Typography>
-          <Typography sx={{mt: 3}}>
-            {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
           </Typography>
         </CardContent>
       </CardActionArea>
