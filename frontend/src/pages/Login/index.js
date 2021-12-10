@@ -30,7 +30,7 @@ const LoginPage = ({ token, setToken }) => {
     promise.then(response => {
       //check for 403 status before getting the json :)
       if(response.status === 403)
-        throw Error("Invalid username and/or password.")
+        throw Error("Invalid email and/or password.")
       return response.json()
     })
     .then(data => {

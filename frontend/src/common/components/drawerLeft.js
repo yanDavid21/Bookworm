@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import PendingIcon from "@mui/icons-material/Pending";
+import LogoutButton from "./logoutButton";
+import LoginButton from "./loginButton";
 
 const listOfTabs = [
   { title: "Reading List", path: "#to-read", icon: <PlaylistAddIcon /> },
@@ -20,7 +22,7 @@ const listOfTabs = [
   { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
 ];
 
-const PermanentDrawerLeft = ({ drawerWidth }) => {
+const PermanentDrawerLeft = ({ drawerWidth, token, setToken}) => {
   return (
     <Drawer
       sx={{
@@ -83,6 +85,8 @@ const PermanentDrawerLeft = ({ drawerWidth }) => {
           </Link>
         ))}
       </List>
+      <Divider />
+      {token ? <LogoutButton token={token} setToken={setToken}/> : <LoginButton />}
     </Drawer>
   );
 };
