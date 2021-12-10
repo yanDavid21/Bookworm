@@ -17,20 +17,23 @@ const updateUser = (id, user) =>
         {$set: user});
 
 const findUserByEmail = (email) => {
-  docs = FreeUser.find({email: email})
-  return docs
+  return FreeUser.findOne({email: email})
+  
 }
 
-const validateLogin = (email, password) => {
-  docs = findUserByEmail(email)
-  if (docs.length() > 1) {
-    console.error("validateLogin: more than one user found for email " + email)
-  } else if (docs.length() === 0) {
-    return false;
-  } else {
-    doc = docs[0]
-    return PaidUser.validatePassword(password, doc.password)
-  }
+const validateLogin = (email, password, callback) => {
+  console.log("Validating login")
+  FreeUser.find({email: email}, function (err, docs) {
+    // console.log("DOCS::::: " + typeof(docs))
+    // console.log(JSON.stringify(docs))
+    if (docs.length === 0) {
+      callback(false);
+    } else if (docs.length === 1) {
+      const doc = docs[0]
+      callback(doc.validatePassword(password, doc.password))
+    }
+  })
+
 }
 
 
