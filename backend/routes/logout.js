@@ -11,3 +11,6 @@ router.post('/', function (req, res) {
     message: "logged out."
   })
 })
+
+
+module.exports = router; 
