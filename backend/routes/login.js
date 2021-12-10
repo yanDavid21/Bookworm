@@ -9,34 +9,49 @@ router.post('/', function (req, res) {
   const email = req.body.email
   const password = req.body.password
 
-  if (freeUserDao.validateLogin(email, password) || paidUserDao.validateLogin(email, password)) {
-    // success!!
+  freeUserDao.validateLogin(email, password, function (validated) {
+    if (validated) {
+      freeUserDao.findUserByEmail(email).then(user => {
+        const userId = user.id
+        // success!!
+        // generate a new cookie
+        const hashString = email + password + Date.now()
+        bcrypt.hash(hashString, 10, function (err, hash) {
+          console.log(hash)
+          cookieDao.createCookie(userId, hash)
+          res.status(200).send({
+            message: "Login successful.",
+            token: hash,
+          })
+        })
 
-    // first figure out which user we are dealing with
-    let users = freeUserDao.findUserByEmail(email)
-    let user = null
-    if (users.length() === 0) {
-      user = paidUserDao.findUserByEmail(email)[0]
+      })
     } else {
-      user = users[0]
+      paidUserDao.validateLogin(email, password, function (validated) {
+        if (validated) {
+          paidUserDao.findUserByEmail(email).then(user => {
+            const userId = user.id
+            // success!!
+            // generate a new cookie
+            const hashString = email + password + Date.now()
+            bcrypt.hash(hashString, 10, function (err, hash) {
+              console.log(hash)
+              cookieDao.createCookie(userId, hash)
+              res.status(200).send({
+                message: "Login successful.",
+                token: hash,
+              })
+            })
+    
+          })
+        } else {
+          res.status(403).send({
+            message: "Username and password not found.",
+          })
+        }
+      })
     }
-    userId = user.id
-
-    // generate a new cookie
-    const hashString = email + password + Date.now()
-    const token = bcrypt.hash(hashString, 10)
-
-    cookieDao.createCookie(new ObjectId(userId), token)
-
-    res.status(200).send({
-      message: "Login successful.",
-      token: token,
-    })
-  } else {
-    res.status(403).send({
-      message: "Incorrect email or password."
-    })
-  }
+  })
 
 })
 

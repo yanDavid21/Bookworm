@@ -9,9 +9,8 @@ schema.methods.setPassword = function(password) {
 }
 
 schema.methods.validatePassword = function(password, hash) {
-  bcrypt.compare(password, hash, (err, response) => {
-    return response
-  })
+  return password === this.password
+  //return bcrypt.compareSync(password, hash)
 }
 
 const model = mongoose.model('PaidUser', schema)
