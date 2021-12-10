@@ -19,46 +19,46 @@ const LoggedIn = () => {
     <div>
     <Typography variant="h3">Bookworm</Typography>     
     
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been searched a lot recently...</Typography>
-    <Grid container spacing={2}>
-      <Grid item xs={2}>
+    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
+    <Grid container spacing={10}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
     </Grid>
 
     <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that you and your friends have added to their lists recently...</Typography>
-    <Grid container spacing={2}>
-      <Grid item xs={2}>
+    <Grid container spacing={10}>
+    <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
     </Grid>
@@ -85,24 +85,24 @@ const UnloggedIn = () => {
       </Grid>
     </Grid>
     
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been searched a lot recently...</Typography>
+    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
     <Grid container spacing={2}>
-      <Grid item xs={2}>
+    <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
     </Grid>
