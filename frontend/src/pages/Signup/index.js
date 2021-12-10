@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import PropTypes from 'prop-types';
 
 async function registerUser(credentials) {
-  return fetch('http://localhost:5000/register', {
+  return fetch('http://localhost:5000/api/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
