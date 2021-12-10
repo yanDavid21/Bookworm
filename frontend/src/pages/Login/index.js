@@ -14,19 +14,31 @@ async function loginUser(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
  }
 
 const LoginPage = ({ token, setToken }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    setToken(await loginUser({
+    const promise = loginUser({
       email,
       password
-    }));
+    });
+
+    promise.then(response => {
+      //check for 403 status before getting the json :)
+      if(response.status === 403)
+        throw Error("Invalid email and/or password.")
+      return response.json()
+    })
+    .then(data => {
+      setToken(data)
+    }).catch(err => {
+      alert(err)
+    })
+    
   }
 
   if(token) {

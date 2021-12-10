@@ -16,8 +16,8 @@ const drawerWidth = 250;
 
 export const BACKEND_URL = "http://localhost:5000"
 
-const Body = ({ drawerWidth }) => {
-  const { token, setToken } = useToken();
+const Body = ({ drawerWidth, token, setToken }) => {
+  // const { token, setToken } = useToken();
   
   return (
     <div
@@ -47,11 +47,11 @@ const Body = ({ drawerWidth }) => {
 };
 
 function App() {
-
+  const { token, setToken } = useToken();
   return (
     <Router>
-      <PermanentDrawerLeft drawerWidth={drawerWidth} />
-      <Body drawerWidth={drawerWidth} />
+      <PermanentDrawerLeft drawerWidth={drawerWidth} token={token} setToken={setToken}/>
+      <Body drawerWidth={drawerWidth} token={token} setToken={setToken}/>
     </Router>
   );
 }
