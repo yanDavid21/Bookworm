@@ -43,7 +43,7 @@ const detailRouter = require('./routes/details');
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
 app.use(cors());
-app.use('/api/createUser', createUserRouter);
+app.use('/api/register', createUserRouter);
 // app.use('/api/getUserData', getUserDataRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/details', detailRouter);

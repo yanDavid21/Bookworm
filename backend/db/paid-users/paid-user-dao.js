@@ -4,7 +4,8 @@ const findAllUsers = () => PaidUser.find()
 
 const deleteUser = (id) => PaidUser.deleteOne({_id: id})
 
-const createUser = (user) => {
+const createUser = (user, password) => {
+  user.friends = []
   const doc = new PaidUser(user)
   doc.setPassword(password)
   doc.save()
@@ -17,20 +18,20 @@ const updateUser = (id, user) =>
         {$set: user});
 
 const findUserByEmail = (email) => {
-  docs = PaidUser.find({email: email})
-  return docs
+  return PaidUser.findOne({email: email})
 }
 
-const validateLogin = (email, password) => {
-  docs = findUserByEmail(email)
-  if (docs.length() > 1) {
-    console.error("validateLogin: more than one user found for email " + email)
-  } else if (docs.length() === 0) {
-    return false;
-  } else {
-    doc = docs[0]
-    return PaidUser.validatePassword(password, doc.password)
-  }
+const validateLogin = (email, password, callback) => {
+  console.log("Validating login")
+  PaidUser.find({email: email}, function (err, docs) {
+    if (docs.length === 0) {
+      callback(false);
+    } else if (docs.length === 1) {
+      const doc = docs[0]
+      callback(doc.validatePassword(password, doc.password))
+    }
+  })
+
 }
 
 module.exports = {

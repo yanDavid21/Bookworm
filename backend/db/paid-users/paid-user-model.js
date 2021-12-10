@@ -3,15 +3,11 @@ const schema = require('./paid-user-schema')
 const bcrypt = require('bcrypt')
 
 schema.methods.setPassword = function(password) {
-  bcrypt.hash(password, 10, (err, hash) => {
-    this.password = hash
-  }) 
+  this.password = bcrypt.hashSync(password, 10)
 }
 
 schema.methods.validatePassword = function(password, hash) {
-  bcrypt.compare(password, hash, (err, response) => {
-    return response
-  })
+  return bcrypt.compareSync(password, hash)
 }
 
 const model = mongoose.model('PaidUser', schema)
