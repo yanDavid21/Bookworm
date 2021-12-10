@@ -5,6 +5,7 @@ const findAllUsers = () => PaidUser.find()
 const deleteUser = (id) => PaidUser.deleteOne({_id: id})
 
 const createUser = (user, password) => {
+  user.friends = []
   const doc = new PaidUser(user)
   doc.setPassword(password)
   doc.save()

@@ -7,8 +7,7 @@ schema.methods.setPassword = function(password) {
 }
 
 schema.methods.validatePassword = function(password, hash) {
-  // return bcrypt.compareSync(password, hash)
-  return true
+  return bcrypt.compareSync(password, hash)
 }
 
 const model = mongoose.model('FreeUser', schema)
