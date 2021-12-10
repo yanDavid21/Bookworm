@@ -43,6 +43,12 @@ const detailRouter = require('./routes/details');
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
 app.use(cors());
+// THIS IS JUST A TEMPORARY THING TO HELP TEST REGISTERING NEW USERS
+app.use('/register', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
 app.use('/api/createUser', createUserRouter);
 // app.use('/api/getUserData', getUserDataRouter);
 app.use('/api/login', loginRouter);
