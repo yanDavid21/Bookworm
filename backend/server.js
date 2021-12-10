@@ -38,6 +38,7 @@ const searchRouter = require('./routes/search');
 const createUserRouter = require('./routes/create-user');
 // const getUserDataRouter = require('./routes/get-user')
 const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
 
 app.use('/', indexRouter);
@@ -46,6 +47,7 @@ app.use(cors());
 app.use('/api/register', createUserRouter);
 // app.use('/api/getUserData', getUserDataRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/logout', logoutRouter)
 app.use('/api/details', detailRouter);
 /*******************************************/
 

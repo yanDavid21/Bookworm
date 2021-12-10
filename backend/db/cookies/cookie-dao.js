@@ -7,8 +7,11 @@ const createCookie = (userId, cookie) => Cookie.create({cookie: cookie, user: mo
 
 const findCookie = (userId) => Cookie.find({user: userId})
 
+const findUser = (cookie) => Cookie.findOne({cookie: cookie})
+
 module.exports = {
   deleteCookie,
   createCookie,
-  findCookie
+  findCookie,
+  findUser
 }
