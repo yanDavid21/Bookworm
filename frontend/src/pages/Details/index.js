@@ -14,8 +14,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
-const fetchBook = (isbn, setResults) => {
-  fetch(`/api/details?q=${isbn}`)
+const fetchBook = (isbn, setResults, searchType) => {
+  console.log("isbn: " + isbn);
+  fetch(
+      `/api/search?q=${isbn}${
+          isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""
+      }`
+  )
   .then((response) => {
     return response.json();
   })
@@ -27,16 +32,12 @@ const fetchBook = (isbn, setResults) => {
 
 const DetailsPage = () => {
   let location = useLocation();
-  let [result, setResult] = useState(null)
+  const [result, setResult] = useState(null)
+  const searchType = "ISBN";
   console.log(location.pathname)
   useEffect(() => {
-    fetchBook(location.pathname.substring(8), setResult)
+    fetchBook(location.pathname.substring(9), setResult, searchType)
   },[location, setResult])
-  // const isbn = {result.items[0].volumeInfo.industryIdentifiers[0].identifier};
-  // const title = {result.items[0].volumeInfo.title};
-  // const authors = {result.items[0].volumeInfo.authors};
-  // const description = {result.items[0].volumeInfo.description};
-  // const thumbnail = {result.items[0].volumeInfo.imageLinks.thumbnail};
   return result ? (<div>
     <Card>
       <CardActionArea sx={{ display: 'flex' }}>
@@ -88,7 +89,10 @@ const DetailsPage = () => {
             {result.items[0].volumeInfo.description}
           </Typography>
           <Typography sx={{mt: 3}}>
-            Published in {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
+            {result.items[0].volumeInfo.publishedDate? "Published in "
+                + result.items[0].volumeInfo.publishedDate + " " +(result.items[0].volumeInfo.publisher?
+                "by " + result.items[0].volumeInfo.publisher: ""): ""}
+            {/*Published in {result.items[0].volumeInfo.publishedDate} {}*/}
           </Typography>
         </CardContent>
       </CardActionArea>

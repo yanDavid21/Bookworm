@@ -14,8 +14,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
-const fetchBook = (isbn, setResults) => {
-  fetch(`/api/details?q=${isbn}`)
+const fetchAuthor = (authorName, setResults, searchType) => {
+  fetch(
+      `/api/search?q=${authorName}${
+          authorName ? `&${searchType}=${authorName}` : ""
+      }`
+  )
   .then((response) => {
     return response.json();
   })
@@ -26,17 +30,14 @@ const fetchBook = (isbn, setResults) => {
 };
 
 const AuthorPage = () => {
-  let [result, setResult] = useState(null)
+  const [result, setResult] = useState(null)
+  const searchType = "author";
   let location = useLocation();
   console.log(location.pathname)
   useEffect(() => {
-    fetchBook(location.pathname.substring(8), setResult)
+    fetchAuthor(location.pathname.substring(8), setResult, searchType)
   },[location, setResult])
-  // const isbn = {result.items[0].volumeInfo.industryIdentifiers[0].identifier};
-  // const title = {result.items[0].volumeInfo.title};
-  // const authors = {result.items[0].volumeInfo.authors};
-  // const description = {result.items[0].volumeInfo.description};
-  // const thumbnail = {result.items[0].volumeInfo.imageLinks.thumbnail};
+
   return result ? (<div>
     <Card>
       <CardActionArea sx={{ display: 'flex' }}>

@@ -64,6 +64,9 @@ export const SearchField = ({
   };
 
   const fetchBooks = () => {
+    console.log("bonus query: " + bonusQuery);
+    console.log("search type: " + searchType);
+    console.log("search: " + search);
     fetch(
       `/api/search?q=${search}${
         bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
