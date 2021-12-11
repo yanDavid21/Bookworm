@@ -16,7 +16,7 @@ async function registerUser(credentials) {
  }
 
 
-const SignupPage = ({ token, setToken }) => {
+const SignupPage = ({ token, setToken, lastPath }) => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -34,7 +34,7 @@ const SignupPage = ({ token, setToken }) => {
 
   if(token) {
     return (
-      <Navigate to="/"/>
+      <Navigate to={lastPath}/>
     );
   }
 

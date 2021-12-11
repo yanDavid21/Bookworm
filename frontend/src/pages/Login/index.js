@@ -40,9 +40,8 @@ const LoginPage = ({ token, setToken, lastPath}) => {
     })
     
   }
-  let navigate = useNavigate();
+  
   if(token) {
-    // navigate(-1);
     return (
       <Navigate to={lastPath}/>
     );
