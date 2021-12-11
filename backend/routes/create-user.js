@@ -29,7 +29,7 @@ router.post('/', function (req, res) {
             message: "User with the inputted email already exists."
           })
         } else {
-          userId = new mongoose.Types.ObjectId()
+          const userId = new mongoose.Types.ObjectId()
           userObj = {
             _id: userId,
             name: name,

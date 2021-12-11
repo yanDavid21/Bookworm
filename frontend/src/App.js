@@ -16,9 +16,9 @@ const drawerWidth = 250;
 
 export const BACKEND_URL = "http://localhost:5000"
 
-const Body = ({ drawerWidth, token, setToken }) => {
+const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
   // const { token, setToken } = useToken();
-  const [lastPath, setHistory] = useState("/");
+  // const [lastPath, setHistory] = useState("/");
   return (
     <div
       className="body"
@@ -48,10 +48,11 @@ const Body = ({ drawerWidth, token, setToken }) => {
 
 function App() {
   const { token, setToken } = useToken();
+  const [lastPath, setHistory] = useState("/");
   return (
     <Router>
-      <PermanentDrawerLeft drawerWidth={drawerWidth} token={token} setToken={setToken}/>
-      <Body drawerWidth={drawerWidth} token={token} setToken={setToken}/>
+      <PermanentDrawerLeft drawerWidth={drawerWidth} token={token} setToken={setToken} setHistory={setHistory}/>
+      <Body drawerWidth={drawerWidth} token={token} setToken={setToken} lastPath={lastPath} setHistory={setHistory}/>
     </Router>
   );
 }

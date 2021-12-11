@@ -4,13 +4,16 @@ const cookieDao = require("../db/cookies/cookie-dao");
 
 router.post('/', function (req, res) {
   // CHANGE THIS LINE IF YOU NEED TO
-  const token = req.headers.tk
+  const token = req.body.token
+
+  console.log(token)
   
-  cookieDao.deleteCookie(token)
-  res.send({
-    message: "logged out."
+  cookieDao.deleteCookie(token).then((status) => {
+    res.send({
+      message: "logged out."
+    })
   })
 })
 
 
-module.exports = router; 
+module.exports = router;
