@@ -14,7 +14,7 @@ import useToken from './common/customHooks/useToken';
 import usePrivacyToken from './common/customHooks/usePrivacyToken';
 import PrivacyDialog from './common/components/privacyDialog';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
-
+import PrivacyPolicyText from './common/components/privacyPolicyText';
 const drawerWidth = 250;
 
 export const BACKEND_URL = "http://localhost:5000"
@@ -53,10 +53,6 @@ const PrivacyPolicyDialog = ({drawerWidth, setPrivacyToken}) => {
   const [open, setOpen] = React.useState(true);
   const [disagreed, setDisagreed] = React.useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleAgree = () => {
     setPrivacyToken({privacyToken: '1'});
     setOpen(false);
@@ -76,7 +72,6 @@ const PrivacyPolicyDialog = ({drawerWidth, setPrivacyToken}) => {
     }}>
     <Dialog
       open={open}
-      onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -84,7 +79,7 @@ const PrivacyPolicyDialog = ({drawerWidth, setPrivacyToken}) => {
         {"Bookworm's Privacy Policy"}
       </DialogTitle>
       <DialogContent>
-        {disagreed? <DialogContentText id="alert-dialog-description">Here is our privacy policy: blah blah blah. Do you agree? You cannot use Bookworm if you disagree with our privacy policy</DialogContentText> : <DialogContentText id="alert-dialog-description">Here is our privacy policy: blah blah blah. Do you agree?</DialogContentText>}
+        <PrivacyPolicyText disagreed={disagreed} />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDisagree}>Disagree</Button>

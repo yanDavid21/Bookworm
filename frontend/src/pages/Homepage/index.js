@@ -86,7 +86,7 @@ const UnloggedIn = () => {
     </Grid>
     
     <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
-    <Grid container spacing={2}>
+    <Grid container spacing={10}>
     <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
