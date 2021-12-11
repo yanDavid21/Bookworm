@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { BACKEND_URL } from "../../App";
@@ -16,7 +16,7 @@ async function loginUser(credentials) {
   })
  }
 
-const LoginPage = ({ token, setToken }) => {
+const LoginPage = ({ token, setToken, lastPath}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -40,10 +40,11 @@ const LoginPage = ({ token, setToken }) => {
     })
     
   }
-
+  let navigate = useNavigate();
   if(token) {
+    // navigate(-1);
     return (
-      <Navigate to="/"/>
+      <Navigate to={lastPath}/>
     );
   }
 

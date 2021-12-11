@@ -25,12 +25,6 @@ const LogoutButton = ({token, setToken}) => {
       });
     }
   
-    // if(!token) {
-    //   return (
-    //     <Navigate to="/"/>
-    //   );
-    // }
-  
     return (
       <List>
         <ListItem button onClick={handleLogout}>

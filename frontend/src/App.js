@@ -1,8 +1,8 @@
 import "./common/stylesheets/App.css";
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "./common/components/header";
 import Homepage from "./pages/Homepage";
-import React from "react";
+import React, {useState} from "react";
 import PermanentDrawerLeft from "./common/components/drawerLeft";
 import DetailsPage from "./pages/Details";
 import LoginPage from "./pages/Login";
@@ -18,7 +18,7 @@ export const BACKEND_URL = "http://localhost:5000"
 
 const Body = ({ drawerWidth, token, setToken }) => {
   // const { token, setToken } = useToken();
-  
+  const [lastPath, setHistory] = useState("/");
   return (
     <div
       className="body"
@@ -31,10 +31,10 @@ const Body = ({ drawerWidth, token, setToken }) => {
       <div className="content">
         <Routes>
           <Route path="/" element={<Homepage token={token}/>}></Route>
-          <Route element={<RequireAuth token={token}/>}>
+          <Route element={<RequireAuth setHistory={setHistory} token={token}/>}>
             <Route path="/details/*" element={<DetailsPage />}></Route>
           </Route>
-          <Route path="/login" exact element={<LoginPage token={token} setToken={setToken}/>}></Route>
+          <Route path="/login" exact element={<LoginPage token={token} setToken={setToken} lastPath={lastPath}/> }></Route>
           <Route path="/register" exact element={<SignupPage token={token} setToken={setToken}/>}></Route>
           <Route path="/profile" exact element={<ProfilePage />}></Route>
           <Route path="/author/*" element={<AuthorPage/>}></Route>
@@ -56,7 +56,7 @@ function App() {
   );
 }
 
-function RequireAuth({token}) {
+function RequireAuth({token, setHistory}) {
   let location = useLocation();
   console.log('token ' + JSON.stringify(token));
 
@@ -66,7 +66,9 @@ function RequireAuth({token}) {
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
     // than dropping them off on the home page.
-    return <Navigate to="/login" state={{ from: location }} />;
+    setHistory(location.pathname)
+    
+    return <Navigate to="/login"/>;
   }
 
   return <Outlet />;
