@@ -11,6 +11,9 @@ import SearchPage from "./pages/Search";
 import SignupPage from "./pages/Signup";
 import AuthorPage from "./pages/Author";
 import useToken from './common/customHooks/useToken';
+import usePrivacyToken from './common/customHooks/usePrivacyToken';
+import PrivacyDialog from './common/components/privacyDialog';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 
 const drawerWidth = 250;
 
@@ -46,13 +49,64 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
   );
 };
 
+const PrivacyPolicyDialog = ({drawerWidth, setPrivacyToken}) => {
+  const [open, setOpen] = React.useState(true);
+  const [disagreed, setDisagreed] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAgree = () => {
+    setPrivacyToken({privacyToken: '1'});
+    setOpen(false);
+  }
+
+  const handleDisagree = () => {
+    localStorage.removeItem('privacyToken');
+    setDisagreed(true);
+    setOpen(true);
+  }
+
+  return (
+    <div       className="body"
+    style={{
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: `${drawerWidth}px`,
+    }}>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {"Bookworm's Privacy Policy"}
+      </DialogTitle>
+      <DialogContent>
+        {disagreed? <DialogContentText id="alert-dialog-description">Here is our privacy policy: blah blah blah. Do you agree? You cannot use Bookworm if you disagree with our privacy policy</DialogContentText> : <DialogContentText id="alert-dialog-description">Here is our privacy policy: blah blah blah. Do you agree?</DialogContentText>}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDisagree}>Disagree</Button>
+        <Button onClick={handleAgree} autoFocus>
+          Agree
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+  );
+}
+
 function App() {
   const { token, setToken } = useToken();
+  const {privacyToken, setPrivacyToken} = usePrivacyToken();
   const [lastPath, setHistory] = useState("/");
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   return (
     <Router>
-      <PermanentDrawerLeft drawerWidth={drawerWidth} token={token} setToken={setToken} setHistory={setHistory}/>
-      <Body drawerWidth={drawerWidth} token={token} setToken={setToken} lastPath={lastPath} setHistory={setHistory}/>
+      <PermanentDrawerLeft drawerWidth={drawerWidth} token={token} setToken={setToken} setHistory={setHistory} setPrivacyOpen={setPrivacyOpen}/>
+      {privacyToken? <Body drawerWidth={drawerWidth} token={token} setToken={setToken} lastPath={lastPath} setHistory={setHistory}/> : <PrivacyPolicyDialog drawerWidth={drawerWidth} setPrivacyToken={setPrivacyToken}/> }
+      <PrivacyDialog privacyOpen={privacyOpen} setPrivacyOpen={setPrivacyOpen}/>
     </Router>
   );
 }

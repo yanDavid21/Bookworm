@@ -16,6 +16,8 @@ import PendingIcon from "@mui/icons-material/Pending";
 import LogoutButton from "./logoutButton";
 import LoginButton from "./loginButton";
 import HomeIcon from '@mui/icons-material/Home';
+import PolicyIcon from '@mui/icons-material/Policy';
+import PrivacyDialog from './privacyDialog';
 
 const listOfTabs = [
   { title: "Reading List", path: "#to-read", icon: <PlaylistAddIcon /> },
@@ -23,7 +25,11 @@ const listOfTabs = [
   { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
 ];
 
-const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory}) => {
+const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPrivacyOpen}) => {
+  const handlePolicy = (e) => {
+    e.preventDefault();
+    setPrivacyOpen(true);
+  }
   return (
     <Drawer
       sx={{
@@ -104,6 +110,21 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory}) => {
             </ListItem>
           </Link>
         ))}
+      </List>
+      <Divider />
+      <List>
+          <ListItem button onClick={handlePolicy}>
+            <ListItemIcon>
+              <PolicyIcon></PolicyIcon>
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  Privacy
+                </Typography>
+              }
+            />
+          </ListItem>
       </List>
       <Divider />
       {token ? <LogoutButton token={token} setToken={setToken}/> : <LoginButton setHistory={setHistory}/>}
