@@ -21,7 +21,8 @@ const PrivacyPolicyText = ({disagreed}) => {
                 <Typography sx={{mt: 1}}>
                 At Bookworm, the privacy of our users is a number-one priority. We will never share your password with anyone. 
                 However, the public information in your profile, such as your name, email, user type, and book lists are all made available 
-                for any other users to view.
+                for any other users to view. Additionally, we use every user's reading list to determine which books are most popular at 
+                any moment.
                 </Typography>
                 {
                     disagreed?
