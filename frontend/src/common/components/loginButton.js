@@ -4,14 +4,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography"; 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const LoginButton = () => {
-  
+const LoginButton = ({ setHistory }) => {
+  let location = useLocation();
+  let navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setHistory(location.pathname);
+    navigate('/login');
+  }
+
     return (
       <List>
           <Link to="/login" className="no-text-decoration">
-        <ListItem button>
+        <ListItem button onClick={handleLogin}>
           <ListItemIcon>
               <LoginIcon></LoginIcon>
             </ListItemIcon>

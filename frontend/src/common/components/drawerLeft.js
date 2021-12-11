@@ -15,6 +15,7 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import PendingIcon from "@mui/icons-material/Pending";
 import LogoutButton from "./logoutButton";
 import LoginButton from "./loginButton";
+import HomeIcon from '@mui/icons-material/Home';
 
 const listOfTabs = [
   { title: "Reading List", path: "#to-read", icon: <PlaylistAddIcon /> },
@@ -22,7 +23,7 @@ const listOfTabs = [
   { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
 ];
 
-const PermanentDrawerLeft = ({ drawerWidth, token, setToken}) => {
+const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory}) => {
   return (
     <Drawer
       sx={{
@@ -37,20 +38,39 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken}) => {
       anchor="left"
       className="drawer"
     >
+      <Link to="/" className="no-text-decoration">
       <Toolbar className="header">
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 0.5 }}
-        >
-          <MenuBookIcon fontSize="large" />
-        </IconButton>
-        <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-          Bookworm
-        </Typography>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 0.5 }}
+          >
+            <MenuBookIcon fontSize="large" />
+          </IconButton>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            Bookworm
+          </Typography>
       </Toolbar>
+      </Link>
+      <Divider />
+      <List>
+        <Link to="/home" className="no-text-decoration">
+          <ListItem button>
+            <ListItemIcon>
+              <HomeIcon></HomeIcon>
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  Home
+                </Typography>
+              }
+            />
+          </ListItem>
+        </Link>
+      </List>
       <Divider />
       <List>
         <Link to="/search" className="no-text-decoration">
@@ -86,7 +106,7 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken}) => {
         ))}
       </List>
       <Divider />
-      {token ? <LogoutButton token={token} setToken={setToken}/> : <LoginButton />}
+      {token ? <LogoutButton token={token} setToken={setToken}/> : <LoginButton setHistory={setHistory}/>}
     </Drawer>
   );
 };
