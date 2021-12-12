@@ -30,7 +30,28 @@ const fetchBook = (isbn, setResults, searchType) => {
   });
 };
 
-const DetailsPage = () => {
+const addBookToList = (bodyParams, location) => {
+  const isbn = location.pathname.substring(9)
+  console.log("Adding book isbn# " + isbn + " to list " + bodyParams.listType)
+  bodyParams.isbn = isbn
+  fetch(
+    '/api/add-book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodyParams)
+    }
+  ).then(response => {
+    if (response.status === 200) {
+      console.log("Book successfully added.")
+    } else {
+      console.log("Failed to add book.")
+    }
+  })
+}
+
+const DetailsPage = ({token}) => {
   let location = useLocation();
   const [result, setResult] = useState(null)
   const searchType = "ISBN";
@@ -38,6 +59,7 @@ const DetailsPage = () => {
   useEffect(() => {
     fetchBook(location.pathname.substring(9), setResult, searchType)
   },[location, setResult])
+  
   return result ? (<div>
     <Card>
       <CardActionArea sx={{ display: 'flex' }}>
@@ -52,21 +74,21 @@ const DetailsPage = () => {
           <Button
               sx={{ mt: 4, ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
               variant="contained"
-              // onClick={}
+              onClick={()=>{addBookToList({listType: "to_read", bookInfo: result.items[0].volumeInfo, token: token}, location)}}
           >
             Add to Reading List
           </Button>
           <Button
               sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
               variant="contained"
-              // onClick={}
+              onClick={()=>{addBookToList({listType: "in_progress", bookInfo: result.items[0].volumeInfo, token: token}, location)}}
           >
             Add to In-Progress List
           </Button>
           <Button
               sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
               variant="contained"
-              // onClick={}
+              onClick={()=>{addBookToList({listType: "finished", bookInfo: result.items[0].volumeInfo, token: token}, location)}}
           >
             Add to Finished List
           </Button>

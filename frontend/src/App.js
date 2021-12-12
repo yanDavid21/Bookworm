@@ -35,7 +35,7 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
         <Routes>
           <Route path="/" element={<Homepage token={token}/>}></Route>
           <Route element={<RequireAuth setHistory={setHistory} token={token}/>}>
-            <Route path="/details/*" element={<DetailsPage />}></Route>
+            <Route path="/details/*" element={<DetailsPage token={token}/>}></Route>
           </Route>
           <Route path="/login" exact element={<LoginPage token={token} setToken={setToken} lastPath={lastPath}/> }></Route>
           <Route path="/register" exact element={<SignupPage token={token} setToken={setToken} lastPath={lastPath}/>}></Route>

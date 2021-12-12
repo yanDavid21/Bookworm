@@ -40,6 +40,7 @@ const createUserRouter = require('./routes/create-user');
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
+const addBookRouter = require('./routes/add-book');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
@@ -49,6 +50,7 @@ app.use('/api/register', createUserRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter)
 app.use('/api/details', detailRouter);
+app.use('/api/add-book', addBookRouter)
 /*******************************************/
 
 
