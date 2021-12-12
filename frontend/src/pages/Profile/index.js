@@ -9,10 +9,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const ProfileHeader = ({ username, email, profPicture }) => {
+const ProfileHeader = ({ name, email, profPicture }) => {
   return (
     <>
-      {username ? (
+      {name ? (
         <div className="flex-center flex-horizontal">
           {profPicture ? (
             <img
@@ -27,7 +27,7 @@ const ProfileHeader = ({ username, email, profPicture }) => {
             />
           )}
           <div className="flex-center flex-vertical">
-            <Typography variant="h4">{`Welcome back, ${username}`}</Typography>
+            <Typography variant="h4">{`Welcome back, ${name}`}</Typography>
             <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
           </div>
         </div>
@@ -118,32 +118,48 @@ const BookList = ({ title, list }) => {
   );
 };
 
-const ProfilePage = () => {
+async function getProfileData(token,setUserData,setEmail,setName) {
+  return fetch('http://localhost:5000/api/get-user-data', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(token)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      setEmail(data.email);
+      setName(data.name);
+      setUserData({readingList: data.to_read, inProgressList:data.in_progress, finishedList:data.finished});
+    })
+    // .then(response => response.json())
+    .catch(err => {
+      alert(err);
+    });
+ }
+
+const ProfilePage = ({token}) => {
   const initState = { readingList: [], inProgressList: [], finishedList: [] };
   const [userData, setUserData] = useState(initState);
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
 
   //get user data
-  // useEffect(() => {
-  //get user data
-  //   fetch()
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //     });
-  // }, [userData]);
+  useEffect(async () => {
+    await getProfileData({token},setUserData, setEmail, setName);
 
-  //get user email
-  //useEffect
+    console.log(email);
+  }, []);
+
   return (
     <div className="profile-page flex-center flex-horizontal">
       <Grid container>
         <Grid item xs={12}>
           <div className="flex-center flex-horizontal">
             <ProfileHeader
-              username={username}
+              name={name}
               email={email}
               image={image}
             ></ProfileHeader>
