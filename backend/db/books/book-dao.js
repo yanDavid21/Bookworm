@@ -12,10 +12,19 @@ const updateBook = (id, book) =>
     model.updateOne({_id: id},
         {$set: book});
 
+const findBookByIsbn = (isbn) => 
+  model.findOne({isbn: isbn})
+
+
+const replaceBook = (isbn, book) => 
+  model.replaceOne({isbn: isbn}, book)
+
 module.exports = {
   findAllBooks,
   deleteBook,
   createBook,
   findBookById,
-  updateBook
+  updateBook,
+  findBookByIsbn,
+  replaceBook
 }

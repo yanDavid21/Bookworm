@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import EditIcon from '@mui/icons-material/Edit';
+import ChangeInfoDialog from '../../common/components/changeInfoDialog';
 
 const ProfileHeader = ({ name, email, profPicture }) => {
+  const [infoOpen, setInfoOpen] = React.useState(false);
+
+  const handleInfoOpen = (e) => {
+    e.preventDefault();
+    setInfoOpen(true);
+  }
+
   return (
     <>
       {name ? (
@@ -26,9 +35,15 @@ const ProfileHeader = ({ name, email, profPicture }) => {
               alt="Profile of ****"
             />
           )}
-          <div className="flex-center flex-vertical">
-            <Typography variant="h4">{`Welcome back, ${name}`}</Typography>
-            <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
+          <div className="flex-vertical">
+            <Typography variant="h3">{`Welcome back, ${name}`}</Typography>
+            <div className="flex-horizontal" sx={{alignItems: 'center'}}>
+              <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
+              <IconButton onClick={handleInfoOpen}>
+                <EditIcon color="success" fontSize="inherit"></EditIcon>
+              </IconButton>
+              <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen}/>
+            </div>
           </div>
         </div>
       ) : (
@@ -157,7 +172,7 @@ const ProfilePage = ({token}) => {
     <div className="profile-page flex-center flex-horizontal">
       <Grid container>
         <Grid item xs={12}>
-          <div className="flex-center flex-horizontal">
+          <div className="flex-horizontal">
             <ProfileHeader
               name={name}
               email={email}

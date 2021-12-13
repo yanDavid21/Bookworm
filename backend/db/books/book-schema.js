@@ -2,16 +2,14 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const bookSchema = new Schema({
+  isbn: String,
   title: String,
-  author: String,
-  genre: String,
+  authors: [String],
   description: String,
-  published: Date,
-  pages: Number,
-  toReadUsers: [Schema.Types.ObjectId],
-  inProgressUsers: [Schema.Types.ObjectId],
-  finishedUsers: [Schema.Types.ObjectId],
-  thumbnail: String
+  publishedDate: String,
+  publisher: String,
+  addedCount: Number, 
+  image: String
 })
 
 module.exports = bookSchema
