@@ -6,8 +6,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 export const SearchTypeRadioGroup = ({
+  searchType,
   setSearchType,
   bonusQuery,
   setBonusQuery,
@@ -27,6 +29,7 @@ export const SearchTypeRadioGroup = ({
           aria-label="Search Types"
           name="row-radio-buttons-group"
           onChange={onChange}
+          value={searchType}
         >
           <FormControlLabel value="ISBN" control={<Radio />} label="ISBN" />
           <FormControlLabel value="Title" control={<Radio />} label="Title" />
@@ -44,6 +47,7 @@ export const SearchTypeRadioGroup = ({
         </RadioGroup>
         <TextField
           size="small"
+          placeholder="Advanced Query"
           value={bonusQuery}
           onChange={onChangeBonusQuery}
         ></TextField>
@@ -69,7 +73,9 @@ export const SearchField = ({
     console.log("search: " + search);
     fetch(
       `/api/search?q=${search}${
-        bonusQuery ? `&${searchType.toLowerCase()}=${bonusQuery}` : ""
+        bonusQuery && searchType
+          ? `&${searchType.toLowerCase()}=${bonusQuery}`
+          : ""
       }`
     )
       .then((response) => {
@@ -77,7 +83,7 @@ export const SearchField = ({
       })
       .then((data) => {
         console.log(data.items);
-        setSearchResults(data.items);
+        setSearchResults(data.items ?? []);
       })
       .catch((err) => {
         alert(err);
@@ -97,13 +103,19 @@ export const SearchField = ({
         value={search}
         onChange={onChange}
       />
-      <Button
-        sx={{ ml: 1, backgroundColor: "rgb(33, 112, 33)" }}
-        variant="contained"
-        onClick={fetchBooks}
+      <Link
+        to={`/search?${search ? "q=" + search : ""}${
+          searchType ? "&searchType=" + searchType : ""
+        }${bonusQuery ? "&bonusQ=" + bonusQuery : ""}`}
       >
-        Search
-      </Button>
+        <Button
+          sx={{ ml: 1, backgroundColor: "rgb(33, 112, 33)" }}
+          variant="contained"
+          //onClick={fetchBooks}
+        >
+          Search
+        </Button>
+      </Link>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
@@ -7,7 +7,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Card } from "@mui/material";
 import BooksImage from "../../common/resources/stackOfBooks.png";
 import { SearchField, SearchTypeRadioGroup } from "./searchInput";
@@ -80,6 +80,58 @@ const SearchPage = () => {
   const [bonusQuery, setBonusQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showBonus, setBonusSearch] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    console.log(location);
+    if (location.search === "") {
+      return;
+    }
+    const queryString = location.search.substring(1).replaceAll("%20", " ");
+    const queryKeyValuePairs = queryString.split("&");
+    let q;
+    let searchType;
+    let bonusQ;
+    queryKeyValuePairs.forEach((pair) => {
+      const elements = pair.split("=");
+      const key = elements[0];
+      const value = elements[1];
+      switch (key) {
+        case "q":
+          q = value;
+          setSearch(value);
+          break;
+        case "searchType":
+          searchType = value;
+          setBonusSearch(true);
+          setSearchType(value);
+          break;
+        case "bonusQ":
+          bonusQ = value;
+          setBonusSearch(true);
+          setBonusQuery(value);
+          break;
+        default:
+          break;
+      }
+    });
+
+    fetch(
+      `/api/search?q=${q}${
+        bonusQ && searchType ? `&${searchType.toLowerCase()}=${bonusQ}` : ""
+      }`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSearchResults(data.items ?? []);
+        data.items ?? alert("No results, please try another query.");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, [location.search]);
+
   return (
     <div className="search-page flex-horizontal flex-center">
       <Grid container spacing={2}>
@@ -101,6 +153,7 @@ const SearchPage = () => {
               <Grid item xs={12}>
                 <div className="flex-horizontal flex-center">
                   <SearchTypeRadioGroup
+                    searchType={searchType}
                     setSearchType={setSearchType}
                     bonusQuery={bonusQuery}
                     setBonusQuery={setBonusQuery}
@@ -129,16 +182,19 @@ const SearchPage = () => {
                     const authors = result.volumeInfo.authors;
                     const description = result.volumeInfo.description;
                     const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
-                    if (isbn.substring(0,4) !== "OCLC") {
-                    return (
-                      <SearchResultCard
-                        title={title}
-                        isbn={isbn}
-                        authors={authors}
-                        thumbnail={thumbnail}
-                        description={description}
-                      />
-                    );}
+                    if (isbn.substring(0, 4) !== "OCLC") {
+                      return (
+                        <SearchResultCard
+                          title={title}
+                          isbn={isbn}
+                          authors={authors}
+                          thumbnail={thumbnail}
+                          description={description}
+                        />
+                      );
+                    } else {
+                      return <></>;
+                    }
                   })}
                 </List>
               </div>
