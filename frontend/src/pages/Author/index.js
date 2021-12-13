@@ -8,13 +8,14 @@ import Card from "@mui/material/Card"
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import {Button, CardActionArea, CardActions, Grid} from '@mui/material';
 import books from "../Details/books.jpeg"
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
+import List from "@mui/material/List";
 
-const fetchAuthor = (authorName, setResults, searchType) => {
+const fetchAuthorBooks = (authorName, setResults, searchType) => {
   fetch(
       `/api/search?q=${authorName}${
           authorName ? `&${searchType}=${authorName}` : ""
@@ -25,75 +26,55 @@ const fetchAuthor = (authorName, setResults, searchType) => {
   })
   .then((data) => {
     console.log(data)
-    setResults(data);
+    setResults(data.items);
   });
 };
 
 const AuthorPage = () => {
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState([])
   const searchType = "author";
   let location = useLocation();
-  console.log(location.pathname)
+  let author= decodeURI(location.pathname.substring(8));
+  console.log(author)
   useEffect(() => {
-    fetchAuthor(location.pathname.substring(8), setResult, searchType)
+    fetchAuthorBooks(author, setResult, searchType)
   },[location, setResult])
 
   return result ? (<div>
     <Card>
-      <CardActionArea sx={{ display: 'flex' }}>
-        <Box>
-          <CardMedia sx={{ display: 'flex', ml:1, flexDirection: 'column', minWidth: 350}}
-                     component="img"
-                     image={result.items[0].volumeInfo.imageLinks.thumbnail?
-                         result.items[0].volumeInfo.imageLinks.thumbnail:
-                         books}
-                     alt="books in library"
-          />
-          <Button
-              sx={{ mt: 4, ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
-              variant="contained"
-              // onClick={}
-          >
-            Add to Reading List
-          </Button>
-          <Button
-              sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
-              variant="contained"
-              // onClick={}
-          >
-            Add to Bookshelf
-          </Button>
-          <Button
-              sx={{ ml:2, mb:2, width: 330, backgroundColor: "rgb(33, 112, 33)" }}
-              variant="contained"
-              // onClick={}
-          >
-            Add to Favorites
-          </Button>
-        </Box>
-        <CardContent sx={{ display: 'flex', position:"relative", mt:-10, ml:3, flexDirection: 'column', flex: '3 1 auto'}}>
-          <Typography gutterBottom variant="h4" component="div">
-            {result.items[0].volumeInfo.title}
-            <Link to={`/author`}>
-              <Typography gutterBottom variant="h5" component="div" color="text.secondary">
-                {result.items[0].volumeInfo.authors.length === 1? result.items[0].volumeInfo.authors:
-                    result.items[0].volumeInfo.authors.join(", ")}
-                {/*{console.log(result.items[0].volumeInfo.authors)}*/}
-                {/*{result.items[0].volumeInfo.authors}*/}
-              </Typography>
-            </Link>
+      <CardContent sx={{ display: 'flex', justifyContent: "left", ml:3, flexDirection: 'column'}}>
+        <Typography component="div">
+          <Typography gutterBottom variant="h4" component="div" color = "rgb(33, 112, 33)">
+            {author}
           </Typography>
-          <Typography>
-            {result.items[0].volumeInfo.description}
-          </Typography>
-          <Typography sx={{mt: 3}}>
-            Published in {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
-          </Typography>
-          <Typography sx={{mt: 3}}>
-            {result.items[0].volumeInfo.publishedDate} by {result.items[0].volumeInfo.publisher}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+        </Typography >
+        <Typography gutterBottom variant="h4" component="div" color = "rgb(33, 112, 33)">
+          Books by this author:
+        </Typography>
+        <Grid container spacing={10} sx={{mt: 1}}>
+          {result.map((currResult) => {
+            const thumbnail = currResult.volumeInfo.imageLinks?.thumbnail;
+            let numbers = /^[0-9]+$/;
+            return currResult.volumeInfo.industryIdentifiers[0].identifier.match(numbers)
+                && currResult.volumeInfo.authors ?
+            <Box sx={{display: 'flex', pl: 10, pt:2, pb:1, pr: 6, flexDirection:'column'}}>
+              <Link to={`/details/${currResult.volumeInfo.industryIdentifiers[0].identifier}`} className="unstyled-link">
+                <CardMedia sx={{ display: 'flex', width: 275}}
+                           component="img"
+                           image={thumbnail?
+                               thumbnail:
+                               books}
+                           alt="books in library"
+                />
+                <Typography gutterBottom variant="h6" component="div" color="text.secondary">
+                  {currResult.volumeInfo.title}
+                </Typography>
+              </Link>
+            </Box> : <></>;
+
+          })}
+        </Grid>
+      </CardContent>
     </Card>
   </div>): <CircularProgress></CircularProgress>;
 };
