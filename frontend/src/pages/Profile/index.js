@@ -10,13 +10,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import EditIcon from '@mui/icons-material/Edit';
 import ChangeInfoDialog from '../../common/components/changeInfoDialog';
+import EnterPasswordDialog from '../../common/components/enterPasswordDialog';
 
-const ProfileHeader = ({ name, email, profPicture }) => {
+const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
+  const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
 
   const handleInfoOpen = (e) => {
     e.preventDefault();
     setInfoOpen(true);
+  }
+
+  const handleEnterPasswordOpen = (e) => {
+    e.preventDefault();
+    setEnterPasswordOpen(true);
   }
 
   return (
@@ -39,10 +46,11 @@ const ProfileHeader = ({ name, email, profPicture }) => {
             <Typography variant="h3">{`Welcome back, ${name}`}</Typography>
             <div className="flex-horizontal" sx={{alignItems: 'center'}}>
               <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
-              <IconButton onClick={handleInfoOpen}>
+              <IconButton onClick={handleEnterPasswordOpen}>
                 <EditIcon color="success" fontSize="inherit"></EditIcon>
               </IconButton>
-              <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen}/>
+              <EnterPasswordDialog enterPasswordOpen={enterPasswordOpen} setEnterPasswordOpen={setEnterPasswordOpen} token={token} setInfoOpen={setInfoOpen}/>
+              <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen} token={token} setEmail={setEmail} setName={setName}/>
             </div>
           </div>
         </div>
@@ -177,6 +185,9 @@ const ProfilePage = ({token}) => {
               name={name}
               email={email}
               image={image}
+              token={token}
+              setEmail={setEmail}
+              setName={setName}
             ></ProfileHeader>
           </div>
         </Grid>

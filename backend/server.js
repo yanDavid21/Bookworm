@@ -41,6 +41,8 @@ const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
 const addBookRouter = require('./routes/add-book');
+const changeUserInfoRouter = require('./routes/change-user-info');
+const enterPasswordRouter = require('./routes/enter-password')
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
@@ -51,6 +53,8 @@ app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter)
 app.use('/api/details', detailRouter);
 app.use('/api/add-book', addBookRouter)
+app.use('/api/change-user-info', changeUserInfoRouter);
+app.use('/api/enter-password', enterPasswordRouter);
 /*******************************************/
 
 
