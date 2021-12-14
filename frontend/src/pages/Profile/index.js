@@ -162,7 +162,7 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const searchType = "ISBN";
   useEffect(() => {
     fetchBook(isbn, setResults, searchType);
-  }, []);
+  }, [isbn]);
   const title = result.volumeInfo.title;
   const author = result.volumeInfo.authors;
   const image = result.volumeInfo.imageLinks?.thumbnail;
@@ -186,25 +186,14 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
         let updatedList = userData[convertToFrontEndName(listType)].filter(
           (listItem) => listItem !== isbn
         );
+        let obj = { ...userData };
         let field = convertToFrontEndName(listType);
-        setUserData({ ...userData, [field]: updatedList });
+        obj[field] = updatedList;
+        setUserData(obj);
       })
       .catch((err) => {
         alert(err);
       });
-  };
-
-  const addToNextList = (listType, isbn) => {};
-
-  const buttonActionText = (listType) => {
-    switch (listType) {
-      case "Reading List":
-        return "Move to In Progress";
-      case "In Progress List":
-        return "Move to Finished";
-      default:
-        return "";
-    }
   };
 
   return result ? (
@@ -254,15 +243,6 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
           sx={{ color: "white" }}
         >
           Remove
-        </Button>
-        <Button
-          size="small"
-          onClick={() => {
-            addToNextList(listType, isbn);
-          }}
-          sx={{ color: "white", pl: 2, pr: 2 }}
-        >
-          {buttonActionText(listType)}
         </Button>
       </CardActions>
     </Card>
