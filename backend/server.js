@@ -62,9 +62,6 @@ app.use("/api/enter-password", enterPasswordRouter);
 app.use("/api/get-popular-books", getPopularBooksRouter);
 app.use("/api/get-reading-list", getReadingListRouter);
 app.use("/api/get-books-by-author", getBooksByAuthorRouter);
-router.get(["/", "/*"], function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
 app.get("*", (req, res) => {
   res.render("index", { title: "Express" });
 });
@@ -84,7 +81,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render("index", { title: "Express" });
 });
 /***********************************************/
 
