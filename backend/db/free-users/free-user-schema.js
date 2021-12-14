@@ -6,8 +6,6 @@ const freeUserSchema = new Schema({
   email: String,
   password: String,
   to_read: [Schema.Types.String],
-  in_progress: [Schema.Types.String],
-  finished: [Schema.Types.String],
 })
 
 module.exports = freeUserSchema
