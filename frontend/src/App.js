@@ -6,7 +6,6 @@ import {
   Navigate,
   Outlet,
   useLocation,
-  useNavigate,
 } from "react-router-dom";
 import Header from "./common/components/header";
 import Homepage from "./pages/Homepage";
@@ -26,7 +25,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
 } from "@mui/material";
 import PrivacyPolicyText from "./common/components/privacyPolicyText";

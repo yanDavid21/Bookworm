@@ -170,7 +170,7 @@ const SearchPage = ({ token }) => {
         data.items ?? alert("No results, please try another query.");
       })
       .catch((err) => {
-        alert(err);
+        alert("Search: " + err);
       });
   }, [location.search]);
 
@@ -191,9 +191,9 @@ const SearchPage = ({ token }) => {
         setFinishedList(data.finished);
       })
       .catch((err) => {
-        alert(err);
+        alert("Token: " + err);
       });
-  }, []);
+  }, [token]);
 
   return (
     <div className="search-page flex-horizontal flex-center">
