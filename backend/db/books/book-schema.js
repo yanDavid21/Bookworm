@@ -9,7 +9,8 @@ const bookSchema = new Schema({
   publishedDate: String,
   publisher: String,
   addedCount: Number, 
-  image: String
+  image: String,
+  id: String,
 })
 
 module.exports = bookSchema
