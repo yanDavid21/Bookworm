@@ -12,7 +12,6 @@ async function registerUser(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
  }
 
 
@@ -24,12 +23,22 @@ const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (name !== '' && email !== '' && password !== '' && (userType === 'paid' || userType === 'free')) {
-      setToken(await registerUser({
+      const promise = registerUser({
         name,
         email,
         password,
         userType
-      }));
+      })
+
+      promise.then(response => {
+        if(response.status === 409)
+          throw Error("Email already exists. Please choose another");
+        return response.json()
+      })
+      .then(data => {
+        setToken(data);
+      })
+      .catch(err => alert(err))
     }
   }
 
