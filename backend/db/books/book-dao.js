@@ -15,6 +15,7 @@ const updateBook = (id, book) =>
 const findBookByIsbn = (isbn) => 
   model.findOne({isbn: isbn})
 
+const findBooksByIsbn = (isbns) => model.find({isbn: {$in: isbns}})
 
 const replaceBook = (isbn, book) => 
   model.replaceOne({isbn: isbn}, book)
@@ -26,5 +27,6 @@ module.exports = {
   findBookById,
   updateBook,
   findBookByIsbn,
+  findBooksByIsbn,
   replaceBook
 }

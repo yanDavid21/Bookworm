@@ -20,6 +20,21 @@ const getPopularBooks = (setPopularBooks) => {
   })
 }
 
+const getReadingList = (setReadingList, token) => {
+  console.log("Getting reading list")
+  fetch(`/api/get-reading-list`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({token: token}) 
+  }).then((response) => {
+    return response.json();
+  }).then(data => {
+    setReadingList(data)
+  })
+}
+
 const Homepage = ({token}) => {
   const [popularBooks, setPopularBooks] = useState(null)
   useEffect(() => {
@@ -33,71 +48,49 @@ const Homepage = ({token}) => {
   }
 
   return (
-    <LoggedIn popularBooks={popularBooks}/>
+    <LoggedIn popularBooks={popularBooks} token={token}/>
   );
 };
 
-const LoggedIn = ({popularBooks}) => {
-  console.log(popularBooks);
-  return popularBooks ? (
+const LoggedIn = ({popularBooks, token}) => {
+  const [readingList, setReadingList] = useState(null)
+  useEffect(() => {
+    getReadingList(setReadingList, token)
+  }, [setReadingList])
+  console.log(readingList)
+  return (popularBooks && readingList) ? (
     <div>
     <Typography variant="h3">Bookworm</Typography>     
     
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
+    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books in your reading list</Typography>
     <Grid container spacing={10}>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
+    {readingList.map((readingListItem) => {
+        const imgSrc = readingListItem.image
+        const isbn = readingListItem.isbn
+        return (
+            <Grid item sm={6} md={4} lg={3} xl={2}>
+              <Link to={`/details/${isbn}`}>          
+                <img src={imgSrc} width="200"/>
+              </Link>          
+            </Grid>
+          
+          )
+      })}
     </Grid>
-
     <Typography variant="h5" sx={{mt: 5, mb: 2}}>Popular books with Bookworm users</Typography>
     <Grid container spacing={10}>
     {popularBooks.map((popularBook) => {
         const imgSrc = popularBook.image
-        
+        const isbn = popularBook.isbn
         return (
-        <Grid item sm={6} md={4} lg={3} xl={2}>
-          <Link to={`/details/${popularBook.isbn}`}>
-            <img src={imgSrc} width="200"/>
-          </Link>
-        </Grid>
-        )
         
-
+          <Grid item sm={6} md={4} lg={3} xl={2}> 
+            <Link to={`/details/${isbn}`}>       
+              <img src={imgSrc} width="200"/>
+            </Link>         
+          </Grid>
+        )
       })}
-    {/* <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid> */}
     </Grid>
   </div>
   ) : (
@@ -124,32 +117,20 @@ const UnloggedIn = ({popularBooks}) => {
       </Grid>
     </Grid>
     
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
+    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Popular books that users have added to their reading list</Typography>
     <Grid container spacing={10}>
     {popularBooks.map((popularBook) => {
         const imgSrc = popularBook.image
-        return <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src={imgSrc} width="200"/>
-        </Grid>
+        const isbn = popularBook.isbn
+        return (
+            <Grid item sm={6} md={4} lg={3} xl={2}>
+              <Link to={`/details/${isbn}`}>          
+                <img src={imgSrc} width="200"/>
+              </Link>          
+            </Grid>
+          
+          )
       })}
-    {/* <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
-      <Grid item sm={6} md={4} lg={3} xl={2}>
-          <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid> */}
     </Grid>
   </div>
   ) : (
