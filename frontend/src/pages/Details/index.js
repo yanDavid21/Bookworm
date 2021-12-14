@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, Snackbar, Alert } from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import books from "./books.jpeg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
