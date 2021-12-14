@@ -15,18 +15,22 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 
-const fetchAuthorBooks = (authorName, setResults, searchType) => {
+const fetchAuthorBooks = (authorName, setResults) => {
   fetch(
-      `/api/search?q=${authorName}${
-          authorName ? `&${searchType}=${authorName}` : ""
-      }`
+      `/api/get-books-by-author`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({authorName: authorName})
+      }
   )
   .then((response) => {
     return response.json();
   })
   .then((data) => {
     console.log(data)
-    setResults(data.items);
+    setResults(data);
   });
 };
 
@@ -48,17 +52,18 @@ const AuthorPage = () => {
             {author}
           </Typography>
         </Typography >
-        <Typography gutterBottom variant="h4" component="div" color = "rgb(33, 112, 33)">
-          Books by this author:
-        </Typography>
-        <Grid container spacing={10} sx={{mt: 1}}>
+        {result.length > 0 ? (<div>
+          <Typography gutterBottom variant="h4" component="div" color = "rgb(33, 112, 33)">
+          Books by this author added by other users:
+          </Typography>
+          <Grid container spacing={10} sx={{mt: 1}}>
           {result.map((currResult) => {
-            const thumbnail = currResult.volumeInfo.imageLinks?.thumbnail;
+            const thumbnail = currResult.image;
             let numbers = /^[0-9]+$/;
-            return currResult.volumeInfo.industryIdentifiers[0].identifier.match(numbers)
-                && currResult.volumeInfo.authors ?
+            return currResult.isbn.match(numbers)
+                && currResult.authors ?
             <Box sx={{display: 'flex', pl: 10, pt:2, pb:1, pr: 6, flexDirection:'column'}}>
-              <Link to={`/details/${currResult.volumeInfo.industryIdentifiers[0].identifier}`} className="unstyled-link">
+              <Link to={`/details/${currResult.isbn}`} className="unstyled-link">
                 <CardMedia sx={{ display: 'flex', width: 275}}
                            component="img"
                            image={thumbnail?
@@ -67,13 +72,18 @@ const AuthorPage = () => {
                            alt="books in library"
                 />
                 <Typography gutterBottom variant="h6" component="div" color="text.secondary">
-                  {currResult.volumeInfo.title}
+                  {currResult.title}
                 </Typography>
               </Link>
             </Box> : <></>;
 
           })}
-        </Grid>
+          </Grid>
+        </div>) : (<div>
+                <Typography gutterBottom variant="h6" component="div" color = "rgb(33, 112, 33)">
+                  No one has added any books by this author yet! Maybe you could be the first :)
+                </Typography>
+              </div>)}
       </CardContent>
     </Card>
   </div>): <CircularProgress></CircularProgress>;
