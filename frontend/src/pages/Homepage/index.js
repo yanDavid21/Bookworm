@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
+import bookwormHeader from "./bookworm-header.png";
 
 const getPopularBooks = (setPopularBooks) => {
   fetch(`/api/get-popular-books`, {
@@ -54,8 +55,10 @@ const LoggedIn = ({ popularBooks, token }) => {
   }, [setReadingList])
   return (popularBooks && readingList) ? (
     <div>
-      <Typography variant="h3">Bookworm</Typography>
-      {readingList.length > 0 ? (<><Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Books in your reading list</Typography>
+      <div className="flex-horizontal flex-center">
+        <img fullwidth src={bookwormHeader} style={{width: "50%", height: "15%", marginBottom: 10, marginLeft: -30}}/>
+      </div>
+      {readingList.length > 0 ? (<><Typography variant="h5" sx={{ mt: 5, mb: 2, maxWidth: 300, borderRadius: 1, backgroundColor: "rgb(33, 112, 33)", color: "white", textAlign: 'center' }}>Books in your Reading List</Typography>
         <Grid container spacing={10}>
           {readingList.map((readingListItem) => {
             const imgSrc = readingListItem.image
@@ -70,7 +73,7 @@ const LoggedIn = ({ popularBooks, token }) => {
             )
           })}
         </Grid></>) : <></>}
-      <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Popular books with Bookworm users</Typography>
+      <Typography variant="h5" sx={{ mt: 5, mb: 2, maxWidth: 410, borderRadius: 1, backgroundColor: "rgb(33, 112, 33)", color: "white", textAlign: 'center'  }}>Popular Books with Bookworm Users</Typography>
       <Grid container spacing={10}>
         {popularBooks.map((popularBook) => {
           const imgSrc = popularBook.image
@@ -93,11 +96,13 @@ const LoggedIn = ({ popularBooks, token }) => {
 const UnloggedIn = ({ popularBooks }) => {
   return popularBooks ? (
     <div>
-      <Typography variant="h2">Bookworm</Typography>
+      <div className="flex-horizontal flex-center">
+        <img fullwidth src={bookwormHeader} style={{width: "50%", height: "15%", marginBottom: 10, marginLeft: -30}}/>
+      </div>
 
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>What is Bookworm?</span></Typography>
+          <Typography sx={{ mb: 2, mt: 3, maxWidth: 250, borderRadius: 1, backgroundColor: "rgb(33, 112, 33)", color: "white", textAlign: 'center' }} variant="h5"><span>What is Bookworm?</span></Typography>
           <Typography variant="h7">
             Bookworm is the app designed for voracious readers and dabblers alike. Our reading lists are designed to keep readers of all ages organized and on track with your reading goals, and our logged-in members can share their profiles, and view their friends'. Premium users can even add to multiple lists!
           </Typography><br/><br/>
@@ -105,14 +110,13 @@ const UnloggedIn = ({ popularBooks }) => {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>Why Bookworm?</span></Typography>
+          <Typography sx={{ mb: 2, mt: 3, maxWidth: 250, borderRadius: 1, backgroundColor: "rgb(33, 112, 33)", color: "white", textAlign: 'center' }} variant="h5"><span>Why Bookworm?</span></Typography>
           <Typography variant="h7">
             Many readers prefer to track their book lists on paper, through Google Docs, or on Goodreads. However, we envisioned a clean, simple interface that combines a vast, easily-searchable, library with a separate-list structure that isn't easily replicable in hand-written journals or the Docs. We do all this while removing all the noise of ads, reviews, and buyer information found in Goodreads. In the end, we came up with Bookworm, the best of all worlds.
           </Typography>
         </Grid>
       </Grid>
-
-      <Typography variant="h4" sx={{ mt: 5, mb: 2 }}>Popular books that users have added to their reading list</Typography>
+      <Typography variant="h5" sx={{ mt: 5, mb: 2, maxWidth: 650, borderRadius: 1, backgroundColor: "rgb(33, 112, 33)", color: "white", textAlign: 'center' }}>Popular books that users have added to their reading list</Typography>
       <Grid container spacing={7}>
         {popularBooks.map((popularBook) => {
           const imgSrc = popularBook.image
