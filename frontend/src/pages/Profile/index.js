@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeInfoDialog from "../../common/components/changeInfoDialog";
 import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import books from "../Details/books.jpeg";
 
 const ProfileHeader = ({
@@ -24,7 +24,7 @@ const ProfileHeader = ({
   curUser,
   location,
   userId,
-  setHistory
+  setHistory,
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
@@ -32,7 +32,7 @@ const ProfileHeader = ({
     "http://localhost:3000" +
     (curUser ? "/profile/" + userId : location.pathname);
 
-  if(!curUser && !token) {
+  if (!curUser && !token) {
     setHistory(location.pathname);
   }
 
@@ -87,7 +87,8 @@ const ProfileHeader = ({
               ) : (
                 <></>
               )}
-              <Button sx={{backgroundColor: "rgb(33, 112, 33)"}}
+              <Button
+                sx={{ backgroundColor: "rgb(33, 112, 33)" }}
                 variant="contained"
                 onClick={() => {
                   navigator.clipboard.writeText(pathName);
@@ -96,8 +97,18 @@ const ProfileHeader = ({
                 Copy Profile URL
               </Button>
             </Box>
-            {token? <></> : 
-                <Link to="/login" className="no-text-decoration"><Button variant="contained" sx={{mt: 3, backgroundColor: "rgb(33, 112, 33)"}}>Log in to view this person's lists</Button></Link>}
+            {token ? (
+              <></>
+            ) : (
+              <Link to="/login" className="no-text-decoration">
+                <Button
+                  variant="contained"
+                  sx={{ mt: 3, backgroundColor: "rgb(33, 112, 33)" }}
+                >
+                  Log in to view this person's lists
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       ) : (
@@ -147,7 +158,7 @@ const convertToFrontEndName = (listType) => {
 
 const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const [result, setResults] = useState({
-    volumeInfo: { title: "", authors: "", thumbnail: "" },
+    volumeInfo: { title: "", authors: [], thumbnail: "" },
   });
   const searchType = "ISBN";
   useEffect(() => {
@@ -198,7 +209,7 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   };
 
   return result ? (
-    <Card sx={{ width: 260, mt: 2}}>
+    <Card sx={{ width: 260, mt: 2 }}>
       <Link to={`/details/${isbn}`} className="unstyled-link">
         <CardMedia
           component="img"
@@ -213,17 +224,37 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {author}
+            {author === 1
+              ? author
+              : author.map((auth, index) => {
+                  return (
+                    <>
+                      <Link to={`/author/${auth}`} color="text.secondary">
+                        {auth + (index === author.length - 1 ? "" : ",")}
+                      </Link>{" "}
+                    </>
+                  );
+                })}
           </Typography>
         </CardContent>
       </Link>
-      <CardActions sx={{backgroundColor: "rgb(33, 112, 33, 0.84)", color: "white", pl:3, pr: 3, pt: 1, pb: 1}}>
+      <CardActions
+        sx={{
+          backgroundColor: "rgb(33, 112, 33, 0.84)",
+          color: "white",
+          pl: 3,
+          pr: 3,
+          pt: 1,
+          pb: 1,
+        }}
+      >
         <Button
           size="small"
           onClick={() => {
             removeItem(listType, isbn);
           }}
-        sx={{color: "white"}} >
+          sx={{ color: "white" }}
+        >
           Remove
         </Button>
         <Button
@@ -231,7 +262,8 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
           onClick={() => {
             addToNextList(listType, isbn);
           }}
-          sx={{color: "white", pl:2, pr: 2}}>
+          sx={{ color: "white", pl: 2, pr: 2 }}
+        >
           {buttonActionText(listType)}
         </Button>
       </CardActions>
@@ -369,12 +401,9 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
     }
   }, []);
 
-  console.log(userData);
-
   //get user data
   useEffect(async () => {
     if (curUser) {
-      console.log(token);
       await getCurrentUserProfileData(
         { token },
         setUserData,
@@ -406,33 +435,43 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
             ></ProfileHeader>
           </div>
         </Grid>
-        {token? <Grid item sx={{ mt: 3 }}>
-          <BookList
-            title="Reading List"
-            list={userData.readingList}
-            userData={userData}
-            setUserData={setUserData}
-            token={token}
-          />
-        </Grid> : <></>}
-{        token && userType === 'paid'? <><Grid item xs={12}>
-          <BookList
-            title="In Progress List"
-            list={userData.inProgressList}
-            userData={userData}
-            setUserData={setUserData}
-            token={token}
-          ></BookList>
-        </Grid>
-        <Grid item xs={12}>
-          <BookList
-            title="Finished List"
-            list={userData.finishedList}
-            userData={userData}
-            setUserData={setUserData}
-            token={token}
-          ></BookList>
-        </Grid></> : <></>}
+        {token ? (
+          <Grid item sx={{ mt: 3 }}>
+            <BookList
+              title="Reading List"
+              list={userData.readingList}
+              userData={userData}
+              setUserData={setUserData}
+              token={token}
+            />
+          </Grid>
+        ) : (
+          <></>
+        )}
+        {token && userType === "paid" ? (
+          <>
+            <Grid item xs={12}>
+              <BookList
+                title="In Progress List"
+                list={userData.inProgressList}
+                userData={userData}
+                setUserData={setUserData}
+                token={token}
+              ></BookList>
+            </Grid>
+            <Grid item xs={12}>
+              <BookList
+                title="Finished List"
+                list={userData.finishedList}
+                userData={userData}
+                setUserData={setUserData}
+                token={token}
+              ></BookList>
+            </Grid>
+          </>
+        ) : (
+          <></>
+        )}
       </Grid>
     </div>
   );
