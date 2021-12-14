@@ -10,7 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
-const fetchBook = (isbn, setResults, searchType) => {
+export const fetchBook = (isbn, setResults, searchType) => {
   console.log("isbn: " + isbn);
   fetch(
     `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
