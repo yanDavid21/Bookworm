@@ -24,12 +24,17 @@ const ProfileHeader = ({
   curUser,
   location,
   userId,
+  setHistory
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
   const pathName =
     "http://localhost:3000" +
     (curUser ? "/profile/" + userId : location.pathname);
+
+  if(!curUser && !token) {
+    setHistory(location.pathname);
+  }
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -91,6 +96,8 @@ const ProfileHeader = ({
                 Copy Profile URL
               </Button>
             </Box>
+            {token? <></> : 
+                <Link to="/login" className="no-text-decoration"><Button variant="contained" sx={{mt: 3, backgroundColor: "rgb(33, 112, 33)"}}>Log in to view this person's lists</Button></Link>}
           </div>
         </div>
       ) : (
@@ -343,7 +350,7 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
   );
 }
 
-const ProfilePage = ({ token, curUser, userType }) => {
+const ProfilePage = ({ token, curUser, userType, setHistory }) => {
   const initState = {
     readingList: null,
     inProgressList: null,
@@ -395,10 +402,11 @@ const ProfilePage = ({ token, curUser, userType }) => {
               curUser={curUser}
               location={location}
               userId={userId}
+              setHistory={setHistory}
             ></ProfileHeader>
           </div>
         </Grid>
-        <Grid item sx={{ mt: 3 }}>
+        {token? <Grid item sx={{ mt: 3 }}>
           <BookList
             title="Reading List"
             list={userData.readingList}
@@ -406,8 +414,8 @@ const ProfilePage = ({ token, curUser, userType }) => {
             setUserData={setUserData}
             token={token}
           />
-        </Grid>
-{        userType === 'paid'? <><Grid item xs={12}>
+        </Grid> : <></>}
+{        token && userType === 'paid'? <><Grid item xs={12}>
           <BookList
             title="In Progress List"
             list={userData.inProgressList}

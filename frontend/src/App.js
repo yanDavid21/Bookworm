@@ -86,7 +86,7 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory, userType, se
           <Route path="/author/*" element={<AuthorPage />}></Route>
           <Route
             path="/profile/*"
-            element={<ProfilePage token={token} curUser={false} />}
+            element={<ProfilePage token={token} curUser={false} userType={userType} setHistory={setHistory}/>}
           ></Route>
           <Route
             path="/search"
