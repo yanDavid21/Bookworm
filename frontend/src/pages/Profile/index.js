@@ -240,7 +240,7 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
       </Link>
       <CardActions
         sx={{
-          backgroundColor: "rgb(33, 112, 33, 0.84)",
+          backgroundColor: "rgba(33, 112, 33, 0.76)",
           color: "white",
           pl: 3,
           pr: 3,
@@ -317,7 +317,7 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
           </Grid>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{mt: 2}}/>
       )}
     </div>
   );

@@ -99,21 +99,21 @@ const LoggedIn = ({ popularBooks, token }) => {
 const UnloggedIn = ({ popularBooks }) => {
   return popularBooks ? (
     <div>
-      <Typography variant="h3">Bookworm</Typography>
+      <Typography variant="h2">Bookworm</Typography>
 
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>What is bookworm?</span></Typography>
-          <Typography variant="h7" sx={{textAlign: "justify"}}>
-            For readers of all ages, Bookworm is the app designed for voracious readers and dabblers alike. Our reading lists are designed to keep you organized and on track with your reading goals, and premium users have the option to see other people's lists as well as their own. Our Google Books-based search software also allows you to easily search for the book you've had on your mind by title, author, or other search fields. Once you find it, you can add it to any of your lists with a click, and view other books written by the same author.
+          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>What is Bookworm?</span></Typography>
+          <Typography variant="h7">
+            Bookworm is the app designed for voracious readers and dabblers alike. Our reading lists are designed to keep readers of all ages organized and on track with your reading goals, and our logged-in members can share their profiles, and view their friends'. Premium users can even add to multiple lists!
+          </Typography><br/><br/>
+          <Typography variant="h7">Our Google Books-based search software also allows you to easily search for that book you've had on your mind by title, author, and other search fields. Once you find it, you can add it to any of your lists with a click, and view other books written by the same author.
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>Why is bookworm?</span></Typography>
+          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>Why Bookworm?</span></Typography>
           <Typography variant="h7">
-
-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
+            Many readers prefer to track their book lists on paper, through Google Docs, or on Goodreads. However, we envisioned a clean, simple interface that combines a vast, easily-searchable, library with a separate-list structure that isn't easily replicable in hand-written journals or the Docs. We do all this while removing all the noise of ads, reviews, and buyer information found in Goodreads. In the end, we came up with Bookworm, the best of all worlds.
           </Typography>
         </Grid>
       </Grid>
@@ -124,11 +124,11 @@ const UnloggedIn = ({ popularBooks }) => {
           const imgSrc = popularBook.image
           const isbn = popularBook.isbn
           return (
-            <Grid item sm={6} md={4} lg={3} xl={2}>
               <Link to={`/details/${isbn}`}>
-                <img src={imgSrc} width="200" />
+                <Grid item sm={6} md={4} lg={3} xl={2}>
+                  <img src={imgSrc} width="200" />
+                </Grid>
               </Link>
-            </Grid>
 
           )
         })}
