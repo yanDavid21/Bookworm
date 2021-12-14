@@ -21,7 +21,7 @@ const SearchResultCard = ({
   inReadingList,
   inProgressList,
   inFinishedList,
-  userType
+  userType,
 }) => {
   return (
     <>
@@ -73,26 +73,30 @@ const SearchResultCard = ({
                         : description.substring(0, 250) + "..."
                       : ""}
                   </Typography>
-                  {userType === 'paid'? (inReadingList.includes(isbn) && (
-                    <Typography
-                      sx={{ display: "block", textAlign: "center" }}
-                      component="span"
-                      variant="subtitle2"
-                      color="text.primary"
-                    >
-                      This book is in your Reading list!
-                    </Typography>
-                  )) : ''}
-                  {userType === 'paid'? (inProgressList.includes(isbn) && (
-                    <Typography
-                      sx={{ display: "block", textAlign: "center" }}
-                      component="span"
-                      variant="subtitle2"
-                      color="text.primary"
-                    >
-                      This book is in your In Progress List!
-                    </Typography>
-                  )) : ''}
+                  {userType === "paid"
+                    ? inReadingList.includes(isbn) && (
+                        <Typography
+                          sx={{ display: "block", textAlign: "center" }}
+                          component="span"
+                          variant="subtitle2"
+                          color="text.primary"
+                        >
+                          This book is in your Reading list!
+                        </Typography>
+                      )
+                    : ""}
+                  {userType === "paid"
+                    ? inProgressList.includes(isbn) && (
+                        <Typography
+                          sx={{ display: "block", textAlign: "center" }}
+                          component="span"
+                          variant="subtitle2"
+                          color="text.primary"
+                        >
+                          This book is in your In Progress List!
+                        </Typography>
+                      )
+                    : ""}
                   {inFinishedList.includes(isbn) && (
                     <Typography
                       sx={{ display: "block", textAlign: "center" }}
@@ -124,7 +128,7 @@ const SearchPage = ({ token }) => {
   const [inReadingList, setReadingList] = useState([]);
   const [inProgressList, setProgressList] = useState([]);
   const [inFinishedList, setFinishedList] = useState([]);
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState("");
 
   useEffect(() => {
     if (location.search === "") {
@@ -191,7 +195,7 @@ const SearchPage = ({ token }) => {
         .then((data) => {
           setUserType(data.userType);
           setReadingList(data.to_read);
-          if(userType === 'paid') {
+          if (userType === "paid") {
             setProgressList(data.in_progress);
             setFinishedList(data.finished);
           }
@@ -245,47 +249,42 @@ const SearchPage = ({ token }) => {
             <Grid item xs={12}>
               <div className="search-results flex-horizontal flex-center">
                 <List>
-                  {/*{searchResults.filter((result) => {*/}
-                  {/*  return result.volumeInfo*/}
-                  {/*      && result.volumeInfo.title*/}
-                  {/*      && result.volumeInfo.authors*/}
-                  {/*      && result.volumeInfo.description*/}
-                  {/*      && result.volumeInfo.imageLinks*/}
-                  {/*      && result.volumeInfo.imageLinks.thumbnail*/}
-                  {/*      && result.volumeInfo.industryIdentifier;*/}
-                  {searchResults.map((result) => {
-                    console.log("ugh")
-                    if (typeof(result.volumeInfo.industryIdentifier) !== undefined
-                        && typeof(result.volumeInfo.industryIdentifiers[0]) !== undefined
-                        && typeof(result.volumeInfo.industryIdentifiers[0].type) !== undefined) {
-                    console.log(result.volumeInfo);
-                    const isbnType = result.volumeInfo.industryIdentifiers[0].type;
-                    const title = result.volumeInfo.title;
-                    const authors = result.volumeInfo.authors;
-                    const description = result.volumeInfo.description;
-                    const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
-                    if (isbnType === 'ISBN_13') {
-                      const isbn = result.volumeInfo.industryIdentifiers[0].identifier;
+                  {searchResults
+                    .filter((result) => {
                       return (
-                        <SearchResultCard
-                          title={title}
-                          isbn={isbn}
-                          authors={authors}
-                          thumbnail={thumbnail}
-                          description={description}
-                          inReadingList={inReadingList}
-                          inProgressList={inProgressList}
-                          inFinishedList={inFinishedList}
-                          userType={userType}
-                        />
+                        result.volumeInfo &&
+                        result.volumeInfo.title &&
+                        result.volumeInfo.authors &&
+                        result.volumeInfo.industryIdentifiers
                       );
-                    } else {
-                      console.log(".....")
-                      return <></>;
-                    }
-                  } else {
-                      return <></>;
-                    }})}
+                    })
+                    .map((result) => {
+                      const isbnType =
+                        result.volumeInfo.industryIdentifiers[0].type;
+                      const title = result.volumeInfo.title;
+                      const authors = result.volumeInfo.authors;
+                      const description = result.volumeInfo.description;
+                      const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
+                      if (isbnType === "ISBN_13") {
+                        const isbn =
+                          result.volumeInfo.industryIdentifiers[0].identifier;
+                        return (
+                          <SearchResultCard
+                            title={title}
+                            isbn={isbn}
+                            authors={authors}
+                            thumbnail={thumbnail}
+                            description={description}
+                            inReadingList={inReadingList}
+                            inProgressList={inProgressList}
+                            inFinishedList={inFinishedList}
+                            userType={userType}
+                          />
+                        );
+                      } else {
+                        return <></>;
+                      }
+                    })}
                 </List>
               </div>
             </Grid>
