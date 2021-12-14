@@ -140,7 +140,7 @@ const convertToFrontEndName = (listType) => {
 
 const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const [result, setResults] = useState({
-    volumeInfo: { title: "", authors: "", thumbnail: "" },
+    volumeInfo: { title: "", authors: [], thumbnail: "" },
   });
   const searchType = "ISBN";
   useEffect(() => {
@@ -206,7 +206,23 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {author}
+            {console.log(author)}
+            {author === 1
+                ? author
+                : author.map(
+                    (auth, index) => {
+                      return (<>
+                          <Link to={`/author/${auth}`} color="text.secondary">
+                            {auth +
+                            (index ===
+                            author.length - 1
+                                ? ""
+                                : ",")}
+                          </Link> {" "}</>
+                      );
+                    }
+                )}
+            {/*{author}*/}
           </Typography>
         </CardContent>
       </Link>
