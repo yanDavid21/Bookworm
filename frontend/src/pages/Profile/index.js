@@ -112,7 +112,7 @@ const ProfileHeader = ({
           </div>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{mt: 2}}/>
       )}
     </>
   );
