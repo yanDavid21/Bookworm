@@ -13,11 +13,11 @@ const Header = () => {
         sx={{ display: "flex", flexDirection: "row-reverse", color: "white" }}
         className="header"
       >
-        <IconButton color="inherit">
-          <Link to="/profile" className="no-text-decoration">
+        <Link to="/profile" className="no-text-decoration">
+          <IconButton color="inherit">
             <AccountCircleIcon fontSize="large" />
-          </Link>
-        </IconButton>
+          </IconButton>
+        </Link>
       </Toolbar>
     </AppBar>
   );
