@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress, IconButton, Box } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -14,7 +14,7 @@ import EnterPasswordDialog from '../../common/components/enterPasswordDialog';
 import { useLocation } from "react-router-dom";
 // import { fetchBook } from "../Details/index"
 
-const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, curUser }) => {
+const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, curUser, location }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
 
@@ -40,16 +40,19 @@ const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, cur
                   />
               )}
               <div className="flex-vertical">
-                {curUser? <Typography variant="h3">{`Welcome back, ${name}`}</Typography> : <Typography variant="h3">{name}</Typography>}
-                {curUser?
-                    <div className="flex-horizontal" sx={{alignItems: 'center'}}>
-                      <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
-                      <IconButton onClick={handleEnterPasswordOpen}>
-                        <EditIcon color="success" fontSize="inherit"></EditIcon>
-                      </IconButton>
-                      <EnterPasswordDialog enterPasswordOpen={enterPasswordOpen} setEnterPasswordOpen={setEnterPasswordOpen} token={token} setInfoOpen={setInfoOpen}/>
-                      <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen} token={token} setEmail={setEmail} setName={setName}/>
-                    </div> : <></>}
+                <Box sx={{justifyContent: 'flex-start'}}>
+                  {curUser? <Typography variant="h3">{`Welcome back, ${name}`}</Typography> : <Typography variant="h3">{name}</Typography>}
+                  {curUser?
+                      <div className="flex-horizontal" sx={{alignItems: 'center'}}>
+                        <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
+                        <IconButton onClick={handleEnterPasswordOpen}>
+                          <EditIcon color="success" fontSize="inherit"></EditIcon>
+                        </IconButton>
+                        <EnterPasswordDialog enterPasswordOpen={enterPasswordOpen} setEnterPasswordOpen={setEnterPasswordOpen} token={token} setInfoOpen={setInfoOpen}/>
+                        <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen} token={token} setEmail={setEmail} setName={setName}/>
+                      </div> : <></>}
+                  <Button color="success" onClick={() => {navigator.clipboard.writeText('http://localhost:3000' + location.pathname)}}>Copy Profile URL</Button>
+                </Box>
               </div>
             </div>
         ) : (
@@ -239,6 +242,7 @@ const ProfilePage = ({token, curUser}) => {
                   setEmail={setEmail}
                   setName={setName}
                   curUser={curUser}
+                  location={location}
               ></ProfileHeader>
             </div>
           </Grid>
