@@ -24,12 +24,14 @@ const SignupPage = ({ token, setToken, lastPath }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setToken(await registerUser({
-      name,
-      email,
-      password,
-      userType
-    }));
+    if (name !== '' && email !== '' && password !== '') {
+      setToken(await registerUser({
+        name,
+        email,
+        password,
+        userType
+      }));
+    }
   }
 
   if(token) {

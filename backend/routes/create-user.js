@@ -30,13 +30,15 @@ router.post('/', function (req, res) {
           })
         } else {
           const userId = new mongoose.Types.ObjectId()
-          userObj = {
+          const userObj = {
             _id: userId,
             name: name,
             email: email,
             to_read: [],
-            in_progress: [],
-            finished: []
+          }
+          if (userType === "premium") {
+            userObj.in_progress = []
+            userObj.finished = []
           }
           dao.createUser(userObj, password)
           const hashString = email + password + Date.now()
