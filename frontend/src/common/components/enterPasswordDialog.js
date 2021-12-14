@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField, Alert } from "@mui/material";
 
 async function enterPassword(enteredPassword, token) {
@@ -21,16 +21,6 @@ const EnterPasswordDialog = ({enterPasswordOpen, setEnterPasswordOpen, token, se
       setEnterPasswordOpen(false);
       setIncorrectPassword(false);
     };
-
-    // const handleChangeInfo = async e => {
-    //     if(newPassword !== confirmPassword) {
-    //         setPasswordsMatch(false);
-    //     } else {
-    //         setPasswordsMatch(true);
-    //         setInfoOpen(false);
-    //         await changeUserInfo(newName, newEmail, curPassword, newPassword, token);
-    //     }
-    // }
 
     const handleSubmitPassword = e => {
         e.preventDefault();

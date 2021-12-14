@@ -17,7 +17,6 @@ import LogoutButton from "./logoutButton";
 import LoginButton from "./loginButton";
 import HomeIcon from '@mui/icons-material/Home';
 import PolicyIcon from '@mui/icons-material/Policy';
-import PrivacyDialog from './privacyDialog';
 
 const listOfTabs = [
   { title: "Reading List", path: "#readingList", icon: <PlaylistAddIcon /> },
@@ -30,7 +29,6 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPriv
     e.preventDefault();
     setPrivacyOpen(true);
   }
-  console.log('type: ' + userType);
   return (
     <Drawer
       sx={{

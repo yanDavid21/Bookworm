@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import PrivacyPolicyText from './privacyPolicyText';
 
 const PrivacyDialog = ({privacyOpen, setPrivacyOpen}) => {
