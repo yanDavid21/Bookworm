@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ChangeInfoDialog from '../../common/components/changeInfoDialog';
 import EnterPasswordDialog from '../../common/components/enterPasswordDialog';
 import { useLocation } from "react-router-dom";
-// import { fetchBook } from "../Details/index"
+import books from "../Details/books.jpeg";
 
 const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, curUser }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
@@ -83,7 +83,7 @@ const BookCard = ({listType, isbn}) => {
   console.log(result)
   const title = result.volumeInfo.title;
   const author = result.volumeInfo.authors;
-  const image = result.volumeInfo.thumbnail;
+  const image = result.volumeInfo.imageLinks?.thumbnail;
   const removeItem = (listType, isbn) => {
 
   };
@@ -104,10 +104,10 @@ const BookCard = ({listType, isbn}) => {
   };
 
   return result ? (
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{width: 260, mt: 2}}>
         <CardMedia
             component="img"
-            height="140"
+            height="340"
             image={image}
             alt={`${title} by ${author}`}
         />
@@ -144,7 +144,7 @@ const BookCard = ({listType, isbn}) => {
 const BookList = ({ title, list }) => {
   return (
       <div className="flex-vertical book-list-container">
-        <Typography variant="h6" component="div">
+        <Typography sx={{mt:5}} variant="h4" component="div">
           {title}
         </Typography>
         <div className="book-list">
@@ -242,7 +242,7 @@ const ProfilePage = ({token, curUser}) => {
               ></ProfileHeader>
             </div>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item>
             <BookList title="Reading List" list={userData.readingList}/>
           </Grid>
           <Grid item xs={12}>
