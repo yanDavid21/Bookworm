@@ -104,13 +104,15 @@ const UnloggedIn = ({ popularBooks }) => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>What is bookworm?</span></Typography>
-          <Typography variant="h7">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
+          <Typography variant="h7" sx={{textAlign: "justify"}}>
+            For readers of all ages, Bookworm is the app designed for voracious readers and dabblers alike. Our reading lists are designed to keep you organized and on track with your reading goals, and premium users have the option to see other people's lists as well as their own. Our Google Books-based search software also allows you to easily search for the book you've had on your mind by title, author, or other search fields. Once you find it, you can add it to any of your lists with a click, and view other books written by the same author.
           </Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>Why is bookworm?</span></Typography>
           <Typography variant="h7">
+
+
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
           </Typography>
         </Grid>
