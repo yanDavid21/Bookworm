@@ -175,24 +175,26 @@ const SearchPage = ({ token }) => {
   }, [location.search]);
 
   useEffect(() => {
-    fetch(`/api/get-current-user-data`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: token }),
-    })
-      .then((response) => {
-        return response.json();
+    if (token) {
+      fetch(`/api/get-current-user-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }), //{message: '', token: ''}
       })
-      .then((data) => {
-        setReadingList(data.to_read);
-        setProgressList(data.in_progress);
-        setFinishedList(data.finished);
-      })
-      .catch((err) => {
-        alert("Token: " + err);
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setReadingList(data.to_read);
+          setProgressList(data.in_progress);
+          setFinishedList(data.finished);
+        })
+        .catch((err) => {
+          alert("Token: " + err);
+        });
+    }
   }, [token]);
 
   return (
