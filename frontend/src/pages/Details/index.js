@@ -56,7 +56,7 @@ const DetailsPage = ({ token }) => {
     <div>
       <Card sx={{justifyContent: "flex-start"}}>
         <CardActionArea sx={{ display: "flex"}}>
-          <Box sx={{maxHeight: 600, maxWidth: 370}}>
+          <Box sx={{ maxWidth: 370}}>
             <CardMedia
               sx={{
                 display: "flex",
