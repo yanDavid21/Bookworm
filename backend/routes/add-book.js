@@ -6,11 +6,11 @@ const freeUserDao = require("../db/free-users/free-user-dao")
 const paidUserDao = require("../db/paid-users/paid-user-dao")
 const bookDao = require("../db/books/book-dao")
 
-const addBookToList = (listType, user, userDao, bookId, res) => {
+const addBookToList = (listType, user, userDao, isbn, res) => {
   const userId = user.id
   const userListToUpdate = user[listType]
-  if (!userListToUpdate.includes(bookId)) {
-    userListToUpdate.push(bookId)
+  if (!userListToUpdate.includes(isbn)) {
+    userListToUpdate.push(isbn)
   }
   
   user[listType] = userListToUpdate
@@ -39,7 +39,7 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
         image: bookInfo.imageLinks.thumbnail ?? ''
       }
       bookDao.createBook(newBook).then(createResult => {
-        addBookToList(listType, user, userDao, newId, res)
+        addBookToList(listType, user, userDao, isbn, res)
       })
     } else {
       const addedCount = book.addedCount + 1
@@ -48,7 +48,7 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
       bookDao.replaceBook(isbn, book).then(replaceResult => {
         if (replaceResult.acknowledged) {
           console.log("------------Book replaced")
-          addBookToList(listType, user, userDao, newId, res)
+          addBookToList(listType, user, userDao, isbn, res)
         } else {
           res.status(500).send({
             message: "internal server error while replacing existing book"
