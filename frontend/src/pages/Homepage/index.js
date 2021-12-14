@@ -118,13 +118,13 @@ const UnloggedIn = ({ popularBooks }) => {
         </Grid>
       </Grid>
 
-      <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Popular books that users have added to their reading list</Typography>
-      <Grid container spacing={10}>
+      <Typography variant="h4" sx={{ mt: 5, mb: 2 }}>Popular books that users have added to their reading list</Typography>
+      <Grid container spacing={7}>
         {popularBooks.map((popularBook) => {
           const imgSrc = popularBook.image
           const isbn = popularBook.isbn
           return (
-            <Grid item sm={6} md={4} lg={3} xl={2}>
+            <Grid item sm={6} md={4} lg={3} xl={2} sx={{mr: 1}}>
               <Link to={`/details/${isbn}`}>
                 <img src={imgSrc} width="200" />
               </Link>
