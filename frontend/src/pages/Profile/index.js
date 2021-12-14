@@ -147,7 +147,7 @@ const BookCard = ({listType, isbn}) => {
 const BookList = ({ title, list }) => {
   return (
       <div className="flex-vertical book-list-container">
-        <Typography sx={{mt:5}} variant="h4" component="div">
+        <Typography sx={{ mt:5, mb: -1, width: 260, textAlign: "center", borderRadius: 2, backgroundColor: "rgb(33, 112, 33)", color: "white"}} variant="h4" component="div">
           {title}
         </Typography>
         <div className="book-list">
