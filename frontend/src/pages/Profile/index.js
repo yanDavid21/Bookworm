@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Grid from "@mui/material/Grid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { CircularProgress, IconButton, Box } from "@mui/material";
@@ -112,7 +112,7 @@ const ProfileHeader = ({
           </div>
         </div>
       ) : (
-        <CircularProgress sx={{mt: 2}}/>
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </>
   );
@@ -274,8 +274,22 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
 };
 
 const BookList = ({ title, list, userData, setUserData, token }) => {
+  const myRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const id = location.hash.substring(1);
+    if (id === convertToFrontEndName(title)) {
+      console.log("here");
+      window.scrollTo({
+        top: myRef.current.offsetTop - 100,
+        behavior: "smooth",
+      });
+    }
+  }, [location.hash]);
+
   return (
-    <div className="flex-vertical book-list-container">
+    <div className="flex-vertical book-list-container" ref={myRef}>
       <Typography
         sx={{
           mt: 4,
@@ -317,7 +331,7 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
           </Grid>
         </div>
       ) : (
-        <CircularProgress sx={{mt: 2}}/>
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </div>
   );
@@ -356,7 +370,13 @@ async function getCurrentUserProfileData(
   );
 }
 
-async function getOtherUserProfileData(userId, setUserData, setEmail, setName, setOtherUserType) {
+async function getOtherUserProfileData(
+  userId,
+  setUserData,
+  setEmail,
+  setName,
+  setOtherUserType
+) {
   return (
     fetch("http://localhost:5000/api/get-other-user-data", {
       method: "POST",
@@ -375,7 +395,7 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName, s
         setEmail(data.email);
         setName(data.name);
         setOtherUserType(data.userType);
-        console.log(JSON.stringify(data))
+        console.log(JSON.stringify(data));
         console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
@@ -416,7 +436,13 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         setUserId
       );
     } else {
-      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName, setOtherUserType);
+      await getOtherUserProfileData(
+        { userId },
+        setUserData,
+        setEmail,
+        setName,
+        setOtherUserType
+      );
     }
   }, [userId]);
 
@@ -452,9 +478,12 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         ) : (
           <></>
         )}
-        {token && ((curUser && userType === 'paid') || (!curUser && otherUserType === 'paid')) ? (
+        {token &&
+        ((curUser && userType === "paid") ||
+          (!curUser && otherUserType === "paid")) ? (
           <>
             <Grid item xs={12}>
+              {" "}
               <BookList
                 title="In Progress List"
                 list={userData.inProgressList}
