@@ -255,7 +255,10 @@ const SearchPage = ({ token }) => {
                         result.volumeInfo &&
                         result.volumeInfo.title &&
                         result.volumeInfo.authors &&
-                        result.volumeInfo.industryIdentifiers
+                        result.volumeInfo.industryIdentifiers &&
+                        result.volumeInfo.industryIdentifiers.filter(identifer => {
+                          return identifer.type = "ISBN_13";
+                        }).length > 0
                       );
                     })
                     .map((result) => {
