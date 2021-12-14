@@ -34,6 +34,7 @@ const LoginPage = ({ token, setToken, lastPath}) => {
       return response.json()
     })
     .then(data => {
+      console.log(data)
       setToken(data)
     }).catch(err => {
       alert(err)
