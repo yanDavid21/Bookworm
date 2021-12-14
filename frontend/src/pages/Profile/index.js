@@ -484,7 +484,6 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
           <>
             <Grid item xs={12}>
               {" "}
-              G
               <BookList
                 title="In Progress List"
                 list={userData.inProgressList}
