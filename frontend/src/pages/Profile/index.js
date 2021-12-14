@@ -23,9 +23,11 @@ const ProfileHeader = ({
   setName,
   curUser,
   location,
+  userId
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
+  const pathName = 'http://localhost:3000' + (curUser? '/profile/' + userId : location.pathname);
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -80,9 +82,10 @@ const ProfileHeader = ({
               )}
               <Button
                 color="success"
+                variant="contained"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    "http://localhost:3000" + location.pathname
+                    pathName
                   );
                 }}
               >
@@ -141,7 +144,7 @@ const BookCard = ({ listType, isbn }) => {
   };
 
   return result ? (
-    <Card sx={{ width: 260, mt: 2 }}>
+    <Card sx={{ width: 260, mt: 2}}>
       <CardMedia
         component="img"
         height="340"
@@ -185,7 +188,7 @@ const BookList = ({ title, list }) => {
     <div className="flex-vertical book-list-container">
       <Typography
         sx={{
-          mt: 5,
+          mt: 4,
           mb: -1,
           width: 260,
           textAlign: "center",
@@ -200,10 +203,15 @@ const BookList = ({ title, list }) => {
       </Typography>
       {list ? (
         <div className="book-list">
+          <Grid container spacing={10} sx={{mt: 1, pl: 10}}>
           {list.map((isbn) => {
+
             console.log(isbn);
-            return <BookCard listType={title} isbn={isbn} />;
+            return <Box sx={{display: 'flex', pb:1, pr: 4, flexDirection:'column'}}>
+              <BookCard listType={title} isbn={isbn} />
+            </Box>
           })}
+          </Grid>
         </div>
       ) : (
         <CircularProgress />
@@ -216,7 +224,8 @@ async function getCurrentUserProfileData(
   token,
   setUserData,
   setEmail,
-  setName
+  setName,
+  setUserId
 ) {
   return (
     fetch("http://localhost:5000/api/get-current-user-data", {
@@ -235,6 +244,7 @@ async function getCurrentUserProfileData(
           inProgressList: data.in_progress,
           finishedList: data.finished,
         });
+        setUserId(data._id);
       })
       // .then(response => response.json())
       .catch((err) => {
@@ -279,12 +289,15 @@ const ProfilePage = ({ token, curUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState('');
 
   let location = useLocation();
-  let userId = "";
-  if (!curUser) {
-    userId = location.pathname.substring(9);
-  }
+  useEffect(() => {
+    if (!curUser) {
+      setUserId(location.pathname.substring(9));
+    }
+  },[]);
+
   console.log(userData);
 
   //get user data
@@ -294,12 +307,13 @@ const ProfilePage = ({ token, curUser }) => {
         { token },
         setUserData,
         setEmail,
-        setName
+        setName,
+        setUserId
       );
     } else {
       await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
     }
-  }, []);
+  }, [userId]);
 
   return (
     <div className="profile-page flex-center flex-horizontal">
@@ -315,10 +329,11 @@ const ProfilePage = ({ token, curUser }) => {
               setName={setName}
               curUser={curUser}
               location={location}
+              userId = {userId}
             ></ProfileHeader>
           </div>
         </Grid>
-        <Grid item>
+        <Grid item sx={{mt: 3}}>
           <BookList title="Reading List" list={userData.readingList} />
         </Grid>
         <Grid item xs={12}>
