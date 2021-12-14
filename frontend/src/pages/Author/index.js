@@ -25,7 +25,6 @@ const fetchAuthorBooks = (authorName, setResults, searchType) => {
     return response.json();
   })
   .then((data) => {
-    console.log(data)
     setResults(data.items);
   });
 };
@@ -35,7 +34,6 @@ const AuthorPage = () => {
   const searchType = "author";
   let location = useLocation();
   let author= decodeURI(location.pathname.substring(8));
-  console.log(author)
   useEffect(() => {
     fetchAuthorBooks(author, setResult, searchType)
   },[location, setResult])

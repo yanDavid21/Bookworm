@@ -4,7 +4,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 
 const getPopularBooks = (setPopularBooks) => {
-  console.log("pre fetch")
   fetch(`/api/get-popular-books`, {
     method: 'GET',
     headers: {
@@ -14,14 +13,11 @@ const getPopularBooks = (setPopularBooks) => {
 
     return response.json();
   }).then(data => {
-    console.log("RESPONSE:")
-    console.log(data)
     setPopularBooks(data)
   })
 }
 
 const getReadingList = (setReadingList, token) => {
-  console.log("Getting reading list")
   fetch(`/api/get-reading-list`, {
     method: "POST",
     headers: {
@@ -40,7 +36,6 @@ const Homepage = ({ token }) => {
   useEffect(() => {
     getPopularBooks(setPopularBooks)
   }, [setPopularBooks])
-  console.log(popularBooks);
   if (!token) {
     return (
       <UnloggedIn popularBooks={popularBooks} />
@@ -57,7 +52,6 @@ const LoggedIn = ({ popularBooks, token }) => {
   useEffect(() => {
     getReadingList(setReadingList, token)
   }, [setReadingList])
-  console.log(readingList)
   return (popularBooks && readingList) ? (
     <div>
       <Typography variant="h3">Bookworm</Typography>

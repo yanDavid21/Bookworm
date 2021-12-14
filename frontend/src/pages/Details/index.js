@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 export const fetchBook = (isbn, setResults, searchType) => {
-  console.log("isbn: " + isbn);
   fetch(
     `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
   )
@@ -19,14 +18,12 @@ export const fetchBook = (isbn, setResults, searchType) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       setResults(data);
     });
 };
 
 const addBookToList = (bodyParams, location, setSnackbarOpen) => {
   const isbn = location.pathname.substring(9);
-  console.log("Adding book isbn# " + isbn + " to list " + bodyParams.listType);
   bodyParams.isbn = isbn;
   fetch("/api/book", {
     method: "POST",
@@ -36,7 +33,6 @@ const addBookToList = (bodyParams, location, setSnackbarOpen) => {
     body: JSON.stringify(bodyParams),
   }).then((response) => {
     if (response.status === 200) {
-      console.log("Book successfully added.");
       setSnackbarOpen(true);
     } else {
       console.log("Failed to add book.");
@@ -49,7 +45,6 @@ const DetailsPage = ({ token, userType }) => {
   const [result, setResult] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const searchType = "ISBN";
-  console.log(location.pathname);
   useEffect(() => {
     fetchBook(location.pathname.substring(9), setResult, searchType);
   }, [location, setResult]);

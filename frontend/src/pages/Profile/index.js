@@ -213,7 +213,6 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
         <CardMedia
           component="img"
           height="360"
-          //padding-top={360-image.height}
           maxWidth="260"
           image={image}
           alt={`${title} by ${author}`}
@@ -279,7 +278,6 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
   useEffect(() => {
     const id = location.hash.substring(1);
     if (id === convertToFrontEndName(title)) {
-      console.log("here");
       window.scrollTo({
         top: myRef.current.offsetTop - 100,
         behavior: "smooth",
