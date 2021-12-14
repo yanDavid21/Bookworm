@@ -112,7 +112,7 @@ const ProfileHeader = ({
           </div>
         </div>
       ) : (
-        <CircularProgress sx={{mt: 2}}/>
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </>
   );
@@ -331,7 +331,7 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
           </Grid>
         </div>
       ) : (
-        <CircularProgress sx={{mt: 2}}/>
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </div>
   );
@@ -370,7 +370,13 @@ async function getCurrentUserProfileData(
   );
 }
 
-async function getOtherUserProfileData(userId, setUserData, setEmail, setName, setOtherUserType) {
+async function getOtherUserProfileData(
+  userId,
+  setUserData,
+  setEmail,
+  setName,
+  setOtherUserType
+) {
   return (
     fetch("http://localhost:5000/api/get-other-user-data", {
       method: "POST",
@@ -389,7 +395,7 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName, s
         setEmail(data.email);
         setName(data.name);
         setOtherUserType(data.userType);
-        console.log(JSON.stringify(data))
+        console.log(JSON.stringify(data));
         console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
@@ -430,7 +436,13 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         setUserId
       );
     } else {
-      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName, setOtherUserType);
+      await getOtherUserProfileData(
+        { userId },
+        setUserData,
+        setEmail,
+        setName,
+        setOtherUserType
+      );
     }
   }, [userId]);
 
@@ -453,18 +465,6 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
             ></ProfileHeader>
           </div>
         </Grid>
-<<<<<<< HEAD
-        <Grid item sx={{ mt: 3 }}>
-          <BookList
-            title="Reading List"
-            list={userData.readingList}
-            userData={userData}
-            setUserData={setUserData}
-            token={token}
-          />
-        </Grid>
-        {userType === "paid" ? (
-=======
         {token ? (
           <Grid item sx={{ mt: 3 }}>
             <BookList
@@ -478,10 +478,13 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         ) : (
           <></>
         )}
-        {token && ((curUser && userType === 'paid') || (!curUser && otherUserType === 'paid')) ? (
->>>>>>> 1744a1d4d3ab583b664cb04e78c8c4519a7efd37
+        {token &&
+        ((curUser && userType === "paid") ||
+          (!curUser && otherUserType === "paid")) ? (
           <>
             <Grid item xs={12}>
+              {" "}
+              G
               <BookList
                 title="In Progress List"
                 list={userData.inProgressList}
