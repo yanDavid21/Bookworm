@@ -20,7 +20,6 @@ const PrivacyDialog = ({privacyOpen, setPrivacyOpen}) => {
             {"Bookworm's Privacy Policy"}
           </DialogTitle>
           <DialogContent>
-              {/* <DialogContentText id="alert-dialog-description">Here is our privacy policy: blah blah blah.</DialogContentText> */}
               <PrivacyPolicyText disagreed={false} />
           </DialogContent>
           <DialogActions>

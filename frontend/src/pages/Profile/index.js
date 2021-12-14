@@ -1,96 +1,136 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress, IconButton, Box } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import EditIcon from '@mui/icons-material/Edit';
-import ChangeInfoDialog from '../../common/components/changeInfoDialog';
-import EnterPasswordDialog from '../../common/components/enterPasswordDialog';
+import EditIcon from "@mui/icons-material/Edit";
+import ChangeInfoDialog from "../../common/components/changeInfoDialog";
+import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
 import { useLocation } from "react-router-dom";
-// import { fetchBook } from "../Details/index"
+import books from "../Details/books.jpeg";
 
-const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, curUser }) => {
+const ProfileHeader = ({
+  name,
+  email,
+  profPicture,
+  token,
+  setEmail,
+  setName,
+  curUser,
+  location,
+  userId
+}) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
+  const pathName = 'http://localhost:3000' + (curUser? '/profile/' + userId : location.pathname);
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
     setEnterPasswordOpen(true);
-  }
+  };
 
   return (
-      <>
-        {name ? (
-            <div className="flex-center flex-horizontal">
-              {profPicture ? (
-                  <img
-                      src={profPicture}
-                      sx={{ width: 200, height: 200 }}
-                      alt="Profile of ****"
-                  />
+    <>
+      {name ? (
+        <div className="flex-center flex-horizontal">
+          {profPicture ? (
+            <img
+              src={profPicture}
+              sx={{ width: 200, height: 200 }}
+              alt="Profile of ****"
+            />
+          ) : (
+            <AccountCircleIcon
+              sx={{ width: 200, height: 200 }}
+              alt="Profile of ****"
+            />
+          )}
+          <div className="flex-vertical">
+            <Box sx={{ justifyContent: "flex-start" }}>
+              {curUser ? (
+                <Typography variant="h3">{`Welcome back, ${name}`}</Typography>
               ) : (
-                  <AccountCircleIcon
-                      sx={{ width: 200, height: 200 }}
-                      alt="Profile of ****"
-                  />
+                <Typography variant="h3">{name}</Typography>
               )}
-              <div className="flex-vertical">
-                {curUser? <Typography variant="h3">{`Welcome back, ${name}`}</Typography> : <Typography variant="h3">{name}</Typography>}
-                {curUser?
-                    <div className="flex-horizontal" sx={{alignItems: 'center'}}>
-                      <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
-                      <IconButton onClick={handleEnterPasswordOpen}>
-                        <EditIcon color="success" fontSize="inherit"></EditIcon>
-                      </IconButton>
-                      <EnterPasswordDialog enterPasswordOpen={enterPasswordOpen} setEnterPasswordOpen={setEnterPasswordOpen} token={token} setInfoOpen={setInfoOpen}/>
-                      <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen} token={token} setEmail={setEmail} setName={setName}/>
-                    </div> : <></>}
-              </div>
-            </div>
-        ) : (
-            <CircularProgress />
-        )}
-      </>
+              {curUser ? (
+                <div className="flex-horizontal" sx={{ alignItems: "center" }}>
+                  <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
+                  <IconButton onClick={handleEnterPasswordOpen}>
+                    <EditIcon color="success" fontSize="inherit"></EditIcon>
+                  </IconButton>
+                  <EnterPasswordDialog
+                    enterPasswordOpen={enterPasswordOpen}
+                    setEnterPasswordOpen={setEnterPasswordOpen}
+                    token={token}
+                    setInfoOpen={setInfoOpen}
+                  />
+                  <ChangeInfoDialog
+                    infoOpen={infoOpen}
+                    setInfoOpen={setInfoOpen}
+                    token={token}
+                    setEmail={setEmail}
+                    setName={setName}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+              <Button
+                color="success"
+                variant="contained"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    pathName
+                  );
+                }}
+              >
+                Copy Profile URL
+              </Button>
+            </Box>
+          </div>
+        </div>
+      ) : (
+        <CircularProgress />
+      )}
+    </>
   );
 };
 
 const fetchBook = (isbn, setResults, searchType) => {
   console.log("isbn: " + isbn);
   fetch(
-      `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
+    `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
   )
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    console.log(data.items[0]);
-    setResults(data.items[0]);
-  });
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data.items[0]);
+      setResults(data.items[0]);
+    });
 };
 
-const BookCard = ({listType, isbn}) => {
-  const [result, setResults] = useState({volumeInfo:{title:'', authors:'', thumbnail:''}});
+const BookCard = ({ listType, isbn }) => {
+  const [result, setResults] = useState({
+    volumeInfo: { title: "", authors: "", thumbnail: "" },
+  });
   const searchType = "ISBN";
   console.log(isbn);
   useEffect(() => {
     fetchBook(isbn, setResults, searchType);
-  },[]);
-  console.log(result)
+  }, []);
+  console.log(result);
   const title = result.volumeInfo.title;
   const author = result.volumeInfo.authors;
-  const image = result.volumeInfo.thumbnail;
-  const removeItem = (listType, isbn) => {
+  const image = result.volumeInfo.imageLinks?.thumbnail;
+  const removeItem = (listType, isbn) => {};
 
-  };
-
-  const addToNextList = (listType, isbn) => {
-
-  };
+  const addToNextList = (listType, isbn) => {};
 
   const buttonActionText = (listType) => {
     switch (listType) {
@@ -104,163 +144,213 @@ const BookCard = ({listType, isbn}) => {
   };
 
   return result ? (
-      <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-            component="img"
-            height="140"
-            image={image}
-            alt={`${title} by ${author}`}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {author}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-              size="small"
-              onClick={() => {
-                removeItem(listType, isbn);
-              }}
-          >
-            Remove
-          </Button>
-          <Button
-              size="small"
-              onClick={() => {
-                addToNextList(listType, isbn);
-              }}
-          >
-            {buttonActionText(listType)}
-          </Button>
-        </CardActions>
-      </Card>
-  ): <></>;
+    <Card sx={{ width: 260, mt: 2}}>
+      <CardMedia
+        component="img"
+        height="340"
+        image={image}
+        alt={`${title} by ${author}`}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {author}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() => {
+            removeItem(listType, isbn);
+          }}
+        >
+          Remove
+        </Button>
+        <Button
+          size="small"
+          onClick={() => {
+            addToNextList(listType, isbn);
+          }}
+        >
+          {buttonActionText(listType)}
+        </Button>
+      </CardActions>
+    </Card>
+  ) : (
+    <></>
+  );
 };
 
 const BookList = ({ title, list }) => {
   return (
-      <div className="flex-vertical book-list-container">
-        <Typography variant="h6" component="div">
-          {title}
-        </Typography>
+    <div className="flex-vertical book-list-container">
+      <Typography
+        sx={{
+          mt: 4,
+          mb: -1,
+          width: 260,
+          textAlign: "center",
+          borderRadius: 2,
+          backgroundColor: "rgb(33, 112, 33)",
+          color: "white",
+        }}
+        variant="h4"
+        component="div"
+      >
+        {title}
+      </Typography>
+      {list ? (
         <div className="book-list">
-
+          <Grid container spacing={10} sx={{mt: 1, pl: 10}}>
           {list.map((isbn) => {
-            console.log(isbn)
-            return (
-                <BookCard
-                    listType={title}
-                    isbn={isbn}
-                />
-            );
+
+            console.log(isbn);
+            return <Box sx={{display: 'flex', pb:1, pr: 4, flexDirection:'column'}}>
+              <BookCard listType={title} isbn={isbn} />
+            </Box>
           })}
+          </Grid>
         </div>
-      </div>
+      ) : (
+        <CircularProgress />
+      )}
+    </div>
   );
 };
 
-async function getCurrentUserProfileData(token,setUserData,setEmail,setName) {
-  return fetch('http://localhost:5000/api/get-current-user-data', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(token)
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    setEmail(data.email);
-    setName(data.name);
-    setUserData({readingList: data.to_read, inProgressList:data.in_progress, finishedList:data.finished});
-  })
-  // .then(response => response.json())
-  .catch(err => {
-    alert(err);
-  });
+async function getCurrentUserProfileData(
+  token,
+  setUserData,
+  setEmail,
+  setName,
+  setUserId
+) {
+  return (
+    fetch("http://localhost:5000/api/get-current-user-data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setEmail(data.email);
+        setName(data.name);
+        setUserData({
+          readingList: data.to_read,
+          inProgressList: data.in_progress,
+          finishedList: data.finished,
+        });
+        setUserId(data._id);
+      })
+      // .then(response => response.json())
+      .catch((err) => {
+        alert(err);
+      })
+  );
 }
 
-async function getOtherUserProfileData(userId,setUserData,setEmail,setName) {
-  return fetch('http://localhost:5000/api/get-other-user-data', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(userId)
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    setUserData({readingList: data.to_read, inProgressList:data.in_progress, finishedList:data.finished});
-    setEmail(data.email);
-    setName(data.name);
-  })
-  // .then(response => response.json())
-  .catch(err => {
-    alert(err);
-  });
+async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
+  return (
+    fetch("http://localhost:5000/api/get-other-user-data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userId),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUserData({
+          readingList: data.to_read,
+          inProgressList: data.in_progress,
+          finishedList: data.finished,
+        });
+        setEmail(data.email);
+        setName(data.name);
+      })
+      // .then(response => response.json())
+      .catch((err) => {
+        alert(err);
+      })
+  );
 }
 
-const ProfilePage = ({token, curUser}) => {
-  const initState = { readingList: [], inProgressList: [], finishedList: [] };
+const ProfilePage = ({ token, curUser }) => {
+  const initState = {
+    readingList: null,
+    inProgressList: null,
+    finishedList: null,
+  };
   const [userData, setUserData] = useState(initState);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState('');
 
   let location = useLocation();
-  let userId = "";
-  if (!curUser) {
-    userId= location.pathname.substring(9);
-  }
-  console.log(userData)
+  useEffect(() => {
+    if (!curUser) {
+      setUserId(location.pathname.substring(9));
+    }
+  },[]);
+
+  console.log(userData);
 
   //get user data
   useEffect(async () => {
-    if(curUser) {
-      await getCurrentUserProfileData({token},setUserData, setEmail, setName);
+    if (curUser) {
+      await getCurrentUserProfileData(
+        { token },
+        setUserData,
+        setEmail,
+        setName,
+        setUserId
+      );
     } else {
-      await getOtherUserProfileData({userId}, setUserData, setEmail, setName);
+      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
     }
-  }, []);
+  }, [userId]);
 
   return (
-      <div className="profile-page flex-center flex-horizontal">
-        <Grid container>
-          <Grid item xs={12}>
-            <div className="flex-horizontal">
-              <ProfileHeader
-                  name={name}
-                  email={email}
-                  image={image}
-                  token={token}
-                  setEmail={setEmail}
-                  setName={setName}
-                  curUser={curUser}
-              ></ProfileHeader>
-            </div>
-          </Grid>
-          <Grid item xs={12}>
-            <BookList title="Reading List" list={userData.readingList}/>
-          </Grid>
-          <Grid item xs={12}>
-            <BookList
-                title="In Progress List"
-                list={userData.inProgressList}
-            ></BookList>
-          </Grid>
-          <Grid item xs={12}>
-            <BookList
-                title="Finished List"
-                list={userData.finishedList}
-            ></BookList>
-          </Grid>
+    <div className="profile-page flex-center flex-horizontal">
+      <Grid container>
+        <Grid item xs={12}>
+          <div className="flex-horizontal">
+            <ProfileHeader
+              name={name}
+              email={email}
+              image={image}
+              token={token}
+              setEmail={setEmail}
+              setName={setName}
+              curUser={curUser}
+              location={location}
+              userId = {userId}
+            ></ProfileHeader>
+          </div>
         </Grid>
-      </div>
+        <Grid item sx={{mt: 3}}>
+          <BookList title="Reading List" list={userData.readingList} />
+        </Grid>
+        <Grid item xs={12}>
+          <BookList
+            title="In Progress List"
+            list={userData.inProgressList}
+          ></BookList>
+        </Grid>
+        <Grid item xs={12}>
+          <BookList
+            title="Finished List"
+            list={userData.finishedList}
+          ></BookList>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
 export default ProfilePage;
-

@@ -21,6 +21,7 @@ const SearchResultCard = ({
   inReadingList,
   inProgressList,
   inFinishedList,
+  userType
 }) => {
   return (
     <>
@@ -72,7 +73,7 @@ const SearchResultCard = ({
                         : description.substring(0, 250) + "..."
                       : ""}
                   </Typography>
-                  {inReadingList.includes(isbn) && (
+                  {userType === 'paid'? (inReadingList.includes(isbn) && (
                     <Typography
                       sx={{ display: "block", textAlign: "center" }}
                       component="span"
@@ -81,8 +82,8 @@ const SearchResultCard = ({
                     >
                       This book is in your Reading list!
                     </Typography>
-                  )}
-                  {inProgressList.includes(isbn) && (
+                  )) : ''}
+                  {userType === 'paid'? (inProgressList.includes(isbn) && (
                     <Typography
                       sx={{ display: "block", textAlign: "center" }}
                       component="span"
@@ -91,7 +92,7 @@ const SearchResultCard = ({
                     >
                       This book is in your In Progress List!
                     </Typography>
-                  )}
+                  )) : ''}
                   {inFinishedList.includes(isbn) && (
                     <Typography
                       sx={{ display: "block", textAlign: "center" }}
@@ -123,6 +124,7 @@ const SearchPage = ({ token }) => {
   const [inReadingList, setReadingList] = useState([]);
   const [inProgressList, setProgressList] = useState([]);
   const [inFinishedList, setFinishedList] = useState([]);
+  const [userType, setUserType] = useState('');
 
   useEffect(() => {
     if (location.search === "") {
@@ -187,9 +189,12 @@ const SearchPage = ({ token }) => {
           return response.json();
         })
         .then((data) => {
+          setUserType(data.userType);
           setReadingList(data.to_read);
-          setProgressList(data.in_progress);
-          setFinishedList(data.finished);
+          if(userType === 'paid') {
+            setProgressList(data.in_progress);
+            setFinishedList(data.finished);
+          }
         })
         .catch((err) => {
           alert("Token: " + err);
@@ -258,6 +263,7 @@ const SearchPage = ({ token }) => {
                           inReadingList={inReadingList}
                           inProgressList={inProgressList}
                           inFinishedList={inFinishedList}
+                          userType={userType}
                         />
                       );
                     } else {
