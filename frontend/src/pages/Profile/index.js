@@ -144,7 +144,7 @@ const BookCard = ({ listType, isbn }) => {
   };
 
   return result ? (
-    <Card sx={{ width: 260, mt: 2 }}>
+    <Card sx={{ width: 260, mt: 2}}>
       <CardMedia
         component="img"
         height="340"
@@ -188,7 +188,7 @@ const BookList = ({ title, list }) => {
     <div className="flex-vertical book-list-container">
       <Typography
         sx={{
-          mt: 5,
+          mt: 4,
           mb: -1,
           width: 260,
           textAlign: "center",
@@ -207,7 +207,7 @@ const BookList = ({ title, list }) => {
           {list.map((isbn) => {
 
             console.log(isbn);
-            return <Box sx={{display: 'flex', pt:2, pb:1, pr: 4, flexDirection:'column'}}>
+            return <Box sx={{display: 'flex', pb:1, pr: 4, flexDirection:'column'}}>
               <BookCard listType={title} isbn={isbn} />
             </Box>
           })}
@@ -333,7 +333,7 @@ const ProfilePage = ({ token, curUser }) => {
             ></ProfileHeader>
           </div>
         </Grid>
-        <Grid item>
+        <Grid item sx={{mt: 3}}>
           <BookList title="Reading List" list={userData.readingList} />
         </Grid>
         <Grid item xs={12}>
