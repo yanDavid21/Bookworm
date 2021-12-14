@@ -23,11 +23,13 @@ const ProfileHeader = ({
   setName,
   curUser,
   location,
-  userId
+  userId,
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
-  const pathName = 'http://localhost:3000' + (curUser? '/profile/' + userId : location.pathname);
+  const pathName =
+    "http://localhost:3000" +
+    (curUser ? "/profile/" + userId : location.pathname);
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -84,9 +86,7 @@ const ProfileHeader = ({
                 color="success"
                 variant="contained"
                 onClick={() => {
-                  navigator.clipboard.writeText(
-                    pathName
-                  );
+                  navigator.clipboard.writeText(pathName);
                 }}
               >
                 Copy Profile URL
@@ -102,7 +102,6 @@ const ProfileHeader = ({
 };
 
 const fetchBook = (isbn, setResults, searchType) => {
-  console.log("isbn: " + isbn);
   fetch(
     `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
   )
@@ -110,25 +109,74 @@ const fetchBook = (isbn, setResults, searchType) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data.items[0]);
       setResults(data.items[0]);
     });
 };
 
-const BookCard = ({ listType, isbn }) => {
+const convertToBackendName = (listType) => {
+  switch (listType) {
+    case "Reading List":
+      return "to_read";
+    case "In Progress List":
+      return "in_progress";
+    case "Finished List":
+      return "finished";
+    default:
+      return "";
+  }
+};
+
+const convertToFrontEndName = (listType) => {
+  switch (listType) {
+    case "Reading List":
+      return "readingList";
+    case "In Progress List":
+      return "inProgressList";
+    case "Finished List":
+      return "finishedList";
+    default:
+      return "";
+  }
+};
+
+const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const [result, setResults] = useState({
     volumeInfo: { title: "", authors: "", thumbnail: "" },
   });
   const searchType = "ISBN";
-  console.log(isbn);
   useEffect(() => {
     fetchBook(isbn, setResults, searchType);
   }, []);
-  console.log(result);
   const title = result.volumeInfo.title;
   const author = result.volumeInfo.authors;
   const image = result.volumeInfo.imageLinks?.thumbnail;
-  const removeItem = (listType, isbn) => {};
+
+  const removeItem = (listType, isbn) => {
+    fetch("/api/book", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+        listType: convertToBackendName(listType),
+        isbn,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          throw Error("Error updating your list.");
+        }
+        let updatedList = userData[convertToFrontEndName(listType)].filter(
+          (listItem) => listItem !== isbn
+        );
+        let field = convertToFrontEndName(listType);
+        setUserData({ ...userData, [field]: updatedList });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   const addToNextList = (listType, isbn) => {};
 
@@ -144,7 +192,7 @@ const BookCard = ({ listType, isbn }) => {
   };
 
   return result ? (
-    <Card sx={{ width: 260, mt: 2}}>
+    <Card sx={{ width: 260, mt: 2 }}>
       <CardMedia
         component="img"
         height="340"
@@ -183,7 +231,7 @@ const BookCard = ({ listType, isbn }) => {
   );
 };
 
-const BookList = ({ title, list }) => {
+const BookList = ({ title, list, userData, setUserData, token }) => {
   return (
     <div className="flex-vertical book-list-container">
       <Typography
@@ -203,14 +251,27 @@ const BookList = ({ title, list }) => {
       </Typography>
       {list ? (
         <div className="book-list">
-          <Grid container spacing={10} sx={{mt: 1, pl: 10}}>
-          {list.map((isbn) => {
-
-            console.log(isbn);
-            return <Box sx={{display: 'flex', pb:1, pr: 4, flexDirection:'column'}}>
-              <BookCard listType={title} isbn={isbn} />
-            </Box>
-          })}
+          <Grid container spacing={10} sx={{ mt: 1, pl: 10 }}>
+            {list.map((isbn) => {
+              return (
+                <Box
+                  sx={{
+                    display: "flex",
+                    pb: 1,
+                    pr: 4,
+                    flexDirection: "column",
+                  }}
+                >
+                  <BookCard
+                    listType={title}
+                    isbn={isbn}
+                    userData={userData}
+                    setUserData={setUserData}
+                    token={token}
+                  />
+                </Box>
+              );
+            })}
           </Grid>
         </div>
       ) : (
@@ -289,14 +350,14 @@ const ProfilePage = ({ token, curUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
 
   let location = useLocation();
   useEffect(() => {
     if (!curUser) {
       setUserId(location.pathname.substring(9));
     }
-  },[]);
+  }, []);
 
   console.log(userData);
 
@@ -329,23 +390,35 @@ const ProfilePage = ({ token, curUser }) => {
               setName={setName}
               curUser={curUser}
               location={location}
-              userId = {userId}
+              userId={userId}
             ></ProfileHeader>
           </div>
         </Grid>
-        <Grid item sx={{mt: 3}}>
-          <BookList title="Reading List" list={userData.readingList} />
+        <Grid item sx={{ mt: 3 }}>
+          <BookList
+            title="Reading List"
+            list={userData.readingList}
+            userData={userData}
+            setUserData={setUserData}
+            token={token}
+          />
         </Grid>
         <Grid item xs={12}>
           <BookList
             title="In Progress List"
             list={userData.inProgressList}
+            userData={userData}
+            setUserData={setUserData}
+            token={token}
           ></BookList>
         </Grid>
         <Grid item xs={12}>
           <BookList
             title="Finished List"
             list={userData.finishedList}
+            userData={userData}
+            setUserData={setUserData}
+            token={token}
           ></BookList>
         </Grid>
       </Grid>

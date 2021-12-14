@@ -41,7 +41,7 @@ const getOtherUserDataRouter = require('./routes/get-other-user')
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
-const addBookRouter = require('./routes/add-book');
+const bookRouter = require('./routes/book');
 const changeUserInfoRouter = require('./routes/change-user-info');
 const enterPasswordRouter = require('./routes/enter-password')
 
@@ -54,7 +54,7 @@ app.use('/api/get-other-user-data', getOtherUserDataRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter)
 app.use('/api/details', detailRouter);
-app.use('/api/add-book', addBookRouter)
+app.use('/api/book', bookRouter)
 app.use('/api/change-user-info', changeUserInfoRouter);
 app.use('/api/enter-password', enterPasswordRouter);
 /*******************************************/

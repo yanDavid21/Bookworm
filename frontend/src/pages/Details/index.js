@@ -28,7 +28,7 @@ const addBookToList = (bodyParams, location) => {
   const isbn = location.pathname.substring(9);
   console.log("Adding book isbn# " + isbn + " to list " + bodyParams.listType);
   bodyParams.isbn = isbn;
-  fetch("/api/add-book", {
+  fetch("/api/book", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
