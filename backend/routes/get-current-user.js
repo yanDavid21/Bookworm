@@ -18,12 +18,14 @@ router.post('/', function (req, res) {
       freeUserDao.findUserById(userData.user).then(freeUser => {
         if(freeUser === null) {
           paidUserDao.findUserById(userData.user).then(paidUser => {
-            paidUser.userType = 'paid'
-            res.send(paidUser);
+            paidUserObject = paidUser.toObject();
+            paidUserObject.userType = 'paid'
+            res.send(paidUserObject);
           })
         } else {
-          freeUser.userType = 'free'
-          res.send(freeUser);
+          freeUserObject = freeUser.toObject();
+          freeUserObject.userType = 'free'
+          res.send(freeUserObject);
         }
       })
     }
