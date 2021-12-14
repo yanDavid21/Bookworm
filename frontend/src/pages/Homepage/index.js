@@ -99,7 +99,7 @@ const LoggedIn = ({ popularBooks, token }) => {
 const UnloggedIn = ({ popularBooks }) => {
   return popularBooks ? (
     <div>
-      <Typography variant="h3">Bookworm</Typography>
+      <Typography variant="h2">Bookworm</Typography>
 
       <Grid container spacing={2}>
         <Grid item xs={6}>
@@ -124,11 +124,11 @@ const UnloggedIn = ({ popularBooks }) => {
           const imgSrc = popularBook.image
           const isbn = popularBook.isbn
           return (
-            <Grid item sm={6} md={4} lg={3} xl={2}>
               <Link to={`/details/${isbn}`}>
-                <img src={imgSrc} width="200" />
+                <Grid item sm={6} md={4} lg={3} xl={2}>
+                  <img src={imgSrc} width="200" />
+                </Grid>
               </Link>
-            </Grid>
 
           )
         })}
