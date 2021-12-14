@@ -9,10 +9,13 @@ import books from "./books.jpeg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
+import { BACKEND_URL } from "../../App";
 
 export const fetchBook = (isbn, setResults, searchType) => {
   fetch(
-    `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
+    `${BACKEND_URL}/api/search?q=${isbn}${
+      isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""
+    }`
   )
     .then((response) => {
       return response.json();
@@ -25,7 +28,7 @@ export const fetchBook = (isbn, setResults, searchType) => {
 const addBookToList = (bodyParams, location, setSnackbarOpen, setInList) => {
   const isbn = location.pathname.substring(9);
   bodyParams.isbn = isbn;
-  fetch("/api/book", {
+  fetch(`${BACKEND_URL}/api/book`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

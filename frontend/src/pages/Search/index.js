@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Card } from "@mui/material";
 import BooksImage from "../../common/resources/stackOfBooks.png";
 import { SearchField, SearchTypeRadioGroup } from "./searchInput";
+import { BACKEND_URL } from "../../App";
 
 const SearchResultCard = ({
   title,
@@ -76,7 +77,12 @@ const SearchResultCard = ({
                   </Typography>
                   {inReadingList.includes(isbn) ? (
                     <Typography
-                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
+                      sx={{
+                        display: "block",
+                        textAlign: "center",
+                        mt: 2,
+                        color: "rgb(33, 112, 33)",
+                      }}
                       component="span"
                       variant="subtitle2"
                     >
@@ -87,7 +93,12 @@ const SearchResultCard = ({
                   )}
                   {inProgressList.includes(isbn) ? (
                     <Typography
-                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
+                      sx={{
+                        display: "block",
+                        textAlign: "center",
+                        mt: 2,
+                        color: "rgb(33, 112, 33)",
+                      }}
                       component="span"
                       variant="subtitle2"
                     >
@@ -98,7 +109,12 @@ const SearchResultCard = ({
                   )}
                   {inFinishedList.includes(isbn) ? (
                     <Typography
-                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
+                      sx={{
+                        display: "block",
+                        textAlign: "center",
+                        mt: 2,
+                        color: "rgb(33, 112, 33)",
+                      }}
                       component="span"
                       variant="subtitle2"
                     >
@@ -182,7 +198,7 @@ const SearchPage = ({ token }) => {
 
   useEffect(() => {
     if (token) {
-      fetch(`/api/get-current-user-data`, {
+      fetch(`${BACKEND_URL}/api/get-current-user-data`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

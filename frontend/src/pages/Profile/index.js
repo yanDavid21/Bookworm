@@ -12,6 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ChangeInfoDialog from "../../common/components/changeInfoDialog";
 import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
 import { Link, useLocation } from "react-router-dom";
+import { BACKEND_URL } from "../../App";
 
 const ProfileHeader = ({
   name,
@@ -119,7 +120,9 @@ const ProfileHeader = ({
 
 const fetchBook = (isbn, setResults, searchType) => {
   fetch(
-    `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
+    `${BACKEND_URL}/api/search?q=${isbn}${
+      isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""
+    }`
   )
     .then((response) => {
       return response.json();
@@ -168,7 +171,7 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const image = result.volumeInfo.imageLinks?.thumbnail;
 
   const removeItem = (listType, isbn) => {
-    fetch("/api/book", {
+    fetch(`${BACKEND_URL}/api/book`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -322,7 +325,7 @@ async function getCurrentUserProfileData(
   setUserId
 ) {
   return (
-    fetch("http://localhost:5000/api/get-current-user-data", {
+    fetch(`${BACKEND_URL}/api/get-current-user-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -355,7 +358,7 @@ async function getOtherUserProfileData(
   setOtherUserType
 ) {
   return (
-    fetch("http://localhost:5000/api/get-other-user-data", {
+    fetch(`${BACKEND_URL}/api/get-other-user-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

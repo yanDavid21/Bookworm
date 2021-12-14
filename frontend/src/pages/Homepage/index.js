@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 import bookwormHeader from "./bookworm-header.png";
+import { BACKEND_URL } from "../../App";
 
 const getPopularBooks = (setPopularBooks) => {
-  fetch(`/api/get-popular-books`, {
+  fetch(`${BACKEND_URL}/api/get-popular-books`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -19,7 +20,7 @@ const getPopularBooks = (setPopularBooks) => {
 }
 
 const getReadingList = (setReadingList, token) => {
-  fetch(`/api/get-reading-list`, {
+  fetch(`${BACKEND_URL}/api/get-reading-list`, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json'

@@ -67,29 +67,6 @@ export const SearchField = ({
     setSearch(e.target.value);
   };
 
-  // const fetchBooks = () => {
-  //   console.log("bonus query: " + bonusQuery);
-  //   console.log("search type: " + searchType);
-  //   console.log("search: " + search);
-  //   fetch(
-  //     `/api/search?q=${search}${
-  //       bonusQuery && searchType
-  //         ? `&${searchType.toLowerCase()}=${bonusQuery}`
-  //         : ""
-  //     }`
-  //   )
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log(data.items);
-  //       setSearchResults(data.items ?? []);
-  //     })
-  //     .catch((err) => {
-  //       alert(err);
-  //     });
-  // };
-
   return (
     <Box sx={{ display: "flex", alignItems: "center", width: "50%" }}>
       <SearchIcon

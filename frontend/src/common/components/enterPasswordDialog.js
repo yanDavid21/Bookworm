@@ -1,8 +1,9 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField, Alert } from "@mui/material";
+import { BACKEND_URL } from "../../App";
 
 async function enterPassword(enteredPassword, token) {
-  return fetch('http://localhost:5000/api/enter-password', {
+  return fetch(`${BACKEND_URL}/api/enter-password`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
