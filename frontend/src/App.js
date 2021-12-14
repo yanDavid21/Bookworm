@@ -52,7 +52,7 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
           <Route
             element={<RequireAuth setHistory={setHistory} token={token} />}
           >
-            <Route path="/details/*" element={<DetailsPage />}></Route>
+            <Route path="/details/*" element={<DetailsPage token={token} />}></Route>
             <Route
               path="/profile"
               exact

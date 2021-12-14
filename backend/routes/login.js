@@ -17,11 +17,14 @@ router.post('/', function (req, res) {
         // generate a new cookie
         const hashString = email + password + Date.now()
         bcrypt.hash(hashString, 10, function (err, hash) {
-          console.log(hash)
-          cookieDao.createCookie(userId, hash)
-          res.status(200).send({
-            message: "Login successful.",
-            token: hash,
+          cookieDao.createOrUpdateCookie(userId, hash, function (promise) {
+            promise.then(cookie => {
+              console.log("UPDATED COOKIE: " + cookie)
+              res.status(200).send({
+                message: "Login successful.",
+                token: cookie.cookie,
+              })
+            })
           })
         })
 
@@ -35,11 +38,14 @@ router.post('/', function (req, res) {
             // generate a new cookie
             const hashString = email + password + Date.now()
             bcrypt.hash(hashString, 10, function (err, hash) {
-              console.log(hash)
-              cookieDao.createCookie(userId, hash)
-              res.status(200).send({
-                message: "Login successful.",
-                token: hash,
+              cookieDao.createOrUpdateCookie(userId, hash, function (promise) {
+                promise.then(cookie => {
+                  console.log("UPDATED COOKIE: " + cookie)
+                  res.status(200).send({
+                    message: "Login successful.",
+                    token: cookie.cookie,
+                  })
+                })
               })
             })
     
