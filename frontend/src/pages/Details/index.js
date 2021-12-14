@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea } from "@mui/material";
+import { Button, CardActionArea, Snackbar, Alert } from "@mui/material";
 import books from "./books.jpeg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ export const fetchBook = (isbn, setResults, searchType) => {
     });
 };
 
-const addBookToList = (bodyParams, location) => {
+const addBookToList = (bodyParams, location, setSnackbarOpen) => {
   const isbn = location.pathname.substring(9);
   console.log("Adding book isbn# " + isbn + " to list " + bodyParams.listType);
   bodyParams.isbn = isbn;
@@ -37,6 +37,7 @@ const addBookToList = (bodyParams, location) => {
   }).then((response) => {
     if (response.status === 200) {
       console.log("Book successfully added.");
+      setSnackbarOpen(true);
     } else {
       console.log("Failed to add book.");
     }
@@ -46,11 +47,20 @@ const addBookToList = (bodyParams, location) => {
 const DetailsPage = ({ token, userType }) => {
   let location = useLocation();
   const [result, setResult] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const searchType = "ISBN";
   console.log(location.pathname);
   useEffect(() => {
     fetchBook(location.pathname.substring(9), setResult, searchType);
   }, [location, setResult]);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
 
   return result ? (
     <div>
@@ -90,7 +100,8 @@ const DetailsPage = ({ token, userType }) => {
                     bookId: result.items[0].id,
                     token: token,
                   },
-                  location
+                  location,
+                  setSnackbarOpen
                 );
               }}
             >
@@ -114,7 +125,8 @@ const DetailsPage = ({ token, userType }) => {
                         bookId: result.items[0].id,
                         token: token,
                       },
-                      location
+                      location,
+                      setSnackbarOpen
                     );
                   }}
                 >
@@ -136,7 +148,8 @@ const DetailsPage = ({ token, userType }) => {
                         bookId: result.items[0].id,
                         token: token,
                       },
-                      location
+                      location,
+                      setSnackbarOpen
                     );
                   }}
                 >
@@ -197,6 +210,11 @@ const DetailsPage = ({ token, userType }) => {
           </CardContent>
         </CardActionArea>
       </Card>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert severity="success" sx={{ width: '100%' }} onClose={handleSnackbarClose}>
+            Added book to list!
+          </Alert>
+      </Snackbar>
     </div>
   ) : (
     <CircularProgress></CircularProgress>

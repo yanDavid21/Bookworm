@@ -107,6 +107,7 @@ export const SearchField = ({
         to={`/search?${search ? "q=" + search : ""}${
           searchType ? "&searchType=" + searchType : ""
         }${bonusQuery ? "&bonusQ=" + bonusQuery : ""}`}
+        className="no-text-decoration"
       >
         <Button
           sx={{ ml: 1, backgroundColor: "rgb(33, 112, 33)" }}
