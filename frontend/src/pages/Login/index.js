@@ -51,7 +51,7 @@ const LoginPage = ({ token, setToken, lastPath, setUserType}) => {
   return <div>
     <Box sx={{width: "50%"}}>
       <TextField fullWidth label="Email" id="email-field" onChange={e => setEmail(e.target.value)}/>
-      <TextField fullWidth label="Password" id="password-field" sx={{mt: 1.5}} onChange={e => setPassword(e.target.value)}/>
+      <TextField fullWidth label="Password" type="password" id="password-field" sx={{mt: 1.5}} onChange={e => setPassword(e.target.value)}/>
       <Button variant="contained" sx={{width: "100%", mt: 1.5, backgroundColor: "rgb(33, 112, 33)"}} onClick={handleSubmit}>Login</Button>
       <Button variant="contained" sx={{width: "100%", mt: 1.5, backgroundColor: "rgb(150, 150, 150)"}} component={Link} to="/register">Sign Up</Button>
     </Box>

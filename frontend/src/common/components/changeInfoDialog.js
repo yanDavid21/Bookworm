@@ -57,8 +57,8 @@ const ChangeInfoDialog = ({infoOpen, setInfoOpen, token, setEmail, setName}) => 
             <Typography sx={{mt: 2}} fontWeight="bold">Enter your new email</Typography>
             <TextField fullWidth sx={{mt: 1}} variant="outlined" label="New Email" onChange={(e) => {setNewEmail(e.target.value)}}/>
             <Typography sx={{mt: 2}} fontWeight="bold">Enter your new password</Typography>
-            <TextField fullWidth sx={{mt: 1.5}} variant="outlined" label="New Password" onChange={(e) => {setNewPassword(e.target.value)}}/>
-            <TextField fullWidth sx={{mt: 1.5}} variant="outlined" label="Confirm New Password" onChange={(e) => {setConfirmPassword(e.target.value)}}/>
+            <TextField fullWidth sx={{mt: 1.5}} type="password" variant="outlined" label="New Password" onChange={(e) => {setNewPassword(e.target.value)}}/>
+            <TextField fullWidth sx={{mt: 1.5}} type="password" variant="outlined" label="Confirm New Password" onChange={(e) => {setConfirmPassword(e.target.value)}}/>
           </DialogContent>
           <DialogActions>
             <Button color="error" onClick={handleClose}>

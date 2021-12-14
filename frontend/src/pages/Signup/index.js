@@ -44,7 +44,7 @@ const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
       <Box sx={{width: "50%"}}>
         <TextField fullWidth label="Name" id="name-field" onChange={e => setName(e.target.value)}/>
         <TextField fullWidth label="Email" id="email-field" sx={{mt: 1.5}} onChange={e => setEmail(e.target.value)}/>
-        <TextField fullWidth label="Password" id="password-field" sx={{mt: 1.5, mb: 1.5}} onChange={e => setPassword(e.target.value)}/>
+        <TextField fullWidth label="Password" type="password" id="password-field" sx={{mt: 1.5, mb: 1.5}} onChange={e => setPassword(e.target.value)}/>
         
         <FormControl component="fieldset">
             <FormLabel component="legend">What kind of user would you like to be?</FormLabel>
