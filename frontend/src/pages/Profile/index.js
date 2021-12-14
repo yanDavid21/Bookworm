@@ -356,7 +356,7 @@ async function getCurrentUserProfileData(
   );
 }
 
-async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
+async function getOtherUserProfileData(userId, setUserData, setEmail, setName, setOtherUserType) {
   return (
     fetch("http://localhost:5000/api/get-other-user-data", {
       method: "POST",
@@ -374,6 +374,9 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
         });
         setEmail(data.email);
         setName(data.name);
+        setOtherUserType(data.userType);
+        console.log(JSON.stringify(data))
+        console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
       .catch((err) => {
@@ -393,6 +396,7 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
   const [userId, setUserId] = useState("");
+  const [otherUserType, setOtherUserType] = useState("");
 
   let location = useLocation();
   useEffect(() => {
@@ -412,7 +416,7 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         setUserId
       );
     } else {
-      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
+      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName, setOtherUserType);
     }
   }, [userId]);
 
@@ -448,7 +452,7 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         ) : (
           <></>
         )}
-        {token && userType === "paid" ? (
+        {token && ((curUser && userType === 'paid') || (!curUser && otherUserType === 'paid')) ? (
           <>
             <Grid item xs={12}>
               <BookList

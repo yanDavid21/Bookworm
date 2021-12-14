@@ -10,31 +10,16 @@ router.post('/', function (req, res) {
   freeUserDao.findUserById(userId).then(freeUser => {
       if(freeUser === null) {
           paidUserDao.findUserById(userId).then(paidUser => {
-              res.send(paidUser);
+              paidUserObject = paidUser.toObject();
+              paidUserObject.userType = 'paid'
+              res.send(paidUserObject);
           })
       } else {
-          res.send(freeUser);
+        freeUserObject = freeUser.toObject();
+        freeUserObject.userType = 'free'
+        res.send(freeUserObject);
       }
   })
-
-//   cookieDao.findUser(token)
-//   .then(userData => {
-//     if(userData === null) {
-//       res.status(409).send({
-//         message: "User could not be found: " + token
-//       })
-//     } else {
-//       freeUserDao.findUserById(userData.user).then(freeUser => {
-//         if(freeUser === null) {
-//           paidUserDao.findUserById(userData.user).then(paidUser => {
-//             res.send(paidUser); 
-//           })
-//         } else {
-//           res.send(freeUser);
-//         }
-//       })
-//     }
-//   });
 })
 
 module.exports = router;
