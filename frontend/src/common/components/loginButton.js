@@ -12,7 +12,8 @@ const LoginButton = ({ setHistory }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setHistory(location.pathname);
+    if(location.pathname !== '/login' && location.pathname !== '/register')
+      setHistory(location.pathname);
     navigate('/login');
   }
 
