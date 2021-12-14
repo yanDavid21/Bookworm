@@ -116,7 +116,7 @@ const fetchBook = (isbn, setResults, searchType) => {
 
 const BookCard = ({ listType, isbn }) => {
   const [result, setResults] = useState({
-    volumeInfo: { title: "", authors: "", thumbnail: "" },
+    volumeInfo: { title: "", authors: [], thumbnail: "" },
   });
   const searchType = "ISBN";
   console.log(isbn);
@@ -158,7 +158,23 @@ const BookCard = ({ listType, isbn }) => {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {author}
+            {console.log(author)}
+            {author === 1
+                ? author
+                : author.map(
+                    (auth, index) => {
+                      return (<>
+                          <Link to={`/author/${auth}`} color="text.secondary">
+                            {auth +
+                            (index ===
+                            author.length - 1
+                                ? ""
+                                : ",")}
+                          </Link> {" "}</>
+                      );
+                    }
+                )}
+            {/*{author}*/}
           </Typography>
         </CardContent>
       </Link>

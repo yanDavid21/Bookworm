@@ -132,7 +132,7 @@ const SearchPage = ({ token }) => {
     }
     const queryString = location.search.substring(1).replaceAll("%20", " ");
     const queryKeyValuePairs = queryString.split("&");
-    let q;
+    let q = "";
     let searchType;
     let bonusQ;
     queryKeyValuePairs.forEach((pair) => {
@@ -245,14 +245,27 @@ const SearchPage = ({ token }) => {
             <Grid item xs={12}>
               <div className="search-results flex-horizontal flex-center">
                 <List>
+                  {/*{searchResults.filter((result) => {*/}
+                  {/*  return result.volumeInfo*/}
+                  {/*      && result.volumeInfo.title*/}
+                  {/*      && result.volumeInfo.authors*/}
+                  {/*      && result.volumeInfo.description*/}
+                  {/*      && result.volumeInfo.imageLinks*/}
+                  {/*      && result.volumeInfo.imageLinks.thumbnail*/}
+                  {/*      && result.volumeInfo.industryIdentifier;*/}
                   {searchResults.map((result) => {
-                    const isbn =
-                      result.volumeInfo.industryIdentifiers[0].identifier;
+                    console.log("ugh")
+                    if (typeof(result.volumeInfo.industryIdentifier) !== undefined
+                        && typeof(result.volumeInfo.industryIdentifiers[0]) !== undefined
+                        && typeof(result.volumeInfo.industryIdentifiers[0].type) !== undefined) {
+                    console.log(result.volumeInfo);
+                    const isbnType = result.volumeInfo.industryIdentifiers[0].type;
                     const title = result.volumeInfo.title;
                     const authors = result.volumeInfo.authors;
                     const description = result.volumeInfo.description;
                     const thumbnail = result.volumeInfo.imageLinks?.thumbnail;
-                    if (isbn.substring(0, 4) !== "OCLC") {
+                    if (isbnType === 'ISBN_13') {
+                      const isbn = result.volumeInfo.industryIdentifiers[0].identifier;
                       return (
                         <SearchResultCard
                           title={title}
@@ -267,9 +280,12 @@ const SearchPage = ({ token }) => {
                         />
                       );
                     } else {
+                      console.log(".....")
                       return <></>;
                     }
-                  })}
+                  } else {
+                      return <></>;
+                    }})}
                 </List>
               </div>
             </Grid>

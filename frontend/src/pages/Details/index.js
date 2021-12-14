@@ -153,7 +153,7 @@ const DetailsPage = ({ token }) => {
           >
             <Typography gutterBottom variant="h4" component="div">
               {result.items[0].volumeInfo.title}
-              <Link to={`/author/${result.items[0].volumeInfo.authors}`}>
+              {/*<Link to={`/author/${result.items[0].volumeInfo.authors}`}>*/}
                 <Typography
                   gutterBottom
                   variant="h5"
@@ -164,19 +164,19 @@ const DetailsPage = ({ token }) => {
                     ? result.items[0].volumeInfo.authors
                     : result.items[0].volumeInfo.authors.map(
                         (author, index) => {
-                          return (
+                          return (<>
                             <Link to={`/author/${author}`}>
                               {author +
                                 (index ===
                                 result.items[0].volumeInfo.authors.length - 1
                                   ? ""
-                                  : ", ")}
-                            </Link>
+                                  : ",")}
+                            </Link> {" "}</>
                           );
                         }
                       )}
                 </Typography>
-              </Link>
+              {/*</Link>*/}
             </Typography>
             <Typography>{result.items[0].volumeInfo.description}</Typography>
             <Typography sx={{ mt: 3 }}>
