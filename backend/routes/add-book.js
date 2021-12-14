@@ -25,9 +25,8 @@ const addBookToList = (listType, user, userDao, bookId, res) => {
 const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
   bookDao.findBookByIsbn(isbn).then(book => {
     let newId = new mongoose.Types.ObjectId()
-    console.log(book)
     if (book === null) {
-      console.log("No book with the given isbn found")
+      console.log("No book with the given isbn found, adding new book to database")
       newBook = {
         _id: newId,
         isbn: isbn,
@@ -66,7 +65,8 @@ router.post('/', function (req, res) {
   const bookInfo = req.body.bookInfo
   const isbn = req.body.isbn
 
-  console.log("Add book backend")
+  console.log("Add book backend-----------------")
+  console.log("TOKEN FROM BROWSER: " + token)
 
   // find user associated with cookie
   cookieDao.findUser(token).then(cookie => {
