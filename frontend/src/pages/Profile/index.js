@@ -23,9 +23,11 @@ const ProfileHeader = ({
   setName,
   curUser,
   location,
+  userId
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
+  const pathName = 'http://localhost:3000' + (curUser? '/profile/' + userId : location.pathname);
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -80,9 +82,10 @@ const ProfileHeader = ({
               )}
               <Button
                 color="success"
+                variant="contained"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    "http://localhost:3000" + location.pathname
+                    pathName
                   );
                 }}
               >
@@ -216,7 +219,8 @@ async function getCurrentUserProfileData(
   token,
   setUserData,
   setEmail,
-  setName
+  setName,
+  setUserId
 ) {
   return (
     fetch("http://localhost:5000/api/get-current-user-data", {
@@ -235,6 +239,7 @@ async function getCurrentUserProfileData(
           inProgressList: data.in_progress,
           finishedList: data.finished,
         });
+        setUserId(data._id);
       })
       // .then(response => response.json())
       .catch((err) => {
@@ -279,12 +284,15 @@ const ProfilePage = ({ token, curUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState('');
 
   let location = useLocation();
-  let userId = "";
-  if (!curUser) {
-    userId = location.pathname.substring(9);
-  }
+  useEffect(() => {
+    if (!curUser) {
+      setUserId(location.pathname.substring(9));
+    }
+  },[]);
+
   console.log(userData);
 
   //get user data
@@ -294,12 +302,13 @@ const ProfilePage = ({ token, curUser }) => {
         { token },
         setUserData,
         setEmail,
-        setName
+        setName,
+        setUserId
       );
     } else {
       await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
     }
-  }, []);
+  }, [userId]);
 
   return (
     <div className="profile-page flex-center flex-horizontal">
@@ -315,6 +324,7 @@ const ProfilePage = ({ token, curUser }) => {
               setName={setName}
               curUser={curUser}
               location={location}
+              userId = {userId}
             ></ProfileHeader>
           </div>
         </Grid>
