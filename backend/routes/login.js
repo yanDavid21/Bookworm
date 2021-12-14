@@ -42,7 +42,7 @@ router.post('/', function (req, res) {
                   console.log("UPDATED COOKIE: " + cookie)
                   res.status(200).send({
                     message: "Login successful.",
-                    token: cookie.cookie,
+                    token: hash,
                   })
                 })
               })
