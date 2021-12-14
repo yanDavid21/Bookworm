@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Grid } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const getPopularBooks = (setPopularBooks) => {
       'Content-Type': 'application/json'
     }
   }).then((response) => {
-    
+
     return response.json();
   }).then(data => {
     console.log("RESPONSE:")
@@ -27,7 +27,7 @@ const getReadingList = (setReadingList, token) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({token: token}) 
+    body: JSON.stringify({ token: token })
   }).then((response) => {
     return response.json();
   }).then(data => {
@@ -35,24 +35,24 @@ const getReadingList = (setReadingList, token) => {
   })
 }
 
-const Homepage = ({token}) => {
+const Homepage = ({ token }) => {
   const [popularBooks, setPopularBooks] = useState(null)
   useEffect(() => {
     getPopularBooks(setPopularBooks)
   }, [setPopularBooks])
   console.log(popularBooks);
-  if(!token) {
+  if (!token) {
     return (
-      <UnloggedIn popularBooks={popularBooks}/>
+      <UnloggedIn popularBooks={popularBooks} />
     );
   }
 
   return (
-    <LoggedIn popularBooks={popularBooks} token={token}/>
+    <LoggedIn popularBooks={popularBooks} token={token} />
   );
 };
 
-const LoggedIn = ({popularBooks, token}) => {
+const LoggedIn = ({ popularBooks, token }) => {
   const [readingList, setReadingList] = useState(null)
   useEffect(() => {
     getReadingList(setReadingList, token)
@@ -60,79 +60,78 @@ const LoggedIn = ({popularBooks, token}) => {
   console.log(readingList)
   return (popularBooks && readingList) ? (
     <div>
-    <Typography variant="h3">Bookworm</Typography>     
-    
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books in your reading list</Typography>
-    <Grid container spacing={10}>
-    {readingList.map((readingListItem) => {
-        const imgSrc = readingListItem.image
-        const isbn = readingListItem.isbn
-        return (
+      <Typography variant="h3">Bookworm</Typography>
+      {readingList.length > 0 ? (<><Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Books in your reading list</Typography>
+        <Grid container spacing={10}>
+          {readingList.map((readingListItem) => {
+            const imgSrc = readingListItem.image
+            const isbn = readingListItem.isbn
+            return (
+              <Grid item sm={6} md={4} lg={3} xl={2}>
+                <Link to={`/details/${isbn}`}>
+                  <img src={imgSrc} width="200" />
+                </Link>
+              </Grid>
+
+            )
+          })}
+        </Grid></>) : <></>}
+      <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Popular books with Bookworm users</Typography>
+      <Grid container spacing={10}>
+        {popularBooks.map((popularBook) => {
+          const imgSrc = popularBook.image
+          const isbn = popularBook.isbn
+          return (
+
             <Grid item sm={6} md={4} lg={3} xl={2}>
-              <Link to={`/details/${isbn}`}>          
-                <img src={imgSrc} width="200"/>
-              </Link>          
+              <Link to={`/details/${isbn}`}>
+                <img src={imgSrc} width="200" />
+              </Link>
             </Grid>
-          
           )
-      })}
-    </Grid>
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Popular books with Bookworm users</Typography>
-    <Grid container spacing={10}>
-    {popularBooks.map((popularBook) => {
-        const imgSrc = popularBook.image
-        const isbn = popularBook.isbn
-        return (
-        
-          <Grid item sm={6} md={4} lg={3} xl={2}> 
-            <Link to={`/details/${isbn}`}>       
-              <img src={imgSrc} width="200"/>
-            </Link>         
-          </Grid>
-        )
-      })}
-    </Grid>
-  </div>
+        })}
+      </Grid>
+    </div>
   ) : (
     <CircularProgress></CircularProgress>
   );
 }
-const UnloggedIn = ({popularBooks}) => {
+const UnloggedIn = ({ popularBooks }) => {
   return popularBooks ? (
     <div>
-    <Typography variant="h3">Bookworm</Typography>     
+      <Typography variant="h3">Bookworm</Typography>
 
-    <Grid container spacing={2}>
-      <Grid item xs={6}>
-        <Typography sx={{mb: 2, mt: 3}} variant="h5"><span>What is bookworm?</span></Typography>
-        <Typography variant="h7">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
-        </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>What is bookworm?</span></Typography>
+          <Typography variant="h7">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography sx={{ mb: 2, mt: 3 }} variant="h5"><span>Why is bookworm?</span></Typography>
+          <Typography variant="h7">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-        <Typography sx={{mb: 2, mt: 3}} variant="h5"><span>Why is bookworm?</span></Typography>
-        <Typography variant="h7">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id fringilla felis. In mollis purus a ex lobortis, vitae feugiat est varius. Nunc eu iaculis nulla, a rhoncus nisi. Fusce a tempus sem, eget eleifend turpis. Suspendisse nec consectetur leo. Nam pharetra eros nibh, eget consectetur leo pretium eget.
-        </Typography>
-      </Grid>
-    </Grid>
-    
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Popular books that users have added to their reading list</Typography>
-    <Grid container spacing={10}>
-    {popularBooks.map((popularBook) => {
-        const imgSrc = popularBook.image
-        const isbn = popularBook.isbn
-        return (
+
+      <Typography variant="h5" sx={{ mt: 5, mb: 2 }}>Popular books that users have added to their reading list</Typography>
+      <Grid container spacing={10}>
+        {popularBooks.map((popularBook) => {
+          const imgSrc = popularBook.image
+          const isbn = popularBook.isbn
+          return (
             <Grid item sm={6} md={4} lg={3} xl={2}>
-              <Link to={`/details/${isbn}`}>          
-                <img src={imgSrc} width="200"/>
-              </Link>          
+              <Link to={`/details/${isbn}`}>
+                <img src={imgSrc} width="200" />
+              </Link>
             </Grid>
-          
+
           )
-      })}
-    </Grid>
-  </div>
+        })}
+      </Grid>
+    </div>
   ) : (
     <CircularProgress></CircularProgress>
   );
