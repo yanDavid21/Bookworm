@@ -22,10 +22,7 @@ const findUserByEmail = (email) => {
 }
 
 const validateLogin = (email, password, callback) => {
-  console.log("Validating login")
   FreeUser.find({email: email}, function (err, docs) {
-    // console.log("DOCS::::: " + typeof(docs))
-    // console.log(JSON.stringify(docs))
     if (docs.length === 0) {
       callback(false);
     } else if (docs.length === 1) {

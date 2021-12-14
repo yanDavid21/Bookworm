@@ -40,7 +40,6 @@ router.post('/', function (req, res) {
             bcrypt.hash(hashString, 10, function (err, hash) {
               cookieDao.createOrUpdateCookie(userId, hash, function (promise) {
                 promise.then(cookie => {
-                  console.log("UPDATED COOKIE: " + cookie)
                   res.status(200).send({
                     message: "Login successful.",
                     token: hash,

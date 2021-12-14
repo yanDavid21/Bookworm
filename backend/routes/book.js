@@ -9,20 +9,16 @@ const authorDao = require("../db/authors/author-dao")
 
 async function addAuthors(authors, isbn, res) {
   authors.forEach(async author => {
-    console.log("Author: " +  author)
     const authorContained = await authorDao.containsAuthor(author);
-    console.log(authorContained)
     if (!authorContained) {
       const authorObj = await authorDao.findAuthorByName(author);
       dbAuthorBooks = authorObj.books
       if (!dbAuthorBooks.includes(isbn)) {
         dbAuthorBooks.push(isbn)
       }
-      console.log("AUTHOR ID: " + authorObj.id)
       authorObj.books = dbAuthorBooks
       await authorDao.updateAuthor(new mongoose.Types.ObjectId(authorObj.id), authorObj)
     } else {
-      console.log("Creating author")
       await authorDao.createAuthor({name: author, books: [isbn]})
     }
   })
@@ -49,9 +45,6 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
   bookDao.findBookByIsbn(isbn).then((book) => {
     let newId = new mongoose.Types.ObjectId();
     if (book === null) {
-      console.log(
-        "No book with the given isbn found, adding new book to database"
-      );
       newBook = {
         _id: newId,
         isbn: isbn,
@@ -72,7 +65,6 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
       newId = book.id;
       bookDao.replaceBook(isbn, book).then((replaceResult) => {
         if (replaceResult.acknowledged) {
-          console.log("------------Book replaced");
           addBookToList(listType, user, userDao, isbn, res, bookInfo.authors);
         } else {
           res.status(500).send({
@@ -90,9 +82,6 @@ router.post("/", function (req, res) {
   const bookInfo = req.body.bookInfo;
   const isbn = req.body.isbn;
 
-  console.log("Add book backend-----------------");
-  console.log("TOKEN FROM BROWSER: " + token);
-
   // find user associated with cookie
   cookieDao.findUser(token).then((cookie) => {
     const userId = cookie.user;
@@ -105,7 +94,6 @@ router.post("/", function (req, res) {
             });
           } else {
             // paid users
-            console.log("PAID USER");
             addBookToDbAndUser(
               listType,
               bookInfo,
@@ -118,7 +106,6 @@ router.post("/", function (req, res) {
         });
       } else {
         // free users
-        console.log("FREE USER");
         addBookToDbAndUser(listType, bookInfo, user, freeUserDao, isbn, res);
       }
     });
@@ -126,21 +113,17 @@ router.post("/", function (req, res) {
 });
 
 router.put("/", function (req, res) {
-  console.log(req.body)
   const token = req.body.token;
   const listType = req.body.listType;
   const isbn = req.body.isbn;
 
   const removeBookFromUserList = (user, userDao) => {
     const userId = user.id;
-    console.log(user);
-    console.log(listType)
     let userListToUpdate = user[listType];
     userListToUpdate = userListToUpdate.filter(item => item !== isbn)
 
     user[listType] = userListToUpdate;
     userDao.updateUser(userId, user).then((status) => {
-      console.log("updated list")
       res.send({
         status: status,
         message: "updated user book list",
@@ -159,13 +142,11 @@ router.put("/", function (req, res) {
             });
           } else {
             // paid users
-            console.log("PAID USER");
             removeBookFromUserList(user, paidUserDao);
           }
         });
       } else {
         // free users
-        console.log("FREE USER");
         removeBookFromUserList(user, freeUserDao);
       }
     });

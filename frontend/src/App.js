@@ -188,10 +188,8 @@ function App() {
 
 function RequireAuth({ token, setHistory }) {
   let location = useLocation();
-  console.log("token " + JSON.stringify(token));
 
   if (!token) {
-    console.log("token was null");
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
