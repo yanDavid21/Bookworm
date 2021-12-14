@@ -17,12 +17,11 @@ import LogoutButton from "./logoutButton";
 import LoginButton from "./loginButton";
 import HomeIcon from '@mui/icons-material/Home';
 import PolicyIcon from '@mui/icons-material/Policy';
-import PrivacyDialog from './privacyDialog';
 
 const listOfTabs = [
-  { title: "Reading List", path: "#to-read", icon: <PlaylistAddIcon /> },
-  { title: "In Progress List", path: "#in-progress", icon: <PendingIcon /> },
-  { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
+  { title: "Reading List", path: "#readingList", icon: <PlaylistAddIcon /> },
+  { title: "In Progress List", path: "#inProgressList", icon: <PendingIcon /> },
+  { title: "Finished List", path: "#finishedList", icon: <AssignmentTurnedInIcon /> },
 ];
 
 const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPrivacyOpen, userType, setUserType}) => {
@@ -30,7 +29,6 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPriv
     e.preventDefault();
     setPrivacyOpen(true);
   }
-  console.log('type: ' + userType);
   return (
     <Drawer
       sx={{

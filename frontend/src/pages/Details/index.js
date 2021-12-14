@@ -4,14 +4,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea } from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import books from "./books.jpeg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 export const fetchBook = (isbn, setResults, searchType) => {
-  console.log("isbn: " + isbn);
   fetch(
     `/api/search?q=${isbn}${isbn ? `&${searchType.toLowerCase()}=${isbn}` : ""}`
   )
@@ -19,14 +18,12 @@ export const fetchBook = (isbn, setResults, searchType) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       setResults(data);
     });
 };
 
-const addBookToList = (bodyParams, location) => {
+const addBookToList = (bodyParams, location, setSnackbarOpen) => {
   const isbn = location.pathname.substring(9);
-  console.log("Adding book isbn# " + isbn + " to list " + bodyParams.listType);
   bodyParams.isbn = isbn;
   fetch("/api/book", {
     method: "POST",
@@ -36,7 +33,7 @@ const addBookToList = (bodyParams, location) => {
     body: JSON.stringify(bodyParams),
   }).then((response) => {
     if (response.status === 200) {
-      console.log("Book successfully added.");
+      setSnackbarOpen(true);
     } else {
       console.log("Failed to add book.");
     }
@@ -46,16 +43,23 @@ const addBookToList = (bodyParams, location) => {
 const DetailsPage = ({ token, userType }) => {
   let location = useLocation();
   const [result, setResult] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const searchType = "ISBN";
-  console.log(location.pathname);
   useEffect(() => {
     fetchBook(location.pathname.substring(9), setResult, searchType);
   }, [location, setResult]);
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return result ? (
     <div>
-      <Card sx={{ justifyContent: "flex-start" }}>
-        <CardActionArea sx={{ display: "flex" }}>
+      <Card sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Box sx={{ maxWidth: 370 }}>
             <CardMedia
               sx={{
@@ -64,6 +68,7 @@ const DetailsPage = ({ token, userType }) => {
                 flexDirection: "column",
                 minWidth: 250,
                 maxWidth: 350,
+                maxHeight: 500
               }}
               component="img"
               image={
@@ -90,7 +95,8 @@ const DetailsPage = ({ token, userType }) => {
                     bookId: result.items[0].id,
                     token: token,
                   },
-                  location
+                  location,
+                  setSnackbarOpen
                 );
               }}
             >
@@ -114,7 +120,8 @@ const DetailsPage = ({ token, userType }) => {
                         bookId: result.items[0].id,
                         token: token,
                       },
-                      location
+                      location,
+                      setSnackbarOpen
                     );
                   }}
                 >
@@ -136,7 +143,8 @@ const DetailsPage = ({ token, userType }) => {
                         bookId: result.items[0].id,
                         token: token,
                       },
-                      location
+                      location,
+                      setSnackbarOpen
                     );
                   }}
                 >
@@ -147,17 +155,15 @@ const DetailsPage = ({ token, userType }) => {
               <></>
             )}
           </Box>
+          <Box sx={{display: "flex", alignItems: "flex-start"}}>
           <CardContent
             sx={{
-              display: "flex",
-              position: "relative",
-              mt: -10,
+              alignItems: "flex-start",
+              alignContent: 'flex-start',
               ml: 3,
-              flexDirection: "column",
-              flex: "3 1 auto",
             }}
           >
-            <Typography gutterBottom variant="h4" component="div">
+            <Typography gutterBottom variant="h4">
               {result.items[0].volumeInfo.title}
               <Typography
                 gutterBottom
@@ -192,11 +198,15 @@ const DetailsPage = ({ token, userType }) => {
                     ? "by " + result.items[0].volumeInfo.publisher
                     : "")
                 : ""}
-              {/*Published in {result.items[0].volumeInfo.publishedDate} {}*/}
             </Typography>
           </CardContent>
-        </CardActionArea>
+          </Box>
       </Card>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert severity="success" sx={{ width: '100%' }} onClose={handleSnackbarClose}>
+            Added book to list!
+          </Alert>
+      </Snackbar>
     </div>
   ) : (
     <CircularProgress></CircularProgress>

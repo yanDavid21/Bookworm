@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { Button, Box, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropTypes from 'prop-types';
@@ -12,7 +12,6 @@ async function registerUser(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
  }
 
 
@@ -24,12 +23,22 @@ const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (name !== '' && email !== '' && password !== '' && (userType === 'paid' || userType === 'free')) {
-      setToken(await registerUser({
+      const promise = registerUser({
         name,
         email,
         password,
         userType
-      }));
+      })
+
+      promise.then(response => {
+        if(response.status === 409)
+          throw Error("Email already exists. Please choose another");
+        return response.json()
+      })
+      .then(data => {
+        setToken(data);
+      })
+      .catch(err => alert(err))
     }
   }
 

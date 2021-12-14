@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { BACKEND_URL } from "../../App";
 import PropTypes from 'prop-types';
 import {Navigate} from 'react-router-dom';
 

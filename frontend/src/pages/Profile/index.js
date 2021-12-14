@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Grid from "@mui/material/Grid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { CircularProgress, IconButton, Box } from "@mui/material";
@@ -12,7 +12,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ChangeInfoDialog from "../../common/components/changeInfoDialog";
 import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
 import { Link, useLocation } from "react-router-dom";
-import books from "../Details/books.jpeg";
 
 const ProfileHeader = ({
   name,
@@ -112,7 +111,7 @@ const ProfileHeader = ({
           </div>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </>
   );
@@ -214,7 +213,6 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
         <CardMedia
           component="img"
           height="360"
-          //padding-top={360-image.height}
           maxWidth="260"
           image={image}
           alt={`${title} by ${author}`}
@@ -240,7 +238,7 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
       </Link>
       <CardActions
         sx={{
-          backgroundColor: "rgb(33, 112, 33, 0.84)",
+          backgroundColor: "rgba(33, 112, 33, 0.76)",
           color: "white",
           pl: 3,
           pr: 3,
@@ -274,8 +272,21 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
 };
 
 const BookList = ({ title, list, userData, setUserData, token }) => {
+  const myRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const id = location.hash.substring(1);
+    if (id === convertToFrontEndName(title)) {
+      window.scrollTo({
+        top: myRef.current.offsetTop - 100,
+        behavior: "smooth",
+      });
+    }
+  }, [location.hash]);
+
   return (
-    <div className="flex-vertical book-list-container">
+    <div className="flex-vertical book-list-container" ref={myRef}>
       <Typography
         sx={{
           mt: 4,
@@ -317,7 +328,7 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
           </Grid>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{ mt: 2 }} />
       )}
     </div>
   );
@@ -356,7 +367,13 @@ async function getCurrentUserProfileData(
   );
 }
 
-async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
+async function getOtherUserProfileData(
+  userId,
+  setUserData,
+  setEmail,
+  setName,
+  setOtherUserType
+) {
   return (
     fetch("http://localhost:5000/api/get-other-user-data", {
       method: "POST",
@@ -374,6 +391,9 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
         });
         setEmail(data.email);
         setName(data.name);
+        setOtherUserType(data.userType);
+        console.log(JSON.stringify(data));
+        console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
       .catch((err) => {
@@ -393,6 +413,7 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
   const [userId, setUserId] = useState("");
+  const [otherUserType, setOtherUserType] = useState("");
 
   let location = useLocation();
   useEffect(() => {
@@ -412,7 +433,13 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         setUserId
       );
     } else {
-      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
+      await getOtherUserProfileData(
+        { userId },
+        setUserData,
+        setEmail,
+        setName,
+        setOtherUserType
+      );
     }
   }, [userId]);
 
@@ -448,9 +475,12 @@ const ProfilePage = ({ token, curUser, userType, setHistory }) => {
         ) : (
           <></>
         )}
-        {token && userType === "paid" ? (
+        {token &&
+        ((curUser && userType === "paid") ||
+          (!curUser && otherUserType === "paid")) ? (
           <>
             <Grid item xs={12}>
+              {" "}
               <BookList
                 title="In Progress List"
                 list={userData.inProgressList}

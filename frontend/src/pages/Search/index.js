@@ -23,6 +23,7 @@ const SearchResultCard = ({
   inFinishedList,
   userType,
 }) => {
+  console.log(inReadingList.includes(isbn));
   return (
     <>
       <Link to={`/details/${isbn}`} className="unstyled-link">
@@ -73,39 +74,38 @@ const SearchResultCard = ({
                         : description.substring(0, 250) + "..."
                       : ""}
                   </Typography>
-                  {userType === "paid"
-                    ? inReadingList.includes(isbn) && (
-                        <Typography
-                          sx={{ display: "block", textAlign: "center" }}
-                          component="span"
-                          variant="subtitle2"
-                          color="text.primary"
-                        >
-                          This book is in your Reading list!
-                        </Typography>
-                      )
-                    : ""}
-                  {userType === "paid"
-                    ? inProgressList.includes(isbn) && (
-                        <Typography
-                          sx={{ display: "block", textAlign: "center" }}
-                          component="span"
-                          variant="subtitle2"
-                          color="text.primary"
-                        >
-                          This book is in your In Progress List!
-                        </Typography>
-                      )
-                    : ""}
-                  {inFinishedList.includes(isbn) && (
+                  {inReadingList.includes(isbn) ? (
                     <Typography
-                      sx={{ display: "block", textAlign: "center" }}
+                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
                       component="span"
                       variant="subtitle2"
-                      color="text.primary"
+                    >
+                      This book is in your Reading list!
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
+                  {inProgressList.includes(isbn) ? (
+                    <Typography
+                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
+                      component="span"
+                      variant="subtitle2"
+                    >
+                      This book is in your In Progress List!
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
+                  {inFinishedList.includes(isbn) ? (
+                    <Typography
+                      sx={{ display: "block", textAlign: "center", mt: 2, color: 'rgb(33, 112, 33)'}}
+                      component="span"
+                      variant="subtitle2"
                     >
                       This book is in your Finished List! Well done :)
                     </Typography>
+                  ) : (
+                    <></>
                   )}
                 </>
               }
@@ -256,9 +256,11 @@ const SearchPage = ({ token }) => {
                         result.volumeInfo.title &&
                         result.volumeInfo.authors &&
                         result.volumeInfo.industryIdentifiers &&
-                        result.volumeInfo.industryIdentifiers.filter(identifer => {
-                          return identifer.type = "ISBN_13";
-                        }).length > 0
+                        result.volumeInfo.industryIdentifiers.filter(
+                          (identifer) => {
+                            return (identifer.type = "ISBN_13");
+                          }
+                        ).length > 0
                       );
                     })
                     .map((result) => {
