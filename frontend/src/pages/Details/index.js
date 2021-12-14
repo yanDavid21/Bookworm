@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, Snackbar, Alert } from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import books from "./books.jpeg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";
@@ -64,8 +64,7 @@ const DetailsPage = ({ token, userType }) => {
 
   return result ? (
     <div>
-      <Card sx={{ justifyContent: "flex-start" }}>
-        <CardActionArea sx={{ display: "flex" }}>
+      <Card sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Box sx={{ maxWidth: 370 }}>
             <CardMedia
               sx={{
@@ -74,6 +73,7 @@ const DetailsPage = ({ token, userType }) => {
                 flexDirection: "column",
                 minWidth: 250,
                 maxWidth: 350,
+                maxHeight: 500
               }}
               component="img"
               image={
@@ -160,17 +160,15 @@ const DetailsPage = ({ token, userType }) => {
               <></>
             )}
           </Box>
+          <Box sx={{display: "flex", alignItems: "flex-start"}}>
           <CardContent
             sx={{
-              display: "flex",
-              position: "relative",
-              mt: -10,
+              alignItems: "flex-start",
+              alignContent: 'flex-start',
               ml: 3,
-              flexDirection: "column",
-              flex: "3 1 auto",
             }}
           >
-            <Typography gutterBottom variant="h4" component="div">
+            <Typography gutterBottom variant="h4">
               {result.items[0].volumeInfo.title}
               <Typography
                 gutterBottom
@@ -205,10 +203,9 @@ const DetailsPage = ({ token, userType }) => {
                     ? "by " + result.items[0].volumeInfo.publisher
                     : "")
                 : ""}
-              {/*Published in {result.items[0].volumeInfo.publishedDate} {}*/}
             </Typography>
           </CardContent>
-        </CardActionArea>
+          </Box>
       </Card>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert severity="success" sx={{ width: '100%' }} onClose={handleSnackbarClose}>

@@ -12,7 +12,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ChangeInfoDialog from "../../common/components/changeInfoDialog";
 import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
 import { Link, useLocation } from "react-router-dom";
-import books from "../Details/books.jpeg";
 
 const ProfileHeader = ({
   name,
