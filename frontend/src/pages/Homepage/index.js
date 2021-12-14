@@ -1,21 +1,45 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Typography, Grid } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Link } from "react-router-dom";
+
+const getPopularBooks = (setPopularBooks) => {
+  console.log("pre fetch")
+  fetch(`/api/get-popular-books`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then((response) => {
+    
+    return response.json();
+  }).then(data => {
+    console.log("RESPONSE:")
+    console.log(data)
+    setPopularBooks(data)
+  })
+}
 
 const Homepage = ({token}) => {
-  console.log('token: ' + token);
+  const [popularBooks, setPopularBooks] = useState(null)
+  useEffect(() => {
+    getPopularBooks(setPopularBooks)
+  }, [setPopularBooks])
+  console.log(popularBooks);
   if(!token) {
     return (
-      <UnloggedIn />
+      <UnloggedIn popularBooks={popularBooks}/>
     );
   }
 
   return (
-    <LoggedIn />
+    <LoggedIn popularBooks={popularBooks}/>
   );
 };
 
-const LoggedIn = () => {
-  return (
+const LoggedIn = ({popularBooks}) => {
+  console.log(popularBooks);
+  return popularBooks ? (
     <div>
     <Typography variant="h3">Bookworm</Typography>     
     
@@ -41,9 +65,22 @@ const LoggedIn = () => {
       </Grid>
     </Grid>
 
-    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that you and your friends have added to their lists recently...</Typography>
+    <Typography variant="h5" sx={{mt: 5, mb: 2}}>Popular books with Bookworm users</Typography>
     <Grid container spacing={10}>
-    <Grid item sm={6} md={4} lg={3} xl={2}>
+    {popularBooks.map((popularBook) => {
+        const imgSrc = popularBook.image
+        
+        return (
+        <Grid item sm={6} md={4} lg={3} xl={2}>
+          <Link to={`/details/${popularBook.isbn}`}>
+            <img src={imgSrc} width="200"/>
+          </Link>
+        </Grid>
+        )
+        
+
+      })}
+    {/* <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
       <Grid item sm={6} md={4} lg={3} xl={2}>
@@ -60,13 +97,15 @@ const LoggedIn = () => {
       </Grid>
       <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
+      </Grid> */}
     </Grid>
   </div>
+  ) : (
+    <CircularProgress></CircularProgress>
   );
 }
-const UnloggedIn = () => {
-  return (
+const UnloggedIn = ({popularBooks}) => {
+  return popularBooks ? (
     <div>
     <Typography variant="h3">Bookworm</Typography>     
 
@@ -87,7 +126,13 @@ const UnloggedIn = () => {
     
     <Typography variant="h5" sx={{mt: 5, mb: 2}}>Books that have been popular in searches recently...</Typography>
     <Grid container spacing={10}>
-    <Grid item sm={6} md={4} lg={3} xl={2}>
+    {popularBooks.map((popularBook) => {
+        const imgSrc = popularBook.image
+        return <Grid item sm={6} md={4} lg={3} xl={2}>
+          <img src={imgSrc} width="200"/>
+        </Grid>
+      })}
+    {/* <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
       </Grid>
       <Grid item sm={6} md={4} lg={3} xl={2}>
@@ -104,9 +149,11 @@ const UnloggedIn = () => {
       </Grid>
       <Grid item sm={6} md={4} lg={3} xl={2}>
           <img src="https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg" width="200"/>
-      </Grid>
+      </Grid> */}
     </Grid>
   </div>
+  ) : (
+    <CircularProgress></CircularProgress>
   );
 }
 
