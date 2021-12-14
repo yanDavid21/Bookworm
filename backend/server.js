@@ -36,7 +36,8 @@ connectToDatabase().catch(err => console.log(err))
 const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
 const createUserRouter = require('./routes/create-user');
-const getUserDataRouter = require('./routes/get-user')
+const getCurrentUserDataRouter = require('./routes/get-current-user')
+const getOtherUserDataRouter = require('./routes/get-other-user')
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
@@ -48,7 +49,8 @@ app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
 app.use(cors());
 app.use('/api/register', createUserRouter);
-app.use('/api/get-user-data', getUserDataRouter);
+app.use('/api/get-current-user-data', getCurrentUserDataRouter);
+app.use('/api/get-other-user-data', getOtherUserDataRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter)
 app.use('/api/details', detailRouter);

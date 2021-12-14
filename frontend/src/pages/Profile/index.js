@@ -11,15 +11,11 @@ import Typography from "@mui/material/Typography";
 import EditIcon from '@mui/icons-material/Edit';
 import ChangeInfoDialog from '../../common/components/changeInfoDialog';
 import EnterPasswordDialog from '../../common/components/enterPasswordDialog';
+import { useLocation } from "react-router-dom";
 
-const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName }) => {
+const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName, curUser }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
-
-  const handleInfoOpen = (e) => {
-    e.preventDefault();
-    setInfoOpen(true);
-  }
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -43,7 +39,8 @@ const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName }) =
             />
           )}
           <div className="flex-vertical">
-            <Typography variant="h3">{`Welcome back, ${name}`}</Typography>
+            {curUser? <Typography variant="h3">{`Welcome back, ${name}`}</Typography> : <Typography variant="h3">{name}</Typography>}
+            {curUser?
             <div className="flex-horizontal" sx={{alignItems: 'center'}}>
               <Typography variant="h5">{`Signed in as:  ${email}`}</Typography>
               <IconButton onClick={handleEnterPasswordOpen}>
@@ -51,7 +48,7 @@ const ProfileHeader = ({ name, email, profPicture, token, setEmail, setName }) =
               </IconButton>
               <EnterPasswordDialog enterPasswordOpen={enterPasswordOpen} setEnterPasswordOpen={setEnterPasswordOpen} token={token} setInfoOpen={setInfoOpen}/>
               <ChangeInfoDialog infoOpen={infoOpen} setInfoOpen={setInfoOpen} token={token} setEmail={setEmail} setName={setName}/>
-            </div>
+            </div> : <></>}
           </div>
         </div>
       ) : (
@@ -141,8 +138,8 @@ const BookList = ({ title, list }) => {
   );
 };
 
-async function getProfileData(token,setUserData,setEmail,setName) {
-  return fetch('http://localhost:5000/api/get-user-data', {
+async function getCurrentUserProfileData(token,setUserData,setEmail,setName) {
+  return fetch('http://localhost:5000/api/get-current-user-data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -162,16 +159,48 @@ async function getProfileData(token,setUserData,setEmail,setName) {
     });
  }
 
-const ProfilePage = ({token}) => {
+ async function getOtherUserProfileData(userId,setUserData,setEmail,setName) {
+  return fetch('http://localhost:5000/api/get-other-user-data', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userId)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      setEmail(data.email);
+      setName(data.name);
+      setUserData({readingList: data.to_read, inProgressList:data.in_progress, finishedList:data.finished});
+    })
+    // .then(response => response.json())
+    .catch(err => {
+      alert(err);
+    });
+ }
+
+const ProfilePage = ({token, curUser}) => {
   const initState = { readingList: [], inProgressList: [], finishedList: [] };
   const [userData, setUserData] = useState(initState);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
 
+  let location = useLocation();
+  let userId = "";
+  if (!curUser) {
+    userId= location.pathname.substring(9);
+  }
+
   //get user data
   useEffect(async () => {
-    await getProfileData({token},setUserData, setEmail, setName);
+    if(curUser) {
+      await getCurrentUserProfileData({token},setUserData, setEmail, setName);
+    } else {
+      console.log(userId);
+      await getOtherUserProfileData({userId}, setUserData, setEmail, setName);
+    }
 
     console.log(email);
   }, []);
@@ -188,6 +217,7 @@ const ProfilePage = ({token}) => {
               token={token}
               setEmail={setEmail}
               setName={setName}
+              curUser={curUser}
             ></ProfileHeader>
           </div>
         </Grid>
