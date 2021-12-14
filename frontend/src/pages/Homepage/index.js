@@ -124,11 +124,11 @@ const UnloggedIn = ({ popularBooks }) => {
           const imgSrc = popularBook.image
           const isbn = popularBook.isbn
           return (
+            <Grid item sm={6} md={4} lg={3} xl={2}>
               <Link to={`/details/${isbn}`}>
-                <Grid item sm={6} md={4} lg={3} xl={2}>
-                  <img src={imgSrc} width="200" />
-                </Grid>
+                <img src={imgSrc} width="200" />
               </Link>
+            </Grid>
 
           )
         })}
