@@ -15,12 +15,12 @@ const PrivacyPolicyText = ({disagreed}) => {
                 <Typography sx={{fontWeight: 'bold', mt: 2}}>How we store your information:</Typography>
                 <Typography sx={{mt: 1}}>
                     In order to ensure that your password is completely protected, we hash every user's password using bcrypt before storing it in our database. 
-                    All public information about a user is stored in plaintext.
+                    All other information about a user is stored in plaintext.
                 </Typography>
                 <Typography sx={{fontWeight: 'bold', mt: 2}}>What we do with your information:</Typography>
                 <Typography sx={{mt: 1}}>
-                At Bookworm, the privacy of our users is a number-one priority. We will never share your password with anyone. 
-                However, the public information in your profile, such as your name, email, user type, and book lists are all made available 
+                At Bookworm, the privacy of our users is a number-one priority. We will never share your email or password with anyone. 
+                However, the public information in your profile, such as your name, user type, and book lists are all made available 
                 for any other users to view. Additionally, we use every user's reading list to determine which books are most popular at 
                 any moment.
                 </Typography>
