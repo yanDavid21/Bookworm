@@ -22,7 +22,7 @@ export const fetchBook = (isbn, setResults, searchType) => {
     });
 };
 
-const addBookToList = (bodyParams, location, setSnackbarOpen) => {
+const addBookToList = (bodyParams, location, setSnackbarOpen, setInList) => {
   const isbn = location.pathname.substring(9);
   bodyParams.isbn = isbn;
   fetch("/api/book", {
@@ -34,6 +34,7 @@ const addBookToList = (bodyParams, location, setSnackbarOpen) => {
   }).then((response) => {
     if (response.status === 200) {
       setSnackbarOpen(true);
+      setInList(true);
     } else {
       console.log("Failed to add book.");
     }
@@ -50,34 +51,78 @@ const DetailsPage = ({ token, userType }) => {
   }, [location, setResult]);
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setSnackbarOpen(false);
   };
 
+  const [inReadingList, setInReadingList] = useState(false);
+  const [inProgressList, setInProgressList] = useState(false);
+  const [inFinishedList, setInFinishedList] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      fetch(`/api/get-current-user-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }), //{message: '', token: ''}
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          const isbn = location.pathname.substring(9);
+          setInReadingList(data.to_read.includes(isbn));
+          if (userType === "paid") {
+            setInProgressList(data.in_progress.includes(isbn));
+            setInFinishedList(data.finished.includes(isbn));
+          }
+        })
+        .catch((err) => {
+          alert("Token: " + err);
+        });
+    }
+  }, [token]);
+
   return result ? (
     <div>
       <Card sx={{ display: "flex", justifyContent: "flex-start" }}>
-          <Box sx={{ maxWidth: 370 }}>
-            <CardMedia
+        <Box sx={{ maxWidth: 370 }}>
+          <CardMedia
+            sx={{
+              display: "flex",
+              ml: 1,
+              flexDirection: "column",
+              minWidth: 250,
+              maxWidth: 350,
+              maxHeight: 500,
+            }}
+            component="img"
+            image={
+              result.items[0].volumeInfo.imageLinks.thumbnail
+                ? result.items[0].volumeInfo.imageLinks.thumbnail
+                : books
+            }
+            alt="books in library"
+          />
+          {inReadingList ? (
+            <Button
               sx={{
-                display: "flex",
-                ml: 1,
-                flexDirection: "column",
-                minWidth: 250,
-                maxWidth: 350,
-                maxHeight: 500
+                mt: 4,
+                ml: 2,
+                mb: 2,
+                width: 330,
+                backgroundColor: "rgb(200, 200, 200)",
               }}
-              component="img"
-              image={
-                result.items[0].volumeInfo.imageLinks.thumbnail
-                  ? result.items[0].volumeInfo.imageLinks.thumbnail
-                  : books
-              }
-              alt="books in library"
-            />
+              variant="disabled"
+            >
+              Add to Reading List
+            </Button>
+          ) : (
             <Button
               sx={{
                 mt: 4,
@@ -96,14 +141,29 @@ const DetailsPage = ({ token, userType }) => {
                     token: token,
                   },
                   location,
-                  setSnackbarOpen
+                  setSnackbarOpen,
+                  setInReadingList
                 );
               }}
             >
               Add to Reading List
             </Button>
-            {userType === "paid" ? (
-              <div>
+          )}
+          {userType === "paid" ? (
+            <div>
+              {inProgressList ? (
+                <Button
+                  sx={{
+                    ml: 2,
+                    mb: 2,
+                    width: 330,
+                    backgroundColor: "rgb(200, 200, 200)",
+                  }}
+                  variant="disabled"
+                >
+                  In your In-Progress List
+                </Button>
+              ) : (
                 <Button
                   sx={{
                     ml: 2,
@@ -121,12 +181,27 @@ const DetailsPage = ({ token, userType }) => {
                         token: token,
                       },
                       location,
-                      setSnackbarOpen
+                      setSnackbarOpen,
+                      setInProgressList
                     );
                   }}
                 >
                   Add to In-Progress List
                 </Button>
+              )}
+              {inFinishedList ? (
+                <Button
+                  sx={{
+                    ml: 2,
+                    mb: 2,
+                    width: 330,
+                    backgroundColor: "rgb(200,200,200)",
+                  }}
+                  variant="disabled"
+                >
+                  In Your Finished List
+                </Button>
+              ) : (
                 <Button
                   sx={{
                     ml: 2,
@@ -144,22 +219,24 @@ const DetailsPage = ({ token, userType }) => {
                         token: token,
                       },
                       location,
-                      setSnackbarOpen
+                      setSnackbarOpen,
+                      setInFinishedList
                     );
                   }}
                 >
                   Add to Finished List
                 </Button>
-              </div>
-            ) : (
-              <></>
-            )}
-          </Box>
-          <Box sx={{display: "flex", alignItems: "flex-start"}}>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
           <CardContent
             sx={{
               alignItems: "flex-start",
-              alignContent: 'flex-start',
+              alignContent: "flex-start",
               ml: 3,
             }}
           >
@@ -171,21 +248,25 @@ const DetailsPage = ({ token, userType }) => {
                 component="div"
                 color="text.secondary"
               >
-                {result.items[0].volumeInfo.authors.length === 1
-                  ? <Link to={`/author/${result.items[0].volumeInfo.authors}`}>{result.items[0].volumeInfo.authors}</Link>
-                  : result.items[0].volumeInfo.authors.map((author, index) => {
-                      return (
-                        <>
-                          <Link to={`/author/${author}`}>
-                            {author +
-                              (index ===
-                              result.items[0].volumeInfo.authors.length - 1
-                                ? ""
-                                : ",")}
-                          </Link>{" "}
-                        </>
-                      );
-                    })}
+                {result.items[0].volumeInfo.authors.length === 1 ? (
+                  <Link to={`/author/${result.items[0].volumeInfo.authors}`}>
+                    {result.items[0].volumeInfo.authors}
+                  </Link>
+                ) : (
+                  result.items[0].volumeInfo.authors.map((author, index) => {
+                    return (
+                      <>
+                        <Link to={`/author/${author}`}>
+                          {author +
+                            (index ===
+                            result.items[0].volumeInfo.authors.length - 1
+                              ? ""
+                              : ",")}
+                        </Link>{" "}
+                      </>
+                    );
+                  })
+                )}
               </Typography>
             </Typography>
             <Typography>{result.items[0].volumeInfo.description}</Typography>
@@ -200,12 +281,20 @@ const DetailsPage = ({ token, userType }) => {
                 : ""}
             </Typography>
           </CardContent>
-          </Box>
+        </Box>
       </Card>
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <Alert severity="success" sx={{ width: '100%' }} onClose={handleSnackbarClose}>
-            Added book to list!
-          </Alert>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          severity="success"
+          sx={{ width: "100%" }}
+          onClose={handleSnackbarClose}
+        >
+          Added book to list!
+        </Alert>
       </Snackbar>
     </div>
   ) : (
