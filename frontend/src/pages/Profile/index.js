@@ -203,10 +203,15 @@ const BookList = ({ title, list }) => {
       </Typography>
       {list ? (
         <div className="book-list">
+          <Grid container spacing={10} sx={{mt: 1, pl: 10}}>
           {list.map((isbn) => {
+
             console.log(isbn);
-            return <BookCard listType={title} isbn={isbn} />;
+            return <Box sx={{display: 'flex', pt:2, pb:1, pr: 4, flexDirection:'column'}}>
+              <BookCard listType={title} isbn={isbn} />
+            </Box>
           })}
+          </Grid>
         </div>
       ) : (
         <CircularProgress />
