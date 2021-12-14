@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeInfoDialog from "../../common/components/changeInfoDialog";
 import EnterPasswordDialog from "../../common/components/enterPasswordDialog";
-import { useLocation } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import books from "../Details/books.jpeg";
 
 const ProfileHeader = ({
@@ -80,8 +80,7 @@ const ProfileHeader = ({
               ) : (
                 <></>
               )}
-              <Button
-                color="success"
+              <Button sx={{backgroundColor: "rgb(33, 112, 33)"}}
                 variant="contained"
                 onClick={() => {
                   navigator.clipboard.writeText(
@@ -145,27 +144,31 @@ const BookCard = ({ listType, isbn }) => {
 
   return result ? (
     <Card sx={{ width: 260, mt: 2}}>
-      <CardMedia
-        component="img"
-        height="340"
-        image={image}
-        alt={`${title} by ${author}`}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {author}
-        </Typography>
-      </CardContent>
-      <CardActions>
+      <Link to={`/details/${isbn}`} className="unstyled-link">
+        <CardMedia
+          component="img"
+          height="360"
+          //padding-top={360-image.height}
+          maxWidth="260"
+          image={image}
+          alt={`${title} by ${author}`}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {author}
+          </Typography>
+        </CardContent>
+      </Link>
+      <CardActions sx={{backgroundColor: "rgb(33, 112, 33, 0.84)", color: "white", pl:3, pr: 3, pt: 1, pb: 1}}>
         <Button
           size="small"
           onClick={() => {
             removeItem(listType, isbn);
           }}
-        >
+        sx={{color: "white"}} >
           Remove
         </Button>
         <Button
@@ -173,7 +176,7 @@ const BookCard = ({ listType, isbn }) => {
           onClick={() => {
             addToNextList(listType, isbn);
           }}
-        >
+          sx={{color: "white", pl:2, pr: 2}}>
           {buttonActionText(listType)}
         </Button>
       </CardActions>

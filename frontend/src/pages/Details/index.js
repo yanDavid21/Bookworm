@@ -54,15 +54,16 @@ const DetailsPage = ({ token }) => {
 
   return result ? (
     <div>
-      <Card>
-        <CardActionArea sx={{ display: "flex" }}>
-          <Box>
+      <Card sx={{justifyContent: "flex-start"}}>
+        <CardActionArea sx={{ display: "flex"}}>
+          <Box sx={{maxHeight: 600, maxWidth: 370}}>
             <CardMedia
               sx={{
                 display: "flex",
                 ml: 1,
                 flexDirection: "column",
-                minWidth: 350,
+                minWidth: 250,
+                maxWidth: 350,
               }}
               component="img"
               image={
