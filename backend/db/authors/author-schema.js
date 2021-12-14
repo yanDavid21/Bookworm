@@ -3,7 +3,7 @@ const { Schema } = mongoose
 
 const authorSchema = new Schema({
   name: String,
-  books: [Schema.Types.ObjectId]
+  books: [String]
 })
 
 module.exports = authorSchema

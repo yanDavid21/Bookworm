@@ -172,7 +172,7 @@ const DetailsPage = ({ token, userType }) => {
                 color="text.secondary"
               >
                 {result.items[0].volumeInfo.authors.length === 1
-                  ? result.items[0].volumeInfo.authors
+                  ? <Link to={`/author/${result.items[0].volumeInfo.authors}`}>{result.items[0].volumeInfo.authors}</Link>
                   : result.items[0].volumeInfo.authors.map((author, index) => {
                       return (
                         <>

@@ -43,9 +43,10 @@ const logoutRouter = require('./routes/logout');
 const detailRouter = require('./routes/details');
 const bookRouter = require('./routes/book');
 const changeUserInfoRouter = require('./routes/change-user-info');
-const enterPasswordRouter = require('./routes/enter-password')
-const getPopularBooksRouter = require('./routes/get-popular-books')
-const getReadingListRouter = require('./routes/get-reading-list')
+const enterPasswordRouter = require('./routes/enter-password');
+const getPopularBooksRouter = require('./routes/get-popular-books');
+const getReadingListRouter = require('./routes/get-reading-list');
+const getBooksByAuthorRouter = require('./routes/get-books-by-author');
 
 app.use('/', indexRouter);
 app.use('/api/search', searchRouter);
@@ -61,6 +62,7 @@ app.use('/api/change-user-info', changeUserInfoRouter);
 app.use('/api/enter-password', enterPasswordRouter);
 app.use('/api/get-popular-books', getPopularBooksRouter);
 app.use('/api/get-reading-list', getReadingListRouter)
+app.use('/api/get-books-by-author', getBooksByAuthorRouter)
 /*******************************************/
 
 

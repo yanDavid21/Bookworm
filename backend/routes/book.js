@@ -5,8 +5,34 @@ const cookieDao = require("../db/cookies/cookie-dao");
 const freeUserDao = require("../db/free-users/free-user-dao");
 const paidUserDao = require("../db/paid-users/paid-user-dao");
 const bookDao = require("../db/books/book-dao");
+const authorDao = require("../db/authors/author-dao")
 
-const addBookToList = (listType, user, userDao, isbn, res) => {
+async function addAuthors(authors, isbn, res) {
+  authors.forEach(async author => {
+    console.log("Author: " +  author)
+    const authorContained = await authorDao.containsAuthor(author);
+    console.log(authorContained)
+    if (!authorContained) {
+      const authorObj = await authorDao.findAuthorByName(author);
+      dbAuthorBooks = authorObj.books
+      if (!dbAuthorBooks.includes(isbn)) {
+        dbAuthorBooks.push(isbn)
+      }
+      console.log("AUTHOR ID: " + authorObj.id)
+      authorObj.books = dbAuthorBooks
+      await authorDao.updateAuthor(new mongoose.Types.ObjectId(authorObj.id), authorObj)
+    } else {
+      console.log("Creating author")
+      await authorDao.createAuthor({name: author, books: [isbn]})
+    }
+  })
+  res.status(200).send({
+    message: "Successfully added books and author"
+  })
+
+}
+
+const addBookToList = (listType, user, userDao, isbn, res, authors) => {
   const userId = user.id;
   const userListToUpdate = user[listType];
   if (!userListToUpdate.includes(isbn)) {
@@ -14,11 +40,8 @@ const addBookToList = (listType, user, userDao, isbn, res) => {
   }
 
   user[listType] = userListToUpdate;
-  userDao.updateUser(userId, user, res).then((status) => {
-    res.send({
-      status: status,
-      message: "added to user book list",
-    });
+  userDao.updateUser(userId, user).then((status) => {
+    addAuthors(authors, isbn, res);
   });
 };
 
@@ -41,7 +64,7 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
         image: bookInfo.imageLinks.thumbnail ?? "",
       };
       bookDao.createBook(newBook).then((createResult) => {
-        addBookToList(listType, user, userDao, isbn, res);
+        addBookToList(listType, user, userDao, isbn, res, bookInfo.authors);
       });
     } else {
       const addedCount = book.addedCount + 1;
@@ -50,7 +73,7 @@ const addBookToDbAndUser = (listType, bookInfo, user, userDao, isbn, res) => {
       bookDao.replaceBook(isbn, book).then((replaceResult) => {
         if (replaceResult.acknowledged) {
           console.log("------------Book replaced");
-          addBookToList(listType, user, userDao, isbn, res);
+          addBookToList(listType, user, userDao, isbn, res, bookInfo.authors);
         } else {
           res.status(500).send({
             message: "internal server error while replacing existing book",
