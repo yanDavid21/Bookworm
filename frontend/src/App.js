@@ -56,7 +56,7 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
             <Route
               path="/profile"
               exact
-              element={<ProfilePage token={token} />}
+              element={<ProfilePage token={token} curUser={true} />}
             ></Route>
           </Route>
           <Route
@@ -82,6 +82,10 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
             }
           ></Route>
           <Route path="/author/*" element={<AuthorPage />}></Route>
+          <Route
+            path="/profile/*"
+            element={<ProfilePage token={token} curUser={false} />}
+          ></Route>
           <Route
             path="/search"
             exact

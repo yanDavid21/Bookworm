@@ -14,6 +14,7 @@ router.post('/', function (req, res) {
         message: "User could not be found: " + token
       })
     } else {
+      console.log('id: ' + userData.user);
       freeUserDao.findUserById(userData.user).then(freeUser => {
         if(freeUser === null) {
           paidUserDao.findUserById(userData.user).then(paidUser => {

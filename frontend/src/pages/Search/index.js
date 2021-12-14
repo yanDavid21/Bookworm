@@ -125,7 +125,6 @@ const SearchPage = ({ token }) => {
   const [inFinishedList, setFinishedList] = useState([]);
 
   useEffect(() => {
-    console.log(location);
     if (location.search === "") {
       return;
     }
@@ -176,7 +175,6 @@ const SearchPage = ({ token }) => {
   }, [location.search]);
 
   useEffect(() => {
-    console.log(token);
     fetch(`/api/get-user-data`, {
       method: "POST",
       headers: {
@@ -241,7 +239,6 @@ const SearchPage = ({ token }) => {
               <div className="search-results flex-horizontal flex-center">
                 <List>
                   {searchResults.map((result) => {
-                    console.log(result);
                     const isbn =
                       result.volumeInfo.industryIdentifiers[0].identifier;
                     const title = result.volumeInfo.title;
