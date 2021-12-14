@@ -175,7 +175,7 @@ const SearchPage = ({ token }) => {
   }, [location.search]);
 
   useEffect(() => {
-    fetch(`/api/get-user-data`, {
+    fetch(`/api/get-current-user-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
