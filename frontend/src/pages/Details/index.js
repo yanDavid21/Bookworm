@@ -43,7 +43,32 @@ const addBookToList = (bodyParams, location) => {
   });
 };
 
-const DetailsPage = ({ token }) => {
+// async function getUserType(
+//   token,
+//   setUserType
+// ) {
+//   return (
+//     fetch("http://localhost:5000/api/get-current-user-data", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(token),
+//     })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         console.log('this is the data: ' + JSON.stringify(data))
+//         console.log('this is the user type: ' + data.userType);
+//         setUserType(data.userType);
+//       })
+//       // .then(response => response.json())
+//       .catch((err) => {
+//         alert(err);
+//       })
+//   );
+// }
+
+const DetailsPage = ({ token, userType }) => {
   let location = useLocation();
   const [result, setResult] = useState(null);
   const searchType = "ISBN";
@@ -51,6 +76,12 @@ const DetailsPage = ({ token }) => {
   useEffect(() => {
     fetchBook(location.pathname.substring(9), setResult, searchType);
   }, [location, setResult]);
+  // useEffect(async () => {
+  //   await getUserType(
+  //     { token },
+  //     setUserType
+  //   );
+  // }, []);
 
   return result ? (
     <div>
@@ -96,7 +127,7 @@ const DetailsPage = ({ token }) => {
             >
               Add to Reading List
             </Button>
-            <Button
+            {userType==='paid'? <div><Button
               sx={{
                 ml: 2,
                 mb: 2,
@@ -139,7 +170,7 @@ const DetailsPage = ({ token }) => {
               }}
             >
               Add to Finished List
-            </Button>
+            </Button></div> : <></>}
           </Box>
           <CardContent
             sx={{

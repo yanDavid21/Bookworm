@@ -13,7 +13,7 @@ router.post('/', function (req, res) {
   const userType = req.body.userType
 
   let dao = freeUserDao
-  if (userType === "premium") {
+  if (userType === "paid") {
     dao = paidUserDao
   }
 
@@ -47,6 +47,7 @@ router.post('/', function (req, res) {
             res.status(200).send({
               message: "New user with email " + email + " created",
               token: hash,
+              userType: userType
             })
           })
         }

@@ -15,11 +15,13 @@ async function logoutUser(token) {
     })
    }
 
-const LogoutButton = ({token, setToken}) => {
+const LogoutButton = ({token, setToken, setUserType}) => {
     const handleLogout = async e => {
       e.preventDefault();
       setToken({token: null});
+      setUserType({userType: null});
       localStorage.removeItem("token");
+      localStorage.removeItem("userType");
       await logoutUser({
           token
       });

@@ -25,11 +25,12 @@ const listOfTabs = [
   { title: "Finished List", path: "#finished", icon: <AssignmentTurnedInIcon /> },
 ];
 
-const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPrivacyOpen}) => {
+const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPrivacyOpen, userType, setUserType}) => {
   const handlePolicy = (e) => {
     e.preventDefault();
     setPrivacyOpen(true);
   }
+  console.log('type: ' + userType);
   return (
     <Drawer
       sx={{
@@ -95,7 +96,8 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPriv
         </Link>
       </List>
       <Divider />
-      <List>
+      {token && userType === 'paid'? <div>
+        <List>
         {listOfTabs.map((tab, index) => (
           <Link to={`/profile${tab.path}`} className="no-text-decoration">
             <ListItem button key={tab.title}>
@@ -110,8 +112,28 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPriv
             </ListItem>
           </Link>
         ))}
-      </List>
-      <Divider />
+      </List> 
+      <Divider/>
+      </div>
+      : <></>}
+      {token && userType === 'free'? <div>
+        <List>
+      <Link to='/profile#to-read' className="no-text-decoration">
+            <ListItem button key="Reading List">
+              <ListItemIcon><PlaylistAddIcon /></ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Reading List
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Link>
+          </List>
+          <Divider/>
+      </div> : <></>
+      }
       <List>
           <ListItem button onClick={handlePolicy}>
             <ListItemIcon>
@@ -127,7 +149,7 @@ const PermanentDrawerLeft = ({ drawerWidth, token, setToken, setHistory, setPriv
           </ListItem>
       </List>
       <Divider />
-      {token ? <LogoutButton token={token} setToken={setToken}/> : <LoginButton setHistory={setHistory}/>}
+      {token ? <LogoutButton token={token} setToken={setToken} setUserType={setUserType}/> : <LoginButton setHistory={setHistory}/>}
     </Drawer>
   );
 };

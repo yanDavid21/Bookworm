@@ -343,7 +343,7 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
   );
 }
 
-const ProfilePage = ({ token, curUser }) => {
+const ProfilePage = ({ token, curUser, userType }) => {
   const initState = {
     readingList: null,
     inProgressList: null,
@@ -367,6 +367,7 @@ const ProfilePage = ({ token, curUser }) => {
   //get user data
   useEffect(async () => {
     if (curUser) {
+      console.log(token);
       await getCurrentUserProfileData(
         { token },
         setUserData,
@@ -406,7 +407,7 @@ const ProfilePage = ({ token, curUser }) => {
             token={token}
           />
         </Grid>
-        <Grid item xs={12}>
+{        userType === 'paid'? <><Grid item xs={12}>
           <BookList
             title="In Progress List"
             list={userData.inProgressList}
@@ -423,7 +424,7 @@ const ProfilePage = ({ token, curUser }) => {
             setUserData={setUserData}
             token={token}
           ></BookList>
-        </Grid>
+        </Grid></> : <></>}
       </Grid>
     </div>
   );

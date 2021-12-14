@@ -22,6 +22,7 @@ router.post('/', function (req, res) {
               res.status(200).send({
                 message: "Login successful.",
                 token: hash,
+                userType: 'free'
               })
             })
           })
@@ -43,6 +44,7 @@ router.post('/', function (req, res) {
                   res.status(200).send({
                     message: "Login successful.",
                     token: hash,
+                    userType: 'paid'
                   })
                 })
               })

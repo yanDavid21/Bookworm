@@ -16,15 +16,14 @@ async function registerUser(credentials) {
  }
 
 
-const SignupPage = ({ token, setToken, lastPath }) => {
+const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [userType, setUserType] = useState("basic");
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (name !== '' && email !== '' && password !== '') {
+    if (name !== '' && email !== '' && password !== '' && (userType === 'paid' || userType === 'free')) {
       setToken(await registerUser({
         name,
         email,
@@ -49,9 +48,9 @@ const SignupPage = ({ token, setToken, lastPath }) => {
         
         <FormControl component="fieldset">
             <FormLabel component="legend">What kind of user would you like to be?</FormLabel>
-            <RadioGroup row aria-label="user-type" name="row-radio-buttons-group" onChange={e => setUserType(e.target.value)} value={userType}>
-              <FormControlLabel value="basic" control={<Radio />} label="Basic" />
-              <FormControlLabel value="premium" control={<Radio />} label="Premium" />
+            <RadioGroup row aria-label="user-type" name="row-radio-buttons-group" onChange={e => setUserType({userType: e.target.value})} value={userType}>
+              <FormControlLabel value="free" control={<Radio />} label="Free" />
+              <FormControlLabel value="paid" control={<Radio />} label="Paid" />
             </RadioGroup>
         </FormControl>
 

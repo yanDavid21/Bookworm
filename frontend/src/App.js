@@ -19,6 +19,7 @@ import SignupPage from "./pages/Signup";
 import AuthorPage from "./pages/Author";
 import useToken from "./common/customHooks/useToken";
 import usePrivacyToken from "./common/customHooks/usePrivacyToken";
+import useUserType from "./common/customHooks/useUserType";
 import PrivacyDialog from "./common/components/privacyDialog";
 import {
   Button,
@@ -32,7 +33,7 @@ const drawerWidth = 250;
 
 export const BACKEND_URL = "http://localhost:5000";
 
-const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
+const Body = ({ drawerWidth, token, setToken, lastPath, setHistory, userType, setUserType }) => {
   // const { token, setToken } = useToken();
   // const [lastPath, setHistory] = useState("/");
   return (
@@ -50,11 +51,11 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
           <Route
             element={<RequireAuth setHistory={setHistory} token={token} />}
           >
-            <Route path="/details/*" element={<DetailsPage token={token} />}></Route>
+            <Route path="/details/*" element={<DetailsPage token={token} userType={userType}/>}></Route>
             <Route
               path="/profile"
               exact
-              element={<ProfilePage token={token} curUser={true} />}
+              element={<ProfilePage token={token} curUser={true} userType={userType}/>}
             ></Route>
           </Route>
           <Route
@@ -65,6 +66,7 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
                 token={token}
                 setToken={setToken}
                 lastPath={lastPath}
+                setUserType={setUserType}
               />
             }
           ></Route>
@@ -76,6 +78,8 @@ const Body = ({ drawerWidth, token, setToken, lastPath, setHistory }) => {
                 token={token}
                 setToken={setToken}
                 lastPath={lastPath}
+                userType={userType}
+                setUserType={setUserType}
               />
             }
           ></Route>
@@ -146,6 +150,7 @@ function App() {
   const { privacyToken, setPrivacyToken } = usePrivacyToken();
   const [lastPath, setHistory] = useState("/");
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const {userType, setUserType} = useUserType();
   return (
     <Router>
       <PermanentDrawerLeft
@@ -154,6 +159,8 @@ function App() {
         setToken={setToken}
         setHistory={setHistory}
         setPrivacyOpen={setPrivacyOpen}
+        userType={userType}
+        setUserType={setUserType}
       />
       {privacyToken ? (
         <Body
@@ -162,6 +169,8 @@ function App() {
           setToken={setToken}
           lastPath={lastPath}
           setHistory={setHistory}
+          userType={userType}
+          setUserType={setUserType}
         />
       ) : (
         <PrivacyPolicyDialog

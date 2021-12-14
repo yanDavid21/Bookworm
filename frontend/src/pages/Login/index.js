@@ -16,7 +16,7 @@ async function loginUser(credentials) {
   })
  }
 
-const LoginPage = ({ token, setToken, lastPath}) => {
+const LoginPage = ({ token, setToken, lastPath, setUserType}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -35,6 +35,7 @@ const LoginPage = ({ token, setToken, lastPath}) => {
     })
     .then(data => {
       setToken(data)
+      setUserType(data);
     }).catch(err => {
       alert(err)
     })
