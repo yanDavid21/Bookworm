@@ -12,7 +12,6 @@ async function registerUser(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
  }
 
 
@@ -24,12 +23,22 @@ const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (name !== '' && email !== '' && password !== '' && (userType === 'paid' || userType === 'free')) {
-      setToken(await registerUser({
+      const promise = registerUser({
         name,
         email,
         password,
         userType
-      }));
+      })
+
+      promise.then(response => {
+        if(response.status === 409)
+          throw Error("Email already exists. Please choose another");
+        return response.json()
+      })
+      .then(data => {
+        setToken(data);
+      })
+      .catch(err => alert(err))
     }
   }
 
@@ -44,7 +53,7 @@ const SignupPage = ({ token, setToken, lastPath, userType, setUserType }) => {
       <Box sx={{width: "50%"}}>
         <TextField fullWidth label="Name" id="name-field" onChange={e => setName(e.target.value)}/>
         <TextField fullWidth label="Email" id="email-field" sx={{mt: 1.5}} onChange={e => setEmail(e.target.value)}/>
-        <TextField fullWidth label="Password" id="password-field" sx={{mt: 1.5, mb: 1.5}} onChange={e => setPassword(e.target.value)}/>
+        <TextField fullWidth label="Password" type="password" id="password-field" sx={{mt: 1.5, mb: 1.5}} onChange={e => setPassword(e.target.value)}/>
         
         <FormControl component="fieldset">
             <FormLabel component="legend">What kind of user would you like to be?</FormLabel>

@@ -24,12 +24,17 @@ const ProfileHeader = ({
   curUser,
   location,
   userId,
+  setHistory,
 }) => {
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
   const pathName =
     "http://localhost:3000" +
     (curUser ? "/profile/" + userId : location.pathname);
+
+  if (!curUser && !token) {
+    setHistory(location.pathname);
+  }
 
   const handleEnterPasswordOpen = (e) => {
     e.preventDefault();
@@ -92,10 +97,22 @@ const ProfileHeader = ({
                 Copy Profile URL
               </Button>
             </Box>
+            {token ? (
+              <></>
+            ) : (
+              <Link to="/login" className="no-text-decoration">
+                <Button
+                  variant="contained"
+                  sx={{ mt: 3, backgroundColor: "rgb(33, 112, 33)" }}
+                >
+                  Log in to view this person's lists
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{mt: 2}}/>
       )}
     </>
   );
@@ -141,7 +158,7 @@ const convertToFrontEndName = (listType) => {
 
 const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
   const [result, setResults] = useState({
-    volumeInfo: { title: "", authors: "", thumbnail: "" },
+    volumeInfo: { title: "", authors: [], thumbnail: "" },
   });
   const searchType = "ISBN";
   useEffect(() => {
@@ -207,13 +224,23 @@ const BookCard = ({ listType, isbn, userData, setUserData, token }) => {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {author}
+            {author === 1
+              ? author
+              : author.map((auth, index) => {
+                  return (
+                    <>
+                      <Link to={`/author/${auth}`} color="text.secondary">
+                        {auth + (index === author.length - 1 ? "" : ",")}
+                      </Link>{" "}
+                    </>
+                  );
+                })}
           </Typography>
         </CardContent>
       </Link>
       <CardActions
         sx={{
-          backgroundColor: "rgb(33, 112, 33, 0.84)",
+          backgroundColor: "rgba(33, 112, 33, 0.76)",
           color: "white",
           pl: 3,
           pr: 3,
@@ -304,7 +331,7 @@ const BookList = ({ title, list, userData, setUserData, token }) => {
           </Grid>
         </div>
       ) : (
-        <CircularProgress />
+        <CircularProgress sx={{mt: 2}}/>
       )}
     </div>
   );
@@ -343,7 +370,7 @@ async function getCurrentUserProfileData(
   );
 }
 
-async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
+async function getOtherUserProfileData(userId, setUserData, setEmail, setName, setOtherUserType) {
   return (
     fetch("http://localhost:5000/api/get-other-user-data", {
       method: "POST",
@@ -361,6 +388,9 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
         });
         setEmail(data.email);
         setName(data.name);
+        setOtherUserType(data.userType);
+        console.log(JSON.stringify(data))
+        console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
       .catch((err) => {
@@ -369,7 +399,7 @@ async function getOtherUserProfileData(userId, setUserData, setEmail, setName) {
   );
 }
 
-const ProfilePage = ({ token, curUser, userType }) => {
+const ProfilePage = ({ token, curUser, userType, setHistory }) => {
   const initState = {
     readingList: null,
     inProgressList: null,
@@ -380,6 +410,7 @@ const ProfilePage = ({ token, curUser, userType }) => {
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
   const [userId, setUserId] = useState("");
+  const [otherUserType, setOtherUserType] = useState("");
 
   let location = useLocation();
   useEffect(() => {
@@ -388,12 +419,9 @@ const ProfilePage = ({ token, curUser, userType }) => {
     }
   }, []);
 
-  console.log(userData);
-
   //get user data
   useEffect(async () => {
     if (curUser) {
-      console.log(token);
       await getCurrentUserProfileData(
         { token },
         setUserData,
@@ -402,7 +430,7 @@ const ProfilePage = ({ token, curUser, userType }) => {
         setUserId
       );
     } else {
-      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName);
+      await getOtherUserProfileData({ userId }, setUserData, setEmail, setName, setOtherUserType);
     }
   }, [userId]);
 
@@ -421,9 +449,11 @@ const ProfilePage = ({ token, curUser, userType }) => {
               curUser={curUser}
               location={location}
               userId={userId}
+              setHistory={setHistory}
             ></ProfileHeader>
           </div>
         </Grid>
+<<<<<<< HEAD
         <Grid item sx={{ mt: 3 }}>
           <BookList
             title="Reading List"
@@ -434,6 +464,22 @@ const ProfilePage = ({ token, curUser, userType }) => {
           />
         </Grid>
         {userType === "paid" ? (
+=======
+        {token ? (
+          <Grid item sx={{ mt: 3 }}>
+            <BookList
+              title="Reading List"
+              list={userData.readingList}
+              userData={userData}
+              setUserData={setUserData}
+              token={token}
+            />
+          </Grid>
+        ) : (
+          <></>
+        )}
+        {token && ((curUser && userType === 'paid') || (!curUser && otherUserType === 'paid')) ? (
+>>>>>>> 1744a1d4d3ab583b664cb04e78c8c4519a7efd37
           <>
             <Grid item xs={12}>
               <BookList
