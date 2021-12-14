@@ -375,8 +375,6 @@ async function getOtherUserProfileData(
         setEmail(data.email);
         setName(data.name);
         setOtherUserType(data.userType);
-        console.log(JSON.stringify(data));
-        console.log("other users type: " + data.userType);
       })
       // .then(response => response.json())
       .catch((err) => {

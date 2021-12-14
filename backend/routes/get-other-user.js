@@ -5,7 +5,6 @@ const paidUserDao = require("../db/paid-users/paid-user-dao");
 
 router.post('/', function (req, res) {
   const userId = req.body.userId;
-  console.log(userId);
 
   freeUserDao.findUserById(userId).then(freeUser => {
       if(freeUser === null) {

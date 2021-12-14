@@ -22,7 +22,6 @@ const findUserByEmail = (email) => {
 }
 
 const validateLogin = (email, password, callback) => {
-  console.log("Validating login")
   PaidUser.find({email: email}, function (err, docs) {
     if (docs.length === 0) {
       callback(false);

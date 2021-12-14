@@ -23,7 +23,6 @@ const fetchAuthorBooks = (authorName, setResults) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       setResults(data);
     });
 };

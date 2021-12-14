@@ -24,7 +24,6 @@ const SearchResultCard = ({
   inFinishedList,
   userType,
 }) => {
-  console.log(inReadingList.includes(isbn));
   return (
     <>
       <Link to={`/details/${isbn}`} className="unstyled-link">

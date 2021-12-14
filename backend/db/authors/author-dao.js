@@ -5,7 +5,6 @@ const findAllAuthors = () => model.find()
 const deleteAuthor = (id) => model.deleteOne({_id: id})
 
 const createAuthor = (author) => model.create(author).then(createdAuthor => {
-  console.log(createdAuthor)
   return createdAuthor
 })
 
