@@ -29,8 +29,7 @@ const ProfileHeader = ({
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [enterPasswordOpen, setEnterPasswordOpen] = React.useState(false);
   const pathName =
-    "http://localhost:3000" +
-    (curUser ? "/profile/" + userId : location.pathname);
+    `${BACKEND_URL}` + (curUser ? "/profile/" + userId : location.pathname);
 
   if (!curUser && !token) {
     setHistory(location.pathname);
