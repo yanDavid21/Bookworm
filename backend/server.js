@@ -63,7 +63,7 @@ app.use("/api/get-popular-books", getPopularBooksRouter);
 app.use("/api/get-reading-list", getReadingListRouter);
 app.use("/api/get-books-by-author", getBooksByAuthorRouter);
 app.get('*', function(req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, "public")});
+  res.sendFile('index.html', {root: path.join(__dirname, "build")});
 });
 /*******************************************/
 
@@ -76,7 +76,7 @@ app.use(function (req, res, next) {
 //error handler func
 app.use(function (err, req, res, next) {
    // render the error page
-   res.sendFile('index.html', {root: path.join(__dirname, "public")});
+   res.sendFile('index.html', {root: path.join(__dirname, "build")});
 });
 /***********************************************/
 
