@@ -62,8 +62,8 @@ app.use("/api/enter-password", enterPasswordRouter);
 app.use("/api/get-popular-books", getPopularBooksRouter);
 app.use("/api/get-reading-list", getReadingListRouter);
 app.use("/api/get-books-by-author", getBooksByAuthorRouter);
-app.get("*", (req, res) => {
-  res.render("index", { title: "Express" });
+app.get('*', function(req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, "public")});
 });
 /*******************************************/
 
@@ -75,12 +75,8 @@ app.use(function (req, res, next) {
 
 //error handler func
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.render("index", { title: "Express" });
+   // render the error page
+   res.sendFile('index.html', {root: path.join(__dirname, "public")});
 });
 /***********************************************/
 
