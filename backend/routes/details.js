@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 
 const searchAPI = "https://www.googleapis.com/books/v1/volumes";
-const APIKEY = `&key=AIzaSyBIQypYCJM2A6Vt_-WFMYmFPXQKx4Wkjpc`;
+const APIKEY = process.env.APIKEY;
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {

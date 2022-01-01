@@ -11,12 +11,6 @@ const app = express();
 
 let db_uri = process.env.MONGODB_URI;
 
-// For local testing, for now
-if (!db_uri) {
-  db_uri =
-    "mongodb+srv://deanframe:mongodbpass@web-dev-final-jose.vcajy.mongodb.net/final_project?retryWrites=true&w=majority";
-}
-
 /***********middleware ************/
 app.use(express.static(path.join(__dirname, "build")));
 app.use(logger("dev"));
