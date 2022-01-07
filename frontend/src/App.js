@@ -31,7 +31,7 @@ import {
 import PrivacyPolicyText from "./common/components/privacyPolicyText";
 const drawerWidth = 250;
 
-export const BACKEND_URL = "https://web-dev-final-jose.herokuapp.com";
+export const BACKEND_URL = "https://bookworm-f21.herokuapp.com";
 
 const Body = ({ drawerWidth, token, setToken, lastPath, setHistory, userType, setUserType }) => {
   // const { token, setToken } = useToken();
